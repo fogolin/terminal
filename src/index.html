@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Firelin Terminal Example</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            color: #757575
+        }
+
+        h2 {
+            text-align: center;
+            padding: 20px;
+            border-radius: 25px 25px 0 0;
+            color: white;
+            background: rgb(15 18 47);
+            margin: 0
+        }
+
+        div {
+            text-align: left;
+            width: 690px;
+            border-radius: 25px;
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+            box-shadow: 0 25px 65px rgba(17, 0, 255, 0.12);
+            display: block;
+        }
+
+        code {
+            display: block;
+            padding: 25px 15px;
+        }
+
+        .toggle-bits {
+            max-width: 150px;
+            margin: 50px auto;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            text-transform: uppercase;
+            color: white;
+            background: rgb(15 18 47);
+            box-shadow: 0 5px 15px rgb(17 0 255 / 25%);
+            transition: 0.5s ease;
+        }
+
+        .toggle-bits:hover {
+            background: rgb(14 207 136);
+            box-shadow: 0 7px 25px rgb(71 255 43 / 30%);
+
+            transform: translateY(-5px);
+        }
+    </style>
+    <script>
+        window.onload = () => { }
+    </script>
+</head>
+
+<body>
+    <h1>TAG EXAMPLES</h1>
+    <div>
+        <h2>Firelin Terminal</h2>
+        <code>
+      &lt;!-- Start Bits Chat --&gt;<br>&lt;script&gt;<br>
+      &nbsp; &nbsp; (function (d, s, id) {<br>
+      &nbsp; &nbsp; &nbsp; var js,<br>
+      &nbsp; &nbsp; &nbsp; el = d.getElementsByTagName(s)[0];<br>
+      &nbsp; &nbsp; &nbsp; if (d.getElementById(id)) {return}js = d.createElement(s);js.id = id;<br>
+      &nbsp; &nbsp; &nbsp; js.src = 'https://cdn.jsdelivr.net/gh/BitsTI/public@main/chat-widget/v1/bits.widget.min.js';<br>
+      &nbsp; &nbsp; &nbsp; el.parentNode.insertBefore(js, el);<br>
+      &nbsp; &nbsp; &nbsp; js.onload = function () {<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; var w=window.Bits({title:!0,<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; client:{title:"Fale com a Bits!",message:"Como podemos ajudar hoje?",<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; whatsappNumber:"Numero",whatsappMessage:"tstMsg",<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ctaLink:"tel:556140428274",ctaDisplay:"Ligar para 4042-8274"},<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; theme:{color:"000",button:"000",notification:"000"},<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; form:{name:!0,message:!0,email:!0,phone:!0,open:1500},<br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; auth:{token:"64c9d28f-fb47-48b0-9a0a-e46620a7e082",endpoint:"app"}});<br>
+      &nbsp; &nbsp; &nbsp; };<br>
+      &nbsp; &nbsp; })(document, 'script', 'bits-js');<br>
+      &lt;/script&gt;<br>
+      &lt;!-- End Bits Chat --&gt;
+    </code>
+    </div>
+</body>
+
+</html>
