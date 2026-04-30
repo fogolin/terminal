@@ -1,34 +1,36 @@
 {
-  "name": "firelin-terminal",
-  "version": "1.0.0",
-  "description": "A modern javascript terminal with a retro feel.",
-  "main": "index.js",
-  "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
-    "dev": "webpack serve",
-    "start": "webpack serve"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fogolin/terminal.git"
-  },
-  "keywords": [],
-  "author": "Lucas Fogolin <lucasfogolin@gmail.com> (https://medium.com/@lucasfogolin)",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/fogolin/terminal/issues"
-  },
-  "homepage": "https://github.com/fogolin/terminal#readme",
-  "devDependencies": {
-    "babel-loader": "^9.1.2",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.7.3",
-    "html-loader": "^4.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "semver": "^7.3.8",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
-  }
+	"name": "firelin-terminal",
+	"version": "1.0.0",
+	"description": "A modern javascript terminal with a retro feel.",
+	"main": "index.js",
+	"scripts": {
+		"build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+		"build:widget": "npm run build",
+		"dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.js --open",
+		"start": "npm run dev"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fogolin/terminal.git"
+	},
+	"keywords": [],
+	"author": "Lucas Fogolin <lucas@fogol.in> (https://fogol.in)",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/fogolin/terminal/issues"
+	},
+	"homepage": "https://github.com/fogolin/terminal#readme",
+	"devDependencies": {
+		"@babel/preset-env": "^7.29.3",
+		"babel-loader": "^9.1.2",
+		"cross-env": "^7.0.3",
+		"css-loader": "^6.7.3",
+		"html-loader": "^4.2.0",
+		"html-webpack-plugin": "^5.5.0",
+		"semver": "^7.3.8",
+		"style-loader": "^3.3.1",
+		"webpack": "^5.75.0",
+		"webpack-cli": "^5.0.1",
+		"webpack-dev-server": "^4.11.1"
+	}
 }

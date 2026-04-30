@@ -7,9 +7,7 @@ const semver = require('semver');
 const { major } = semver.parse(version);
 
 module.exports = {
-    entry: {
-        widget: "./src/app.js"
-    },
+    entry: './src/app.js',
     mode: isProduction ? 'production' : 'development',
 
     // devtool: 'inline-source-map',
@@ -17,7 +15,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, 'dist', `v${major}`),
-        filename: `firelin.[name].[contenthash]${isProduction ? '.min' : ''}.js`,
+        filename: `firelin.widget${isProduction ? '.min' : ''}.js`,
         clean: true,
         environment: {
             arrowFunction: false
@@ -25,9 +23,14 @@ module.exports = {
     },
 
     devServer: {
-        static: {
-            directory: path.resolve(__dirname, 'dist')
-        },
+        static: [
+            {
+                directory: path.resolve(__dirname, 'dist')
+            },
+            {
+                directory: path.resolve(__dirname, 'src')
+            }
+        ],
         port: 3333,
         open: true,
         hot: true,
@@ -61,12 +64,12 @@ module.exports = {
 
     plugins: [
         isProduction
-            ? null
-            : new HTMLWebpackPlugin({
+            ? new HTMLWebpackPlugin({
                 title: 'Firelin Terminal Example',
                 filename: 'index.html',
                 template: path.resolve(__dirname, 'src/index.html'),
-            }),
-        isProduction ? null : new webpack.HotModuleReplacementPlugin(),
+            })
+            : null,
+        new webpack.HotModuleReplacementPlugin(),
     ].filter(Boolean),
 };

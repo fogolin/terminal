@@ -58,7 +58,7 @@
         }
     </style>
     <script>
-        (function (d, s, id) {
+        (function (d, s, id, config) {
             var js,
                 el = d.getElementsByTagName(s)[0];
             // avoids loading the script twice by mistake
@@ -69,21 +69,25 @@
             js = d.createElement(s);
             // assign an id so we can detect if we already added it
             js.id = id;
-            // assign the src to the script's CDN URL
-            // js.src = 'https://cdn.jsdelivr.net/gh/BitsTI/public@main/chat-widget/v1/bits.widget.v1.0.1.min.js';
-            js.src = 'dist/v1/bits.widget.e002025ab60370154272.min.js';
+            // assign the src to the script's widget URL
+            js.src = 'dist/v1/firelin.widget.min.js';
+            js.defer = true;
             el.parentNode.insertBefore(js, el);
             // initializes the widget when the script is ready
-            js.onload = function () { };
-        })(document, 'script', 'bits-js');
+            js.onload = function () {
+                if (window.FirelinTerminal) {
+                    window.FirelinTerminal.create(config);
+                }
+            };
+        })(document, 'script', 'firelin-terminal-js', {
+            // pass configuration here
+        });
     </script>
 </head>
-
-<body>
-    <h1>Tag examples</h1>
-    <div>
-        <h2>Bits Chat</h2>
-        <code>
+<h1>Tag examples</h1>
+<div>
+    <h2>Bits Chat</h2>
+    <code>
       &lt;!-- Start Bits Chat --&gt;<br>&lt;script&gt;<br>
       &nbsp; &nbsp; (function (d, s, id) {<br>
       &nbsp; &nbsp; &nbsp; var js,<br>
@@ -104,7 +108,12 @@
       &lt;/script&gt;<br>
       &lt;!-- End Bits Chat --&gt;
     </code>
-    </div>
+</div>
+<div>
+    <p>The widget automatically activates when the Konami code is entered:</p>
+    <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
+    <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
+</div>
 </body>
 
 </html>
