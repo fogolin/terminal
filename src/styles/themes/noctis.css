@@ -1,29 +1,38 @@
+/* 
+Theme: Noctis Default
+Source: https://terminalcolors.com/themes/noctis/default/
+
 lets rework the terminal colors so the app can use the same colors for the terminal and the rest of the app. this will make it easier to maintain and customize themes in the future. we can define a set of base colors in the theme file and then use those colors in the terminal styles. this way, when we change a color in the theme, it will automatically update in the terminal as well.
 
 Thus, instead of app saying "terminal-promp" to differentiate colors, it can only say "blue", with accent variant named "bight", if not set, default to normal color. This is a common practice on theming terminals. Use the following theme content as reference for this new setup.
+*/
 
-name: Noctis Default
-accent: "#40d4e7"
-cursor: "#40d4e7"
-background: "#03191b"
-foreground: "#b2cacd"
-details: darker
-terminal_colors:
-  bright:
-    black: "#47686c"
-    blue: "#60b6eb"
-    cyan: "#60dbeb"
-    green: "#60ebb1"
-    magenta: "#e798b3"
-    red: "#e97749"
-    white: "#c1d4d7"
-    yellow: "#e69533"
-  normal:
-    black: "#324a4d"
-    blue: "#49ace9"
-    cyan: "#49d6e9"
-    green: "#49e9a6"
-    magenta: "#df769b"
-    red: "#e66533"
-    white: "#b2cacd"
-    yellow: "#e4b781"
+:root {
+	/* Core UI Colors */
+	--theme-name: "Noctis Default";
+	--accent: #40d4e7;
+	--cursor: #40d4e7;
+	--background: #03191b;
+	--foreground: #b2cacd;
+	--details: darker;
+
+	/* Normal Terminal Colors */
+	--black: #324a4d;
+	--blue: #49ace9;
+	--cyan: #49d6e9;
+	--green: #49e9a6;
+	--magenta: #df769b;
+	--red: #e66533;
+	--yellow: #e4b781;
+	--white: #b2cacd;
+
+	/* Bright Terminal Colors */
+	--bright-black: #47686c;
+	--bright-blue: #60b6eb;
+	--bright-cyan: #60dbeb;
+	--bright-green: #60ebb1;
+	--bright-magenta: #e798b3;
+	--bright-red: #e97749;
+	--bright-white: #c1d4d7;
+	--bright-yellow: #e69533;
+}

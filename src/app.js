@@ -1,14 +1,14 @@
 import terminalStyles from './styles/terminal.css';
-import terminalFonts  from './styles/fonts.css';
+import terminalFonts from './styles/fonts.css';
 import terminalTemplate from './assets/template.html';
-import { Shell }       from './shell/shell.js';
-import { TerminalUI }  from './shell/ui.js';
+import { Shell } from './shell/shell.js';
+import { TerminalUI } from './shell/ui.js';
 
 const WIDGET_TAG = 'firelin-terminal';
 
-const KONAMI_KEYS   = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-const KONAMI_MOBILE = ['up','up','down','down','left','right','left','right','doubletap'];
-const SWIPE_THRESHOLD  = 30;
+const KONAMI_KEYS = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+const KONAMI_MOBILE = ['up', 'up', 'down', 'down', 'left', 'right', 'left', 'right', 'doubletap'];
+const SWIPE_THRESHOLD = 30;
 const DOUBLE_TAP_WINDOW = 400;
 
 function parseConfig(value) {
@@ -34,30 +34,34 @@ class FirelinTerminalElement extends HTMLElement {
     constructor() {
         super();
         injectFonts();
-        this.config        = parseConfig(this.getAttribute('data-config'));
-        this.touchStart    = null;
+        this.config = parseConfig(this.getAttribute('data-config'));
+        this.touchStart = null;
         this.touchSequence = [];
-        this.lastTap       = 0;
-        this.keySequence   = [];
-        this._positioned   = false;
-        this._dragState    = null;
-        this._shellBooted  = false;
-        this._ui           = null;
-        this._shell        = null;
+        this.lastTap = 0;
+        this.keySequence = [];
+        this._positioned = false;
+        this._dragState = null;
+        this._shellBooted = false;
+        this._ui = null;
+        this._shell = null;
+        this._savedRight = '24px';
+        this._savedBottom = '24px';
+        this._savedWidth = null;
+        this._savedHeight = null;
 
         this._shadow = this.attachShadow({ mode: 'open' });
         this._shadow.appendChild(createTemplate().content.cloneNode(true));
     }
 
     connectedCallback() {
-        this.shell         = this._shadow.querySelector('.terminal-window');
-        this.closeButton   = this._shadow.querySelector('.btn-close');
+        this.shell = this._shadow.querySelector('.terminal-window');
+        this.closeButton = this._shadow.querySelector('.btn-close');
         this.minimizeButton = this._shadow.querySelector('.btn-minimize');
 
-        this.toggleHandler          = () => this.toggleShell();
-        this.handleKeyDown          = this.handleKeyDown.bind(this);
-        this.handlePointerDown      = this.handlePointerDown.bind(this);
-        this.handlePointerUp        = this.handlePointerUp.bind(this);
+        this.toggleHandler = () => this.toggleShell();
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handlePointerDown = this.handlePointerDown.bind(this);
+        this.handlePointerUp = this.handlePointerUp.bind(this);
         this.handleShellTriggerClick = this.handleShellTriggerClick.bind(this);
 
         this.handleRestoreClick = (e) => {
@@ -96,12 +100,17 @@ class FirelinTerminalElement extends HTMLElement {
             if (e.button !== 0 || e.target.closest('.terminal-btn')) return;
             const rect = this.shell.getBoundingClientRect();
             this._dragState = {
-                startX: e.clientX, startY: e.clientY,
-                origRight:  window.innerWidth  - rect.right,
-                origBottom: window.innerHeight - rect.bottom,
+                startX: e.clientX,
+                startY: e.clientY,
+                startLeft: rect.left,
+                startTop: rect.top,
             };
-            this.shell.style.left = 'auto';
-            this.shell.style.top  = 'auto';
+
+            this.shell.style.position = 'fixed';
+            this.shell.style.left = `${rect.left}px`;
+            this.shell.style.top = `${rect.top}px`;
+            this.shell.style.right = 'auto';
+            this.shell.style.bottom = 'auto';
             e.preventDefault();
         });
 
@@ -109,8 +118,16 @@ class FirelinTerminalElement extends HTMLElement {
             if (!this._dragState) return;
             const dx = e.clientX - this._dragState.startX;
             const dy = e.clientY - this._dragState.startY;
-            this.shell.style.right  = `${this._dragState.origRight  - dx}px`;
-            this.shell.style.bottom = `${this._dragState.origBottom - dy}px`;
+            const newLeft = Math.min(
+                Math.max(0, this._dragState.startLeft + dx),
+                window.innerWidth - this.shell.offsetWidth
+            );
+            const newTop = Math.min(
+                Math.max(0, this._dragState.startTop + dy),
+                window.innerHeight - this.shell.offsetHeight
+            );
+            this.shell.style.left = `${newLeft}px`;
+            this.shell.style.top = `${newTop}px`;
         });
 
         window.addEventListener('mouseup', () => {
@@ -120,12 +137,106 @@ class FirelinTerminalElement extends HTMLElement {
     }
 
     initResize() {
+        const resizeHandles = this._shadow.querySelectorAll('.resize-handle');
+        let resizeState = null;
+
+        const startResize = (e, direction) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const rect = this.shell.getBoundingClientRect();
+            resizeState = {
+                direction,
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: rect.width,
+                startHeight: rect.height,
+                startLeft: rect.left,
+                startTop: rect.top,
+                startRight: window.innerWidth - rect.right,
+                startBottom: window.innerHeight - rect.bottom
+            };
+
+            // Switch to position: fixed with explicit coordinates during resize
+            this.shell.style.position = 'fixed';
+            this.shell.style.left = `${rect.left}px`;
+            this.shell.style.top = `${rect.top}px`;
+            this.shell.style.right = 'auto';
+            this.shell.style.bottom = 'auto';
+
+            document.addEventListener('mousemove', doResize);
+            document.addEventListener('mouseup', endResize);
+        };
+
+        const doResize = (e) => {
+            if (!resizeState) return;
+
+            const dx = e.clientX - resizeState.startX;
+            const dy = e.clientY - resizeState.startY;
+            let newWidth = resizeState.startWidth;
+            let newHeight = resizeState.startHeight;
+            let newLeft = resizeState.startLeft;
+            let newTop = resizeState.startTop;
+
+            // Handle horizontal resizing
+            if (resizeState.direction.includes('right')) {
+                newWidth = Math.max(200, resizeState.startWidth + dx);
+            } else if (resizeState.direction.includes('left')) {
+                const potentialWidth = resizeState.startWidth - dx;
+                if (potentialWidth >= 200) {
+                    newWidth = potentialWidth;
+                    newLeft = resizeState.startLeft + dx;
+                }
+            }
+
+            // Handle vertical resizing
+            if (resizeState.direction.includes('bottom')) {
+                newHeight = Math.max(100, resizeState.startHeight + dy);
+            } else if (resizeState.direction.includes('top')) {
+                const potentialHeight = resizeState.startHeight - dy;
+                if (potentialHeight >= 100) {
+                    newHeight = potentialHeight;
+                    newTop = resizeState.startTop + dy;
+                }
+            }
+
+            // Apply constraints to keep window on screen
+            const maxLeft = window.innerWidth - 200;
+            const maxTop = window.innerHeight - 100;
+            newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+            newTop = Math.max(0, Math.min(newTop, maxTop));
+
+            this.shell.style.width = `${newWidth}px`;
+            this.shell.style.height = `${newHeight}px`;
+            this.shell.style.left = `${newLeft}px`;
+            this.shell.style.top = `${newTop}px`;
+        };
+
+        const endResize = () => {
+            if (!resizeState) return;
+
+            // Keep fixed left/top positioning after resize to avoid shifting.
+            this.shell.style.position = 'fixed';
+
+            resizeState = null;
+            document.removeEventListener('mousemove', doResize);
+            document.removeEventListener('mouseup', endResize);
+        };
+
+        // Attach event listeners to resize handles
+        resizeHandles.forEach(handle => {
+            const direction = Array.from(handle.classList)
+                .find(cls => cls.startsWith('resize-') && cls !== 'resize-handle')
+            handle.addEventListener('mousedown', (e) => startResize(e, direction));
+        });
+
+        // Keep the existing ResizeObserver for body height adjustment
         const titlebar = this._shadow.querySelector('.terminal-titlebar');
-        const body     = this._shadow.querySelector('.terminal-body');
+        const body = this._shadow.querySelector('.terminal-body');
         new ResizeObserver(() => {
             if (this.shell.classList.contains('minimized')) return;
             const h = this.shell.getBoundingClientRect().height
-                    - titlebar.getBoundingClientRect().height;
+                - titlebar.getBoundingClientRect().height;
             if (h > 0) body.style.height = h + 'px';
         }).observe(this.shell);
     }
@@ -140,8 +251,8 @@ class FirelinTerminalElement extends HTMLElement {
         const key = event.key;
         this.keySequence.push(key);
         if (!KONAMI_KEYS.slice(0, this.keySequence.length)
-                .every((expected, i) => expected.toLowerCase() === this.keySequence[i].toLowerCase())) {
-            const validStart = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','b','a'];
+            .every((expected, i) => expected.toLowerCase() === this.keySequence[i].toLowerCase())) {
+            const validStart = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
             this.keySequence = validStart.some(k => k.toLowerCase() === key.toLowerCase()) ? [key] : [];
             return;
         }
@@ -180,8 +291,8 @@ class FirelinTerminalElement extends HTMLElement {
         if (direction) {
             this.touchSequence.push(direction);
             if (!KONAMI_MOBILE.slice(0, this.touchSequence.length)
-                    .every((expected, i) => expected === this.touchSequence[i])) {
-                const validStart = ['up','down','left','right','doubletap'];
+                .every((expected, i) => expected === this.touchSequence[i])) {
+                const validStart = ['up', 'down', 'left', 'right', 'doubletap'];
                 this.touchSequence = validStart.includes(direction) ? [direction] : [];
                 return;
             }
@@ -215,14 +326,14 @@ class FirelinTerminalElement extends HTMLElement {
         if (!this._positioned) {
             this.shell.classList.remove('hidden');
             const h = this.shell.offsetHeight;
-            this.shell.style.right  = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.shell.style.right = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
             this.shell.style.bottom = `${window.innerHeight - 80 - h}px`;
             this._positioned = true;
         } else if (this.shell.classList.contains('minimized') && this._savedRight != null) {
             this.shell.classList.add('animate');
-            this.shell.style.right  = this._savedRight;
+            this.shell.style.right = this._savedRight;
             this.shell.style.bottom = this._savedBottom;
-            this._savedRight  = null;
+            this._savedRight = null;
             this._savedBottom = null;
             this.shell.addEventListener('transitionend', () => this.shell.classList.remove('animate'), { once: true });
         }
@@ -239,7 +350,7 @@ class FirelinTerminalElement extends HTMLElement {
     }
 
     async _bootShell() {
-        this._ui    = new TerminalUI(this._shadow);
+        this._ui = new TerminalUI(this._shadow);
         this._shell = new Shell();
         this._ui.setShell(this._shell);
         this._shell.setUI(this._ui);
@@ -251,18 +362,53 @@ class FirelinTerminalElement extends HTMLElement {
         this.shell.classList.add('animate');
         this.shell.addEventListener('transitionend', () => this.shell.classList.remove('animate'), { once: true });
 
+        // Ensure position is in right/bottom for smooth animation
+        const rect = this.shell.getBoundingClientRect();
+        const currentRight = (this.shell.style.right && this.shell.style.right !== 'auto')
+            ? this.shell.style.right
+            : `${window.innerWidth - rect.right}px`;
+        const currentBottom = (this.shell.style.bottom && this.shell.style.bottom !== 'auto')
+            ? this.shell.style.bottom
+            : `${window.innerHeight - rect.bottom}px`;
+        this.shell.style.right = currentRight;
+        this.shell.style.bottom = currentBottom;
+        this.shell.style.left = 'auto';
+        this.shell.style.top = 'auto';
+
         if (this.shell.classList.contains('minimized')) {
-            this.shell.classList.remove('minimized');
-            this.shell.style.right  = this._savedRight  ?? `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
-            this.shell.style.bottom = this._savedBottom ?? `${window.innerHeight - 80 - this.shell.offsetHeight}px`;
-            this._savedRight  = null;
+            // Restoring: animate from minimized state back to saved position/size.
+            const targetRight = this._savedRight;
+            const targetBottom = this._savedBottom;
+            const targetWidth = this._savedWidth || '';
+            const targetHeight = this._savedHeight || '';
+
+            this._savedRight = null;
             this._savedBottom = null;
-            if (this._ui) this._ui.focus();
+            this._savedWidth = null;
+            this._savedHeight = null;
+
+            requestAnimationFrame(() => {
+                this.shell.style.right = targetRight;
+                this.shell.style.bottom = targetBottom;
+                this.shell.style.width = targetWidth;
+                this.shell.style.height = targetHeight;
+
+                requestAnimationFrame(() => {
+                    this.shell.classList.remove('minimized');
+                    if (this._ui) this._ui.focus();
+                });
+            });
         } else {
-            this._savedRight  = this.shell.style.right;
-            this._savedBottom = this.shell.style.bottom;
-            this.shell.style.right  = '8px';
+            // Minimizing
+            this._savedRight = currentRight;
+            this._savedBottom = currentBottom;
+            this._savedWidth = this.shell.style.width || getComputedStyle(this.shell).width;
+            this._savedHeight = this.shell.style.height || getComputedStyle(this.shell).height;
+
+            this.shell.style.right = '8px';
             this.shell.style.bottom = '8px';
+            this.shell.style.width = '220px';
+            this.shell.style.height = '38px';
             this.shell.classList.add('minimized');
         }
     }

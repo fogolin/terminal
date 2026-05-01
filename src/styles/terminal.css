@@ -1,3 +1,6 @@
+/* Import Themes */
+/* @import "./themes.css"; */
+
 /* ============================================================
    DESIGN TOKENS — tweak these to restyle everything
    ============================================================ */
@@ -45,7 +48,7 @@
 	--term-width: 480px;
 	--term-border-radius: 10px;
 	--term-titlebar-height: 38px;
-	--term-body-min-h: 180px;
+	--term-body-min-h: 2200px;
 	--term-body-max-h: 360px;
 	--term-minimized-width: 220px;
 	--term-minimized-opacity: 0.75;
@@ -84,9 +87,9 @@
    WINDOW SHELL
    ============================================================ */
 .terminal-window {
-	/* position: relative; */
-	top: var(--term-right);
-	left: var(--term-bottom);
+	position: absolute;
+	right: var(--term-right);
+	bottom: var(--term-bottom);
 	pointer-events: auto;
 	width: var(--term-width);
 	height: calc(var(--term-titlebar-height) + var(--term-body-max-h));
@@ -98,7 +101,6 @@
 
 	border-radius: var(--term-border-radius);
 	overflow: hidden;
-	resize: both;
 	box-shadow: var(--term-outer-glow);
 	color: var(--term-text);
 	font-size: var(--term-font-size);
@@ -111,6 +113,7 @@
 		right 0.45s cubic-bezier(0.1, 1.2, 0.3, 1),
 		bottom 0.45s cubic-bezier(0.1, 1.2, 0.3, 1),
 		width 0.45s 0.1s cubic-bezier(0.1, 1.2, 0.3, 1),
+		height 0.45s 0.1s cubic-bezier(0.1, 1.2, 0.3, 1),
 		opacity 0.3s;
 }
 
@@ -148,11 +151,16 @@
 
 .terminal-window.minimized {
 	width: var(--term-minimized-width);
+	height: var(--term-titlebar-height);
 	opacity: var(--term-minimized-opacity);
 	resize: none;
 }
 
 .terminal-window.minimized .btn-minimize {
+	display: none;
+}
+
+.terminal-window.minimized .resize-handle {
 	display: none;
 }
 
@@ -414,4 +422,78 @@
 	50% {
 		opacity: 0;
 	}
+}
+
+/* ============================================================
+   RESIZE HANDLES
+   ============================================================ */
+.resize-handle {
+	position: absolute;
+	opacity: 0;
+	transition: opacity 0.2s;
+	z-index: 100;
+}
+
+.terminal-window:hover .resize-handle {
+	opacity: 1;
+}
+
+.resize-right {
+	top: 0;
+	right: 0;
+	width: 10px;
+	height: 100%;
+	cursor: e-resize;
+}
+
+.resize-bottom {
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 10px;
+	cursor: s-resize;
+}
+
+.resize-left {
+	top: 0;
+	left: 0;
+	width: 10px;
+	height: 100%;
+	cursor: w-resize;
+}
+
+.resize-bottom-right {
+	bottom: 0;
+	right: 0;
+	width: 15px;
+	height: 15px;
+	cursor: se-resize;
+}
+.resize-bottom-right::before {
+	content: "";
+	position: absolute;
+	border-radius: 0 0 calc(var(--term-border-radius) * 0.8) 0;
+	border-right: 1px solid var(--term-cursor);
+	border-bottom: 1px solid var(--term-cursor);
+	width: 10px;
+	height: 10px;
+	margin: 0 0 4px 0;
+}
+
+.resize-bottom-left {
+	bottom: 0;
+	left: 0;
+	width: 15px;
+	height: 15px;
+	cursor: sw-resize;
+}
+.resize-bottom-left::before {
+	content: "";
+	position: absolute;
+	border-radius: 0 0 0 calc(var(--term-border-radius) * 0.8);
+	border-left: 1px solid var(--term-cursor);
+	border-bottom: 1px solid var(--term-cursor);
+	width: 10px;
+	height: 10px;
+	margin: 0 0 0 4px;
 }

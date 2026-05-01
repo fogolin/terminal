@@ -1,0 +1,29 @@
+:root {
+	/* Core UI Colors */
+	--theme-name: "Ayu Dark";
+	--accent: #e6b450;
+	--cursor: #e6b450;
+	--background: #0b0e14;
+	--foreground: #bfbdb6;
+	--details: darker;
+
+	/* Normal Terminal Colors */
+	--black: #686868;
+	--blue: #59c2ff;
+	--cyan: #95e6cb;
+	--green: #aad94c;
+	--magenta: #d2a6ff;
+	--red: #f07178;
+	--yellow: #ffb454;
+	--white: #ffffff;
+
+	/* Bright Terminal Colors */
+	--bright-black: #1e232b;
+	--bright-blue: #53bdfa;
+	--bright-cyan: #90e1c6;
+	--bright-green: #7fd962;
+	--bright-magenta: #cda1fa;
+	--bright-red: #ea6c73;
+	--bright-white: #c7c7c7;
+	--bright-yellow: #f9af4f;
+}
