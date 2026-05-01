@@ -1,6 +1,7 @@
 import { parse } from './parser.js';
 import { HistoryManager } from './history.js';
 import registry from './commands/index.js';
+import { VFS } from './vfs/vfs.js';
 
 const MOTD = [
     'Welcome to Firelin OS 1.0.0 LTS (Phosphor)',
@@ -14,6 +15,7 @@ class Shell {
     constructor() {
         this._ui = null;
         this.history = new HistoryManager();
+        this.vfs = new VFS();
         this._running = false;
         this._currentAbort = null;
         this.session = {
@@ -121,6 +123,7 @@ class Shell {
                 shell.session.cwd = home;
                 shell._ui.setPrompt(shell.prompt);
             },
+            vfs: shell.vfs,
             abort: abortSignal,
             sleep(ms) {
                 return new Promise((resolve, reject) => {
