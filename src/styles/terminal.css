@@ -1,54 +1,170 @@
+/* ============================================================
+   DESIGN TOKENS — tweak these to restyle everything
+   ============================================================ */
 :host {
+	/* --- Colors ------------------------------------------- */
+	--term-text: #36ba2c; /* phosphor green */
+	--term-text-dim: #2a8a22; /* dimmed / secondary text */
+	--term-text-glow-color: #79ba48; /* glow halo color */
+	--term-prompt: #e8f7dc; /* prompt symbol */
+	--term-cursor: #36ba2c;
+	--term-btn: #888;
+	--term-btn-hover: #ddd;
+	--term-title: #aaa;
+	--term-scrollbar: #2a5a22;
+
+	/* --- Backgrounds -------------------------------------- */
+	--term-bg: rgba(4, 8, 5, 0.88); /* main window */
+	--term-titlebar-bg: rgba(45, 45, 45, 0.5);
+	--term-btn-hover-bg: rgba(255, 255, 255, 0.1);
+
+	/* --- Blur / transparency ------------------------------ */
+	--term-blur: 6px;
+
+	/* --- Monitor effects ---------------------------------- */
+	--term-scanline-color: rgba(0, 0, 0, 0.18); /* darker = heavier lines */
+	--term-scanline-size: 4px; /* total row height */
+	--term-scanline-line: 1px; /* opaque line thickness */
+	--term-vignette: inset 0 0 80px 20px rgba(0, 0, 0, 0.2);
+	--term-outer-glow:
+		0 22px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.07);
+	--term-text-glow: 0 0 8px var(--term-text-glow-color);
+
+	/* --- Typography --------------------------------------- */
+	--term-font:
+		"Kode Mono Variable", "Monaspace Krypton", "Ubuntu Mono", "Menlo", "Monaco",
+		"Courier New", monospace;
+	--term-font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	--term-font-size: 13px;
+	--term-line-height: 1.6;
+	--term-font-weight: 600;
+
+	/* --- Layout ------------------------------------------- */
+	--term-width: 480px;
+	--term-border-radius: 10px;
+	--term-titlebar-height: 38px;
+	--term-body-min-h: 180px;
+	--term-body-max-h: 360px;
+	--term-minimized-width: 220px;
+	--term-minimized-opacity: 0.75;
+
+	/* --- Spacing ------------------------------------------ */
+	--term-gap-lines: 2px;
+	--term-pad-body: 10px 14px 14px;
+	--term-pad-titlebar: 0 12px;
+	--term-pad-btn: 0;
+	--term-btn-w: 26px;
+	--term-btn-h: 20px;
+	--term-btn-font-size: 14px;
+	--term-btn-gap: 4px;
+	--term-title-font-size: 12px;
+	--term-cursor-h: 1em;
+	--term-cursor-w: 6px;
+	--term-cursor-margin-bottom: 2px;
+	--term-scrollbar-w: 6px;
+
+	/* --- Position ----------------------------------------- */
+	--term-bottom: 24px;
+	--term-right: 24px;
+
+	/* ======================================================= */
+
 	all: initial;
 	position: fixed;
-	bottom: 24px;
-	right: 24px;
+	bottom: var(--term-bottom);
+	right: var(--term-right);
 	z-index: 9999;
-	font-family: "Menlo", "Monaco", "Courier New", monospace;
+	font-family: var(--term-font);
+	font-weight: var(--term-font-weight);
 	transition:
 		right 0.45s cubic-bezier(0.1, 1.2, 0.3, 1),
 		bottom 0.45s cubic-bezier(0.1, 1.2, 0.3, 1);
 }
 
+/* ============================================================
+   WINDOW SHELL
+   ============================================================ */
 .terminal-window {
-	width: 480px;
+	position: relative;
+	width: var(--term-width);
 	max-width: calc(100vw - 32px);
 
-	background-color: rgba(30, 30, 30, 0.9);
-	backdrop-filter: blur(4px);
-	-webkit-backdrop-filter: blur(4px);
+	background-color: var(--term-bg);
+	backdrop-filter: blur(var(--term-blur));
+	-webkit-backdrop-filter: blur(var(--term-blur));
 
-	border-radius: 10px;
+	border-radius: var(--term-border-radius);
 	overflow: hidden;
-	box-shadow:
-		0 22px 70px rgba(0, 0, 0, 0.6),
-		0 0 0 1px rgba(255, 255, 255, 0.07);
-	color: #cccccc;
-	font-size: 13px;
-	line-height: 1.6;
+	box-shadow: var(--term-outer-glow);
+	color: var(--term-text);
+	font-size: var(--term-font-size);
+	line-height: var(--term-line-height);
+	text-shadow: var(--term-text-glow);
 	transition:
 		width 0.45s 0.1s cubic-bezier(0.1, 1.2, 0.3, 1),
 		opacity 0.3s;
 }
 
+/* Scanlines — horizontal CRT lines overlay (body only, not titlebar) */
+.terminal-window::before {
+	content: "";
+	position: absolute;
+	top: var(--term-titlebar-height);
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: repeating-linear-gradient(
+		to bottom,
+		transparent 0px,
+		transparent calc(var(--term-scanline-size) - var(--term-scanline-line)),
+		var(--term-scanline-color)
+			calc(var(--term-scanline-size) - var(--term-scanline-line)),
+		var(--term-scanline-color) var(--term-scanline-size)
+	);
+	pointer-events: none;
+	z-index: 10;
+	border-radius: var(--term-border-radius);
+}
+
+/* Vignette — darkens corners like a CRT bezel */
+.terminal-window::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	box-shadow: var(--term-vignette);
+	pointer-events: none;
+	z-index: 11;
+	border-radius: var(--term-border-radius);
+}
+
 .terminal-window.minimized {
-	width: 220px;
-	opacity: 0.75;
+	width: var(--term-minimized-width);
+	opacity: var(--term-minimized-opacity);
 }
 
 .terminal-window.minimized .btn-minimize {
 	display: none;
 }
 
+.terminal-window.hidden {
+	display: none;
+}
+
+/* ============================================================
+   TITLEBAR
+   ============================================================ */
 .terminal-titlebar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 38px;
-	padding: 0 12px;
-	background: rgba(45, 45, 45, 0.5);
+	height: var(--term-titlebar-height);
+	padding: var(--term-pad-titlebar);
+	background: var(--term-titlebar-bg);
 	cursor: grab;
 	user-select: none;
+	position: relative;
+	z-index: 1;
+	text-shadow: none;
 }
 
 .terminal-titlebar:active {
@@ -56,9 +172,9 @@
 }
 
 .terminal-title {
-	font-size: 12px;
-	color: #aaa;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-size: var(--term-title-font-size);
+	color: var(--term-title);
+	font-family: var(--term-font-ui);
 	font-weight: 500;
 	pointer-events: none;
 	white-space: nowrap;
@@ -66,39 +182,44 @@
 
 .terminal-controls {
 	display: flex;
-	gap: 4px;
+	gap: var(--term-btn-gap);
 	align-items: center;
 }
 
 .terminal-btn {
-	width: 26px;
-	height: 20px;
+	width: var(--term-btn-w);
+	height: var(--term-btn-h);
 	border: none;
 	background: transparent;
-	color: #888;
+	color: var(--term-btn);
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 14px;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-size: var(--term-btn-font-size);
+	font-family: var(--term-font-ui);
 	border-radius: 3px;
 	line-height: 1;
-	padding: 0;
+	padding: var(--term-pad-btn);
 }
 
 .terminal-btn:hover {
-	background: rgba(255, 255, 255, 0.1);
-	color: #ddd;
+	background: var(--term-btn-hover-bg);
+	color: var(--term-btn-hover);
 }
 
+/* ============================================================
+   BODY / CONTENT
+   ============================================================ */
 .terminal-body {
-	padding: 10px 14px 14px;
-	min-height: 180px;
-	max-height: 360px;
+	padding: var(--term-pad-body);
+	min-height: var(--term-body-min-h);
+	max-height: var(--term-body-max-h);
 	overflow-y: auto;
 	scrollbar-width: thin;
-	scrollbar-color: #444 transparent;
+	scrollbar-color: var(--term-scrollbar) transparent;
+	position: relative;
+	z-index: 1;
 	transition:
 		max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
 		min-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -107,11 +228,11 @@
 }
 
 .terminal-body::-webkit-scrollbar {
-	width: 6px;
+	width: var(--term-scrollbar-w);
 }
 
 .terminal-body::-webkit-scrollbar-thumb {
-	background: #444;
+	background: var(--term-scrollbar);
 	border-radius: 3px;
 }
 
@@ -124,32 +245,41 @@
 	overflow: hidden;
 }
 
+/* ============================================================
+   LINES & TEXT
+   ============================================================ */
 .terminal-lines {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: var(--term-gap-lines);
 }
 
 .terminal-line {
-	font-family: "Menlo", "Monaco", "Courier New", monospace;
+	font-family: var(--term-font);
 	white-space: pre-wrap;
 	word-break: break-all;
-	font-size: 13px;
-	color: #cccccc;
+	font-size: var(--term-font-size);
+	color: var(--term-text);
 }
 
 .terminal-prompt {
-	color: #6fb3d2;
+	color: var(--term-prompt);
+	text-shadow: var(--term-text-glow);
 }
 
+/* ============================================================
+   CURSOR
+   ============================================================ */
 .terminal-cursor {
 	display: inline-block;
-	width: 8px;
-	height: 1em;
-	background: #cccccc;
+	width: var(--term-cursor-w);
+	height: var(--term-cursor-h, 0.85em);
+	background: var(--term-cursor);
+	box-shadow: 0 0 6px var(--term-text-glow-color);
 	vertical-align: text-bottom;
 	margin-left: 1px;
 	animation: cursor-blink 1.1s step-start infinite;
+	margin-bottom: var(--term-cursor-margin-bottom, 2px);
 }
 
 @keyframes cursor-blink {
@@ -160,8 +290,4 @@
 	50% {
 		opacity: 0;
 	}
-}
-
-.terminal-window.hidden {
-	display: none;
 }

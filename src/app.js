@@ -1,4 +1,6 @@
 import terminalStyles from './styles/terminal.css';
+import terminalFonts from './styles/fonts.css';
+import terminalTemplate from './assets/template.html';
 
 const WIDGET_TAG = 'firelin-terminal';
 const KONAMI_KEYS = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -15,33 +17,24 @@ function parseConfig(value) {
     }
 }
 
+function injectFonts() {
+    if (document.getElementById('firelin-fonts')) return;
+    const style = document.createElement('style');
+    style.id = 'firelin-fonts';
+    style.textContent = terminalFonts;
+    document.head.appendChild(style);
+}
+
 function createTemplate() {
     const template = document.createElement('template');
-    template.innerHTML = `
-      <style>${terminalStyles}</style>
-      <div class="terminal-window hidden" role="dialog" aria-label="Firelin terminal window">
-        <div class="terminal-titlebar">
-          <span class="terminal-title">firelin — bash</span>
-          <div class="terminal-controls">
-            <button class="terminal-btn btn-minimize" type="button" aria-label="Minimize terminal">&#x2013;</button>
-            <button class="terminal-btn btn-close" type="button" aria-label="Close terminal">&#x2715;</button>
-          </div>
-        </div>
-        <div class="terminal-body">
-          <div class="terminal-lines">
-            <div class="terminal-line">Welcome to Firelin.</div>
-            <div class="terminal-line">Konami sequence detected.</div>
-            <div class="terminal-line"><span class="terminal-prompt">user@firelin:~$</span> <span class="terminal-cursor"></span></div>
-          </div>
-        </div>
-      </div>
-    `;
+    template.innerHTML = `<style>${terminalStyles}</style>${terminalTemplate}`;
     return template;
 }
 
 class FirelinTerminalElement extends HTMLElement {
     constructor() {
         super();
+        injectFonts();
         this.config = parseConfig(this.getAttribute('data-config'));
         this.touchStart = null;
         this.touchSequence = [];
