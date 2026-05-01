@@ -43,7 +43,7 @@ module.exports = {
             {
                 test: /\.css$/i,
                 exclude: /node_modules/,
-                use: ["style-loader", "css-loader"]
+                type: 'asset/source'
             },
             {
                 test: /\.(js)$/,
@@ -58,6 +58,7 @@ module.exports = {
             {
                 test: /\.html?$/i,
                 loader: "html-loader",
+                options: { sources: false }
             }
         ]
     },
