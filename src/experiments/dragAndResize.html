@@ -1,0 +1,177 @@
+<html>
+
+<head>
+    <style>
+        /* Base reset */
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            min-height: 100%;
+            background: linear-gradient(45deg, rgba(12, 205, 163, 1) 0%, rgba(0, 255, 171, 1) 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .window {
+            position: absolute;
+            top: 30%;
+            left: 30%;
+            background: #fff;
+            min-height: 156px;
+            min-width: 256px;
+            height: 150px;
+            width: 300px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+
+            * {
+                user-select: none;
+            }
+
+            .status-bar {
+                background: #333;
+                color: #fff;
+                height: 2rem;
+                line-height: 2rem;
+                padding: 0 1rem;
+                cursor: move;
+            }
+
+            .content {
+                padding: 1rem;
+                overflow: auto;
+                height: calc(100% - 2rem);
+            }
+
+            .resizer {
+                position: absolute;
+                opacity: 0;
+
+                &.right {
+                    top: 0;
+                    right: 0;
+                    width: 3px;
+                    height: 100%;
+                    background: #f00;
+                    cursor: w-resize;
+                }
+
+                &.bottom {
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 3px;
+                    background: #0f0;
+                    cursor: s-resize;
+                }
+
+                &.bottom-right {
+                    bottom: 0;
+                    right: 0;
+                    width: 3px;
+                    height: 3px;
+                    background: #00f;
+                    cursor: nw-resize;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+        <div class="status-bar">
+            Title of the window
+        </div>
+        <div class="content">
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+            <p>Content of the window</p>
+        </div>
+        <div class="resizer right"></div>
+        <div class="resizer bottom"></div>
+        <div class="resizer bottom-right"></div>
+    </div>
+
+    <script>
+        var myWindow;
+
+        $(document).ready(function () {
+            bindEvents();
+        });
+
+        function bindEvents() {
+            // Drag and drop
+            $('.window .status-bar').bind('mousedown', function (e) {
+                var startX = e.clientX;
+                var startY = e.clientY;
+                var startTop = parseInt($('.window').css('top'));
+                var startLeft = parseInt($('.window').css('left'));
+                console.log(startX, startY, startTop, startLeft);
+
+                $(window).bind('mousemove', function (e) {
+                    $('.window').css({
+                        top: startTop + e.clientY - startY,
+                        left: startLeft + e.clientX - startX
+                    });
+                });
+
+                $(window).bind('mouseup', function (e) {
+                    $(window).unbind('mousemove');
+                    $(window).unbind('mouseup');
+                });
+            });
+
+            // Resize
+            $('.window .resizer').bind('mousedown', function (e) {
+                var startX = e.clientX;
+                var startY = e.clientY;
+                var startWidth = parseInt($('.window').css('width'));
+                var startHeight = parseInt($('.window').css('height'));
+                var resizeMode;
+
+                if ($(this).hasClass('right')) {
+                    resizeMode = "h";
+                }
+                else if ($(this).hasClass('bottom')) {
+                    resizeMode = "v";
+                }
+                else if ($(this).hasClass('bottom-right')) {
+                    resizeMode = "hv";
+                }
+
+                $(window).bind('mousemove', function (e) {
+                    if (resizeMode == "h" || resizeMode == "hv") {
+                        $('.window').css({
+                            width: startWidth + e.clientX - startX
+                        });
+                    }
+                    if (resizeMode == "v" || resizeMode == "hv") {
+                        $('.window').css({
+                            height: startHeight + e.clientY - startY
+                        });
+                    }
+
+                });
+
+                $(window).bind('mouseup', function (e) {
+                    $(window).unbind('mousemove');
+                    $(window).unbind('mouseup');
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

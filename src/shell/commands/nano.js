@@ -5,7 +5,7 @@ export default {
     description: 'Simple in-terminal text editor. Ctrl+S to save, Ctrl+X to exit.',
     options: [],
     examples: [
-        { command: 'nano notes.txt',          description: 'Edit (or create) notes.txt.' },
+        { command: 'nano notes.txt',             description: 'Edit (or create) notes.txt.' },
         { command: 'nano /home/guest/readme.txt', description: 'Open absolute path.' },
     ],
     async execute(args, ctx) {
@@ -17,24 +17,26 @@ export default {
                 content = ctx.vfs.readFile(path, ctx.session);
             } catch (e) {
                 if (e.code !== 'ENOENT') return ctx.error(`nano: ${e.message}`);
-                // ENOENT → new file, content stays ''
             }
         }
 
         await new Promise(resolve => {
             const overlay = document.createElement('div');
             overlay.style.cssText = [
-                'position:absolute', 'inset:0', 'display:flex', 'flex-direction:column',
+                'position:absolute',
+                'top:var(--term-titlebar-height,38px)', 'left:0', 'right:0', 'bottom:0',
+                'display:flex', 'flex-direction:column',
                 'background:var(--term-bg,#040805)', 'color:var(--term-text,#36ba2c)',
                 'font-family:var(--term-font,monospace)', 'font-size:var(--term-font-size,13px)',
                 'font-weight:var(--term-font-weight,600)', 'z-index:10',
             ].join(';');
 
             const header = document.createElement('div');
-            header.style.cssText = 'padding:3px 10px;opacity:0.6;border-bottom:1px solid currentColor;flex-shrink:0';
+            header.className = 'nano-bar nano-bar-top';
             header.textContent = `GNU nano 7.2  ${path || '[New File]'}`;
 
             const textarea = document.createElement('textarea');
+            textarea.className = 'nano-textarea';
             textarea.style.cssText = [
                 'flex:1', 'background:transparent', 'color:inherit', 'font:inherit',
                 'border:none', 'outline:none', 'padding:8px 10px', 'resize:none',
@@ -44,7 +46,7 @@ export default {
             textarea.spellcheck = false;
 
             const statusbar = document.createElement('div');
-            statusbar.style.cssText = 'padding:3px 10px;opacity:0.6;border-top:1px solid currentColor;flex-shrink:0';
+            statusbar.className = 'nano-bar nano-bar-bottom';
             statusbar.textContent = '^X Exit  ^S Save';
 
             let modified = false;
@@ -66,7 +68,7 @@ export default {
                 if (e.key === 's' || e.key === 'S') {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (!path) { setStatus('No filename — provide path as argument: nano myfile.txt'); return; }
+                    if (!path) { setStatus('No filename — pass path as argument: nano myfile.txt'); return; }
                     try {
                         ctx.vfs.writeFile(path, textarea.value, ctx.session);
                         modified = false;

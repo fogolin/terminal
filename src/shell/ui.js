@@ -115,9 +115,19 @@ class TerminalUI {
         };
     }
 
+    injectStyle(id, css) {
+        if (this._shadow.getElementById(id)) return;
+        const style = document.createElement('style');
+        style.id = id;
+        style.textContent = css;
+        this._shadow.appendChild(style);
+    }
+
     mountOverlay(el) {
-        this._body.style.position = 'relative';
-        this._body.appendChild(el);
+        // Mount on .terminal-window (position:relative, overflow:hidden),
+        // not on .terminal-body which scrolls — otherwise position:absolute inset:0
+        // anchors to the full scroll height instead of the visible area.
+        this._shadow.querySelector('.terminal-window').appendChild(el);
     }
 
     unmountOverlay(el) {
@@ -126,6 +136,11 @@ class TerminalUI {
 
     focus() {
         this._capture.focus();
+    }
+
+    focusAndScroll() {
+        this._capture.focus();
+        this._scrollToBottom();
     }
 
     // ── Private ─────────────────────────────────────────────────────────────

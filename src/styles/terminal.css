@@ -73,22 +73,23 @@
 
 	all: initial;
 	position: fixed;
-	bottom: var(--term-bottom);
-	right: var(--term-right);
+	inset: 0;
 	z-index: 9999;
+	pointer-events: none;
 	font-family: var(--term-font);
 	font-weight: var(--term-font-weight);
-	transition:
-		right 0.45s cubic-bezier(0.1, 1.2, 0.3, 1),
-		bottom 0.45s cubic-bezier(0.1, 1.2, 0.3, 1);
 }
 
 /* ============================================================
    WINDOW SHELL
    ============================================================ */
 .terminal-window {
-	position: relative;
+	/* position: relative; */
+	top: var(--term-right);
+	left: var(--term-bottom);
+	pointer-events: auto;
 	width: var(--term-width);
+	height: calc(var(--term-titlebar-height) + var(--term-body-max-h));
 	max-width: calc(100vw - 32px);
 
 	background-color: var(--term-bg);
@@ -97,12 +98,18 @@
 
 	border-radius: var(--term-border-radius);
 	overflow: hidden;
+	resize: both;
 	box-shadow: var(--term-outer-glow);
 	color: var(--term-text);
 	font-size: var(--term-font-size);
 	line-height: var(--term-line-height);
 	text-shadow: var(--term-text-glow);
+}
+
+.terminal-window.animate {
 	transition:
+		right 0.45s cubic-bezier(0.1, 1.2, 0.3, 1),
+		bottom 0.45s cubic-bezier(0.1, 1.2, 0.3, 1),
 		width 0.45s 0.1s cubic-bezier(0.1, 1.2, 0.3, 1),
 		opacity 0.3s;
 }
@@ -142,6 +149,7 @@
 .terminal-window.minimized {
 	width: var(--term-minimized-width);
 	opacity: var(--term-minimized-opacity);
+	resize: none;
 }
 
 .terminal-window.minimized .btn-minimize {
@@ -213,38 +221,63 @@
 /* ============================================================
    BODY / CONTENT
    ============================================================ */
-.terminal-body {
-	padding: var(--term-pad-body);
-	min-height: var(--term-body-min-h);
-	max-height: var(--term-body-max-h);
-	overflow-y: auto;
+.terminal-window * {
 	scrollbar-width: thin;
 	scrollbar-color: var(--term-scrollbar) transparent;
-	position: relative;
-	z-index: 1;
-	transition:
-		max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-		min-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-		padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-		opacity 0.25s;
 }
 
-.terminal-body::-webkit-scrollbar {
+.terminal-window *::-webkit-scrollbar {
 	width: var(--term-scrollbar-w);
 }
 
-.terminal-body::-webkit-scrollbar-thumb {
+.terminal-window *::-webkit-scrollbar-thumb {
 	background: var(--term-scrollbar);
 	border-radius: 3px;
 }
 
+.terminal-body {
+	padding: var(--term-pad-body);
+	height: var(--term-body-max-h);
+	overflow-y: auto;
+	position: relative;
+	z-index: 1;
+}
+
+/* Transition on the normal state animates the RESTORE direction */
+/* .terminal-body {
+	transition:
+		height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+		padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 0.25s;
+} */
+
+.nano-bar {
+	padding: 3px 10px;
+	flex-shrink: 0;
+	color: var(--term-text-dim);
+	font-size: var(--term-font-size);
+	font-family: var(--term-font);
+	font-weight: var(--term-font-weight);
+}
+
+.nano-bar-top {
+	border-bottom: 1px solid var(--term-text);
+}
+.nano-bar-bottom {
+	border-top: 1px solid var(--term-text);
+}
+
+/* Transition on the minimized state animates the MINIMIZE direction */
 .terminal-window.minimized .terminal-body {
-	max-height: 0;
-	min-height: 0;
+	height: 0;
 	padding-top: 0;
 	padding-bottom: 0;
 	opacity: 0;
 	overflow: hidden;
+	transition:
+		height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+		padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 0.25s;
 }
 
 /* ============================================================
@@ -273,67 +306,81 @@
    SHELL — HIGHLIGHT & OUTPUT COLORS
    ============================================================ */
 :host {
-    --term-hl-cmd-known:   var(--term-text);
-    --term-hl-cmd-unknown: #e06c75;
-    --term-hl-flag:        #61afef;
-    --term-hl-string:      #98c379;
-    --term-hl-arg:         var(--term-text);
+	--term-hl-cmd-known: var(--term-text);
+	--term-hl-cmd-unknown: #e06c75;
+	--term-hl-flag: #61afef;
+	--term-hl-string: #98c379;
+	--term-hl-arg: var(--term-text);
 }
 
-.hl-cmd-known   { color: var(--term-hl-cmd-known); }
-.hl-cmd-unknown { color: var(--term-hl-cmd-unknown); }
-.hl-flag        { color: var(--term-hl-flag); }
-.hl-string      { color: var(--term-hl-string); }
-.hl-arg         { color: var(--term-hl-arg); }
+.hl-cmd-known {
+	color: var(--term-hl-cmd-known);
+}
+.hl-cmd-unknown {
+	color: var(--term-hl-cmd-unknown);
+}
+.hl-flag {
+	color: var(--term-hl-flag);
+}
+.hl-string {
+	color: var(--term-hl-string);
+}
+.hl-arg {
+	color: var(--term-hl-arg);
+}
 
-.line-error { color: var(--term-hl-cmd-unknown); }
-.line-dim   { color: var(--term-text-dim); }
+.line-error {
+	color: var(--term-hl-cmd-unknown);
+}
+.line-dim {
+	color: var(--term-text-dim);
+}
 
 .line-command .terminal-prompt {
-    color: var(--term-prompt);
-    text-shadow: var(--term-prompt-glow);
+	color: var(--term-prompt);
+	text-shadow: var(--term-prompt-glow);
 }
 
 /* ============================================================
    INTERACTIVE INPUT ROW
    ============================================================ */
 .terminal-input-row {
-    position: relative;
-    min-height: calc(var(--term-font-size) * var(--term-line-height));
-    word-break: break-all;
-    margin-top: var(--term-gap-lines);
+	position: relative;
+	min-height: calc(var(--term-font-size) * var(--term-line-height));
+	word-break: break-all;
+	margin-top: var(--term-gap-lines);
 }
 
 .terminal-input-row .terminal-prompt {
-    color: var(--term-prompt);
-    text-shadow: var(--term-prompt-glow);
+	color: var(--term-prompt);
+	text-shadow: var(--term-prompt-glow);
 }
 
 .terminal-input-display {
-    white-space: pre-wrap;
-    word-break: break-all;
+	white-space: pre-wrap;
+	word-break: break-all;
 }
 
 .terminal-input-capture {
-    position: absolute;
-    width: 0;
-    height: 0;
-    opacity: 0;
-    border: none;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    pointer-events: none;
-    font-family: var(--term-font);
-    font-size: var(--term-font-size);
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	border: none;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	pointer-events: none;
+	font-family: var(--term-font);
+	font-size: var(--term-font-size);
 }
 
 /* Cursor only blinks when input is active */
 .terminal-cursor {
-    display: none;
+	display: none;
 }
 .terminal-cursor.cursor-active {
-    display: inline-block;
+	display: inline-block;
 }
 
 /* ============================================================

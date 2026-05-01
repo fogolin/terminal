@@ -102,6 +102,7 @@ class Shell {
             this._currentAbort = null;
             this._ui.setInputLocked(false);
             this._ui.setPrompt(this.prompt);
+            this._ui.focusAndScroll();
         }
     }
 
@@ -149,6 +150,7 @@ class Shell {
             setInputRowVisible(visible) { shell._ui.setInputRowVisible(visible); },
             mountOverlay(el)            { shell._ui.mountOverlay(el); },
             unmountOverlay(el)          { shell._ui.unmountOverlay(el); },
+            injectStyle(id, css)        { shell._ui.injectStyle(id, css); },
             abort: abortSignal,
             sleep(ms) {
                 return new Promise((resolve, reject) => {
