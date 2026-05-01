@@ -19,7 +19,20 @@
             margin: 0
         }
 
-        div {
+        p {
+            margin-block-start: 0;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgb(15 18 47);
+            color: white;
+            cursor: pointer;
+        }
+
+        .block {
             text-align: left;
             width: 690px;
             border-radius: 25px;
@@ -31,30 +44,9 @@
             display: block;
         }
 
-        code {
+        .content {
             display: block;
             padding: 25px 15px;
-        }
-
-        .toggle-bits {
-            max-width: 150px;
-            margin: 50px auto;
-            padding: 10px 20px;
-            font-weight: 600;
-            font-size: 14px;
-            text-align: center;
-            text-transform: uppercase;
-            color: white;
-            background: rgb(15 18 47);
-            box-shadow: 0 5px 15px rgb(17 0 255 / 25%);
-            transition: 0.5s ease;
-        }
-
-        .toggle-bits:hover {
-            background: rgb(14 207 136);
-            box-shadow: 0 7px 25px rgb(71 255 43 / 30%);
-
-            transform: translateY(-5px);
         }
     </style>
     <script>
@@ -85,35 +77,38 @@
     </script>
 </head>
 <h1>Tag examples</h1>
-<div>
-    <h2>Bits Chat</h2>
-    <code>
-      &lt;!-- Start Bits Chat --&gt;<br>&lt;script&gt;<br>
-      &nbsp; &nbsp; (function (d, s, id) {<br>
-      &nbsp; &nbsp; &nbsp; var js,<br>
-      &nbsp; &nbsp; &nbsp; el = d.getElementsByTagName(s)[0];<br>
-      &nbsp; &nbsp; &nbsp; if (d.getElementById(id)) {return}js = d.createElement(s);js.id = id;<br>
-      &nbsp; &nbsp; &nbsp; js.src = 'https://cdn.jsdelivr.net/gh/BitsTI/public@main/chat-widget/v1/bits.widget.min.js';<br>
-      &nbsp; &nbsp; &nbsp; el.parentNode.insertBefore(js, el);<br>
-      &nbsp; &nbsp; &nbsp; js.onload = function () {<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; var w=window.Bits({title:!0,<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; client:{title:"Fale com a Bits!",message:"Como podemos ajudar hoje?",<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; whatsappNumber:"Numero",whatsappMessage:"tstMsg",<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ctaLink:"tel:556140428274",ctaDisplay:"Ligar para 4042-8274"},<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; theme:{color:"000",button:"000",notification:"000"},<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; form:{name:!0,message:!0,email:!0,phone:!0,open:1500},<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; auth:{token:"64c9d28f-fb47-48b0-9a0a-e46620a7e082",endpoint:"app"}});<br>
-      &nbsp; &nbsp; &nbsp; };<br>
-      &nbsp; &nbsp; })(document, 'script', 'bits-js');<br>
-      &lt;/script&gt;<br>
-      &lt;!-- End Bits Chat --&gt;
-    </code>
+<div class="block">
+    <h2>Script Injection Example</h2>
+    <code class="content">
+            &lt;script&gt;<br>
+            &nbsp; (function (d, s, id, config) {<br>
+            &nbsp; &nbsp; var js, el = d.getElementsByTagName(s)[0];<br>
+            &nbsp; &nbsp; if (d.getElementById(id)) return;<br>
+            &nbsp; &nbsp; js = d.createElement(s);<br>
+            &nbsp; &nbsp; js.id = id;<br>
+            &nbsp; &nbsp; js.src = 'dist/v1/firelin.widget.min.js';<br>
+            &nbsp; &nbsp; js.defer = true;<br>
+            &nbsp; &nbsp; el.parentNode.insertBefore(js, el);<br>
+            &nbsp; &nbsp; js.onload = function () {<br>
+            &nbsp; &nbsp; &nbsp; if (window.FirelinTerminal) {<br>
+            &nbsp; &nbsp; &nbsp; &nbsp; window.FirelinTerminal.create(config);<br>
+            &nbsp; &nbsp; &nbsp; }<br>
+            &nbsp; &nbsp; };<br>
+            &nbsp; })(document, 'script', 'firelin-terminal-js', {<br>
+            &nbsp; &nbsp; /* pass config here */<br>
+            &nbsp; });<br>
+            &lt;/script&gt;
+        </code>
 </div>
-<div>
-    <p>The widget automatically activates when the Konami code is entered:</p>
-    <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
-    <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
-    <p class="shell">Shell trigger</p>
+<div class="block">
+    <h2>Instructions</h2>
+    <div class="content">
+        <p>The widget automatically activates when the Konami code is entered:</p>
+        <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
+        <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
+        <p>The shell can also be activated by clicking elements using the "shell" class.</p>
+        <button class="shell">Shell trigger</button>
+    </div>
 </div>
 </body>
 

@@ -19,7 +19,20 @@
             margin: 0
         }
 
-        div {
+        p {
+            margin-block-start: 0;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgb(15 18 47);
+            color: white;
+            cursor: pointer;
+        }
+
+        .block {
             text-align: left;
             width: 690px;
             border-radius: 25px;
@@ -31,30 +44,9 @@
             display: block;
         }
 
-        code {
+        .content {
             display: block;
             padding: 25px 15px;
-        }
-
-        .toggle-bits {
-            max-width: 150px;
-            margin: 50px auto;
-            padding: 10px 20px;
-            font-weight: 600;
-            font-size: 14px;
-            text-align: center;
-            text-transform: uppercase;
-            color: white;
-            background: rgb(15 18 47);
-            box-shadow: 0 5px 15px rgb(17 0 255 / 25%);
-            transition: 0.5s ease;
-        }
-
-        .toggle-bits:hover {
-            background: rgb(14 207 136);
-            box-shadow: 0 7px 25px rgb(71 255 43 / 30%);
-
-            transform: translateY(-5px);
         }
     </style>
     <script defer src="firelin.widget.js"></script>
@@ -62,34 +54,38 @@
 
 <body>
     <h1>Firelin Terminal Widget</h1>
-    <div>
+    <div class="block">
         <h2>Script Injection Example</h2>
-        <code>
-      &lt;script&gt;<br>
-      &nbsp; (function (d, s, id, config) {<br>
-      &nbsp; &nbsp; var js, el = d.getElementsByTagName(s)[0];<br>
-      &nbsp; &nbsp; if (d.getElementById(id)) return;<br>
-      &nbsp; &nbsp; js = d.createElement(s);<br>
-      &nbsp; &nbsp; js.id = id;<br>
-      &nbsp; &nbsp; js.src = 'dist/v1/firelin.widget.min.js';<br>
-      &nbsp; &nbsp; js.defer = true;<br>
-      &nbsp; &nbsp; el.parentNode.insertBefore(js, el);<br>
-      &nbsp; &nbsp; js.onload = function () {<br>
-      &nbsp; &nbsp; &nbsp; if (window.FirelinTerminal) {<br>
-      &nbsp; &nbsp; &nbsp; &nbsp; window.FirelinTerminal.create(config);<br>
-      &nbsp; &nbsp; &nbsp; }<br>
-      &nbsp; &nbsp; };<br>
-      &nbsp; })(document, 'script', 'firelin-terminal-js', {<br>
-      &nbsp; &nbsp; /* pass config here */<br>
-      &nbsp; });<br>
-      &lt;/script&gt;
-    </code>
+        <code class="content">
+            &lt;script&gt;<br>
+            &nbsp; (function (d, s, id, config) {<br>
+            &nbsp; &nbsp; var js, el = d.getElementsByTagName(s)[0];<br>
+            &nbsp; &nbsp; if (d.getElementById(id)) return;<br>
+            &nbsp; &nbsp; js = d.createElement(s);<br>
+            &nbsp; &nbsp; js.id = id;<br>
+            &nbsp; &nbsp; js.src = 'dist/v1/firelin.widget.min.js';<br>
+            &nbsp; &nbsp; js.defer = true;<br>
+            &nbsp; &nbsp; el.parentNode.insertBefore(js, el);<br>
+            &nbsp; &nbsp; js.onload = function () {<br>
+            &nbsp; &nbsp; &nbsp; if (window.FirelinTerminal) {<br>
+            &nbsp; &nbsp; &nbsp; &nbsp; window.FirelinTerminal.create(config);<br>
+            &nbsp; &nbsp; &nbsp; }<br>
+            &nbsp; &nbsp; };<br>
+            &nbsp; })(document, 'script', 'firelin-terminal-js', {<br>
+            &nbsp; &nbsp; /* pass config here */<br>
+            &nbsp; });<br>
+            &lt;/script&gt;
+        </code>
     </div>
-    <div>
-        <p>The widget automatically activates when the Konami code is entered:</p>
-        <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
-        <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
-        <p class="shell">Shell trigger</p>
+    <div class="block">
+        <h2>Instructions</h2>
+        <div class="content">
+            <p>The widget automatically activates when the Konami code is entered:</p>
+            <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
+            <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
+            <p>The shell can also be activated by clicking elements using the "shell" class.</p>
+            <button class="shell">Shell trigger</button>
+        </div>
     </div>
 </body>
 

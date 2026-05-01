@@ -98,7 +98,15 @@ class FirelinTerminalElement extends HTMLElement {
         titlebar.addEventListener('mousedown', (e) => {
             if (e.button !== 0 || e.target.closest('.terminal-btn')) return;
             const rect = this.getBoundingClientRect();
-            this._dragState = { startX: e.clientX, startY: e.clientY, origLeft: rect.left, origTop: rect.top };
+            this._dragState = {
+                startX: e.clientX,
+                startY: e.clientY,
+                origRight: window.innerWidth - rect.right,
+                origBottom: window.innerHeight - rect.bottom
+            };
+            this.style.transition = 'none';
+            this.style.left = 'auto';
+            this.style.top = 'auto';
             e.preventDefault();
         });
 
@@ -106,13 +114,15 @@ class FirelinTerminalElement extends HTMLElement {
             if (!this._dragState) return;
             const dx = e.clientX - this._dragState.startX;
             const dy = e.clientY - this._dragState.startY;
-            this.style.left = `${this._dragState.origLeft + dx}px`;
-            this.style.top = `${this._dragState.origTop + dy}px`;
-            this.style.right = 'auto';
-            this.style.bottom = 'auto';
+            this.style.right = `${this._dragState.origRight - dx}px`;
+            this.style.bottom = `${this._dragState.origBottom - dy}px`;
         });
 
-        window.addEventListener('mouseup', () => { this._dragState = null; });
+        window.addEventListener('mouseup', () => {
+            if (!this._dragState) return;
+            this._dragState = null;
+            this.style.transition = '';
+        });
     }
 
     handleKeyDown(event) {
@@ -186,12 +196,19 @@ class FirelinTerminalElement extends HTMLElement {
     showShell() {
         if (!this._positioned) {
             this.style.transition = 'none';
-            this.style.top = '80px';
-            this.style.left = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
-            this.style.right = 'auto';
-            this.style.bottom = 'auto';
+            this.style.left = 'auto';
+            this.style.top = 'auto';
+            this.shell.classList.remove('hidden');
+            const h = this.offsetHeight;
+            this.style.right = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.style.bottom = `${window.innerHeight - 80 - h}px`;
             this._positioned = true;
             requestAnimationFrame(() => { this.style.transition = ''; });
+        } else if (this.shell.classList.contains('minimized') && this._savedRight != null) {
+            this.style.right = this._savedRight;
+            this.style.bottom = this._savedBottom;
+            this._savedRight = null;
+            this._savedBottom = null;
         }
         this.shell.classList.remove('hidden');
         this.shell.classList.remove('minimized');
@@ -200,14 +217,15 @@ class FirelinTerminalElement extends HTMLElement {
     minimizeShell() {
         if (this.shell.classList.contains('minimized')) {
             this.shell.classList.remove('minimized');
-            this.style.left = this._savedLeft || `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
-            this.style.top = this._savedTop || '80px';
+            this.style.right = this._savedRight != null ? this._savedRight : `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.style.bottom = this._savedBottom != null ? this._savedBottom : `${window.innerHeight - 80 - this.offsetHeight}px`;
+            this._savedRight = null;
+            this._savedBottom = null;
         } else {
-            this._savedLeft = this.style.left;
-            this._savedTop = this.style.top;
-            const right = 22, bottom = 8;
-            this.style.left = `${window.innerWidth - 220 - right}px`;
-            this.style.top = `${window.innerHeight - 38 - bottom}px`;
+            this._savedRight = this.style.right;
+            this._savedBottom = this.style.bottom;
+            this.style.right = '8px';
+            this.style.bottom = '8px';
             this.shell.classList.add('minimized');
         }
     }
