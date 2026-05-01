@@ -1,4 +1,4 @@
-import nanoTemplate from '../templates/overlay.html';
+import nanoTemplate from '../../templates/overlay.html';
 
 export default {
     name: 'nano',
