@@ -1,9 +1,28 @@
+const LS_KEY = 'firelin_history';
+
 class HistoryManager {
     constructor(maxSize = 200) {
         this._max = maxSize;
-        this._entries = [];
+        this._entries = this._loadHistory();
         this._idx = -1;
         this._draft = '';
+    }
+
+    _loadHistory() {
+        try {
+            const saved = localStorage.getItem(LS_KEY);
+            const entries = saved ? JSON.parse(saved) : null;
+            if (Array.isArray(entries)) {
+                return entries.slice(-this._max);
+            }
+        } catch (_) { }
+        return [];
+    }
+
+    _saveHistory() {
+        try {
+            localStorage.setItem(LS_KEY, JSON.stringify(this._entries));
+        } catch (_) { }
     }
 
     push(entry) {
@@ -13,6 +32,7 @@ class HistoryManager {
         if (this._entries.length > this._max) this._entries.shift();
         this._idx = -1;
         this._draft = '';
+        this._saveHistory();
     }
 
     up(currentInput) {
