@@ -1,0 +1,146 @@
+{
+  "_version": "1.0",
+  "_description": "Mock HTTP responses for the curl command. Add new endpoints freely — key is the full URL, value is the response object. Delay is in milliseconds.",
+  "_schema": {
+    "endpoint": {
+      "status": "number — HTTP status code",
+      "statusText": "string — HTTP status text",
+      "delay": "number — simulated latency in ms",
+      "headers": "object — response headers map",
+      "body": "string — raw response body"
+    }
+  },
+
+  "endpoints": {
+
+    "https://strucit.app": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 620,
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Server": "vercel",
+        "X-Powered-By": "strucit/2.3.1",
+        "Cache-Control": "public, max-age=60",
+        "X-Easter-Egg": "You found the terminal. Now try the app."
+      },
+      "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>strucit — structured content</title>\n</head>\n<body>\n  <h1>strucit</h1>\n  <p>Structured content creation platform.</p>\n  <!-- Easter egg achieved. See /projects/strucit/README.md for details. -->\n</body>\n</html>"
+    },
+
+    "https://api.strucit.app/status": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 380,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "vercel",
+        "X-Powered-By": "strucit/2.3.1"
+      },
+      "body": "{\n  \"status\": \"operational\",\n  \"version\": \"2.3.1\",\n  \"uptime\": \"14d 6h 22m\",\n  \"services\": {\n    \"api\": \"ok\",\n    \"database\": \"ok\",\n    \"storage\": \"ok\",\n    \"queue\": \"ok\"\n  },\n  \"latency_ms\": 12,\n  \"last_deploy\": \"2026-05-01T00:02:45Z\"\n}"
+    },
+
+    "https://api.strucit.app/projects": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 510,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "vercel"
+      },
+      "body": "{\n  \"total\": 3,\n  \"projects\": [\n    { \"id\": 1, \"name\": \"firelin-terminal\", \"status\": \"live\", \"updated\": \"2026-05-01\" },\n    { \"id\": 2, \"name\": \"strucit\", \"status\": \"live\", \"updated\": \"2026-05-01\" },\n    { \"id\": 3, \"name\": \"[REDACTED]\", \"status\": \"in-progress\", \"updated\": \"2026-04-28\" }\n  ]\n}"
+    },
+
+    "https://api.firelin.sh/status": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 290,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "firelin/1.0",
+        "X-Node": "firelin-prod-01"
+      },
+      "body": "{\n  \"status\": \"nominal\",\n  \"hostname\": \"firelin\",\n  \"kernel\": \"Firelin OS 1.0.0 Phosphor\",\n  \"uptime\": \"∞\",\n  \"load\": [0.42, 0.38, 0.41],\n  \"memory\": {\n    \"total\": \"8192 MB\",\n    \"used\": \"3201 MB\",\n    \"free\": \"4991 MB\"\n  },\n  \"coffee\": \"brewing\",\n  \"message\": \"All systems go. Even the imaginary ones.\"\n}"
+    },
+
+    "https://api.firelin.sh/coffee/status": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 1100,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "firelin/1.0",
+        "X-Caffeine-Level": "optimal"
+      },
+      "body": "{\n  \"machine\": \"Firelin Brew Station v3\",\n  \"status\": \"ready\",\n  \"temperature_c\": 94,\n  \"reservoir_pct\": 72,\n  \"grounds_pct\": 35,\n  \"cups_today\": 3,\n  \"last_brew\": \"2026-05-01T14:30:01Z\",\n  \"next_scheduled\": null,\n  \"advisory\": \"Grounds at 35%. Replenishment recommended before tomorrow morning.\"\n}"
+    },
+
+    "https://api.firelin.sh/coffee/brew": {
+      "status": 202,
+      "statusText": "Accepted",
+      "delay": 2400,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "firelin/1.0"
+      },
+      "body": "{\n  \"job_id\": \"brew-2026-001\",\n  \"status\": \"queued\",\n  \"message\": \"Brew job accepted. ETA: 4 minutes.\",\n  \"warning\": \"curl cannot trigger real coffee. This is a terminal Easter egg. You know that.\"\n}"
+    },
+
+    "https://api.firelin.sh/parts": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 740,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "firelin/1.0",
+        "X-Warehouse": "firelin-depot-01"
+      },
+      "body": "{\n  \"inventory\": [\n    { \"sku\": \"BRK-001\", \"name\": \"Brake Fluid DOT 4\",     \"qty\": 24, \"status\": \"in-stock\",  \"last_check\": \"2026-05-01\" },\n    { \"sku\": \"OIL-5W30\",\"name\": \"Engine Oil 5W-30\",      \"qty\": 8,  \"status\": \"in-stock\",  \"last_check\": \"2026-05-01\" },\n    { \"sku\": \"FLT-AIR\", \"name\": \"Air Filter K&N\",         \"qty\": 3,  \"status\": \"low\",       \"last_check\": \"2026-04-28\" },\n    { \"sku\": \"SPK-NGK\", \"name\": \"NGK Spark Plugs (x4)\",  \"qty\": 12, \"status\": \"in-stock\",  \"last_check\": \"2026-05-01\" },\n    { \"sku\": \"TYR-255\", \"name\": \"Tyres 255/35 R19\",       \"qty\": 0,  \"status\": \"backordered\",\"eta\": \"2026-05-07\"       },\n    { \"sku\": \"CAL-FRN\", \"name\": \"Front Brake Caliper\",    \"qty\": 2,  \"status\": \"in-stock\",  \"last_check\": \"2026-04-30\" }\n  ],\n  \"last_updated\": \"2026-05-01T06:00:00Z\",\n  \"note\": \"Tyres on backorder. Tell the customer. Again.\"\n}"
+    },
+
+    "https://api.firelin.sh/deploy": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 480,
+      "headers": {
+        "Content-Type": "application/json",
+        "Server": "firelin/1.0"
+      },
+      "body": "{\n  \"deployments\": [\n    { \"project\": \"strucit\",          \"version\": \"2.3.1\", \"status\": \"live\",    \"ts\": \"2026-05-01T00:02:45Z\", \"duration_s\": 26 },\n    { \"project\": \"firelin-terminal\", \"version\": \"1.0.0\", \"status\": \"live\",    \"ts\": \"2026-04-28T09:12:18Z\", \"duration_s\": 15 },\n    { \"project\": \"[REDACTED]\",       \"version\": \"0.1.0\", \"status\": \"staging\", \"ts\": \"2026-04-28T22:00:00Z\", \"duration_s\": 44 }\n  ],\n  \"pipeline\": \"healthy\",\n  \"queue\": 0\n}"
+    },
+
+    "https://lucasfogolin.com": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 530,
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Server": "vercel",
+        "X-Easter-Egg": "You are already here. This is the site. The terminal is inside the site. The curl is inside the terminal. We need to go deeper."
+      },
+      "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>Lucas Fogolin</title>\n</head>\n<body>\n  <!-- You curled the site from within the site's Easter egg terminal. -->\n  <!-- That's a level of recursion I respect. -->\n  <h1>Lucas Fogolin</h1>\n  <p>Developer. Builder. Coffee drinker.</p>\n</body>\n</html>"
+    },
+
+    "https://github.com/lucasfogolin": {
+      "status": 200,
+      "statusText": "OK",
+      "delay": 890,
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Server": "github.com"
+      },
+      "body": "{\n  \"user\": \"lucasfogolin\",\n  \"public_repos\": 12,\n  \"followers\": \"some\",\n  \"following\": \"some others\",\n  \"bio\": \"Builder of things. Sometimes they work.\",\n  \"pinned\": [\"firelin-terminal\", \"strucit\"],\n  \"tip\": \"Star the repo if you liked the terminal.\"\n}"
+    }
+  },
+
+  "fallback": {
+    "status": 200,
+    "statusText": "OK",
+    "delay": 600,
+    "headers": {
+      "Content-Type": "text/plain",
+      "Server": "firelin/1.0",
+      "X-Simulated": "true"
+    },
+    "body": "curl: (6) Could not resolve host: {host}\nTip: known hosts are api.firelin.sh, strucit.app, lucasfogolin.com, github.com/lucasfogolin"
+  }
+}

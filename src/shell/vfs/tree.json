@@ -1,0 +1,401 @@
+{
+  "type": "directory",
+  "name": "/",
+  "owner": "root",
+  "permissions": "755",
+  "modified": "2026-05-01T00:00:00Z",
+  "children": {
+    "bin": {
+      "type": "directory",
+      "name": "bin",
+      "owner": "root",
+      "permissions": "555",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        "bash": {
+          "type": "file",
+          "name": "bash",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# GNU Bash, version 5.2.21(1)-release\n# This is the shell you are currently using.\n# Source: github.com/lucasfogolin/firelin-terminal\n# Yes, you're reading a file that describes the thing you are reading it with.\n# Congratulations. You have achieved recursion.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 312
+        },
+        "ls": {
+          "type": "file",
+          "name": "ls",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# ls — list directory contents\n# Compiled from: src/shell/commands/ls.js\n# You found the source. Or the illusion of the source.\n# The real ls is a JavaScript function running in your browser.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 247
+        },
+        "cat": {
+          "type": "file",
+          "name": "cat",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# cat — concatenate and print files\n# Compiled from: src/shell/commands/cat.js\n# Fun fact: you used cat to read a file about cat.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 198
+        },
+        "grep": {
+          "type": "file",
+          "name": "grep",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# grep — print lines that match patterns\n# Compiled from: src/shell/commands/grep.js\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 162
+        },
+        "find": {
+          "type": "file",
+          "name": "find",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# find — search for files in a directory hierarchy\n# Compiled from: src/shell/commands/find.js\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 175
+        },
+        "nano": {
+          "type": "file",
+          "name": "nano",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# nano — simple text editor\n# Compiled from: src/shell/commands/nano.js\n# Controls: ^X Exit  ^S Save  ^G Help\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 200
+        },
+        "curl": {
+          "type": "file",
+          "name": "curl",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# curl — transfer a URL\n# Mock responses loaded from: src/shell/commands/data/curl-responses.json\n# Not a real HTTP client. But it plays one in your browser.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 220
+        },
+        "ping": {
+          "type": "file",
+          "name": "ping",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# ping — send ICMP ECHO_REQUEST to network hosts\n# Simulated. No packets actually sent. GDPR-friendly.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 187
+        },
+        "top": {
+          "type": "file",
+          "name": "top",
+          "owner": "root",
+          "permissions": "555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# top — display Linux processes\n# Processes are fabricated for entertainment purposes.\n# Any resemblance to real processes is coincidental.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 201
+        },
+        "su": {
+          "type": "file",
+          "name": "su",
+          "owner": "root",
+          "permissions": "4555",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "#!/firelin/bash\n# su — run a command with substitute user and group ID\n# setuid bit is set. Escalate wisely.\nbinary: ELF 64-bit LSB executable, x86-64",
+          "size": 180
+        }
+      }
+    },
+    "etc": {
+      "type": "directory",
+      "name": "etc",
+      "owner": "root",
+      "permissions": "755",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        "hostname": {
+          "type": "file",
+          "name": "hostname",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "firelin",
+          "size": 7
+        },
+        "os-release": {
+          "type": "file",
+          "name": "os-release",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "NAME=\"Firelin OS\"\nVERSION=\"1.0.0 (Phosphor)\"\nID=firelin\nID_LIKE=debian\nPRETTY_NAME=\"Firelin OS 1.0.0 Phosphor\"\nHOME_URL=\"https://lucasfogolin.com\"\nBUG_REPORT_URL=\"https://github.com/lucasfogolin/firelin-terminal/issues\"",
+          "size": 218
+        },
+        "passwd": {
+          "type": "file",
+          "name": "passwd",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "root:x:0:0:root:/root:/bin/bash\nguest:x:1000:1000:Guest User:/home/guest:/bin/bash",
+          "size": 82
+        },
+        "shadow": {
+          "type": "file",
+          "name": "shadow",
+          "owner": "root",
+          "permissions": "640",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "root:$6$rounds=4096$salted$hashedpassword:19480:0:99999:7:::\nguest:!:19480:0:99999:7:::",
+          "size": 88
+        },
+        "motd": {
+          "type": "file",
+          "name": "motd",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "Welcome to Firelin OS 1.0.0 LTS (Phosphor)\n\n  System information as of 2026-05-01\n\n  Uptime:    ∞\n  Load:      existential\n  Processes: however many you imagine\n\nType `help` to list available commands.\nType `ls /projects` to see what's been built.\nType `tail -f /logs/system.log` for entertainment.\n\nThis system is monitored. By its own creator. Who built it as an Easter egg.\nCarry on.",
+          "size": 388
+        }
+      }
+    },
+    "home": {
+      "type": "directory",
+      "name": "home",
+      "owner": "root",
+      "permissions": "755",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        "guest": {
+          "type": "directory",
+          "name": "guest",
+          "owner": "guest",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            ".bashrc": {
+              "type": "file",
+              "name": ".bashrc",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "# ~/.bashrc — executed for interactive shells\n\nexport PS1=\"guest@firelin:\\w$ \"\nexport EDITOR=\"nano\"\nexport LANG=\"en_US.UTF-8\"\n\n# Aliases\nalias ll=\"ls -la\"\nalias ..=\"cd ..\"\nalias home=\"cd ~\"\n\n# Easter egg hint\n# try: su root\n# try: cat /root/diary.txt\n# try: curl https://api.firelin.sh/coffee/status",
+              "size": 342
+            },
+            "readme.txt": {
+              "type": "file",
+              "name": "readme.txt",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "This is your home directory. Make yourself at home.\n\nYou can:\n  mkdir anything\n  touch files\n  nano a file to write something\n  cd /projects to see what's been built\n  tail -f /logs/system.log to watch the world burn (slowly)\n\nIf you get bored:\n  su root         (password: root)\n  find / -name \"*.secret\"\n  curl https://api.firelin.sh/status",
+              "size": 330
+            }
+          }
+        }
+      }
+    },
+    "logs": {
+      "type": "directory",
+      "name": "logs",
+      "owner": "root",
+      "permissions": "755",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        "system.log": {
+          "type": "file",
+          "name": "system.log",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "_live": true,
+          "_generator": "system-log",
+          "_interval": 2800,
+          "content": "[2026-05-01 00:00:01] [BOOT ] Firelin OS kernel loaded. Phosphor display initialized.\n[2026-05-01 00:00:02] [INIT ] Mounting virtual filesystems... done.\n[2026-05-01 00:00:03] [INIT ] Starting system services... done.\n[2026-05-01 00:00:04] [AUTH ] Guest session opened. Welcome.\n[2026-05-01 00:00:10] [SYS  ] Coffee machine daemon: warming up. ETA 4 minutes.\n[2026-05-01 00:00:15] [NET  ] Network interface eth0 up. IP: 127.0.0.1 (you're local, buddy)\n[2026-05-01 00:00:22] [CRON ] Scheduled job: rotate_logs.sh — completed in 0.003s\n[2026-05-01 00:00:45] [WARN ] Brake fluid level at 68%. Reminder set for next week.\n[2026-05-01 00:01:10] [DEP  ] strucit v2.3.1 — build started.\n[2026-05-01 00:02:44] [DEP  ] strucit v2.3.1 — build completed. 0 errors, 3 warnings (the usual).\n[2026-05-01 00:02:45] [DEP  ] strucit v2.3.1 — deployed to production. Users unaware. As planned.",
+          "size": 820
+        },
+        "deploy.log": {
+          "type": "file",
+          "name": "deploy.log",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "[2026-04-28 09:12:03] [DEPLOY] firelin-terminal v1.0.0 — ROLLOUT START\n[2026-04-28 09:12:04] [BUILD ] webpack --mode=production... OK (12.4s)\n[2026-04-28 09:12:16] [PUSH  ] dist/v1/firelin.widget.min.js → CDN... OK\n[2026-04-28 09:12:18] [VERIFY] Health check passed. 200 OK.\n[2026-04-28 09:12:18] [DEPLOY] firelin-terminal v1.0.0 — LIVE\n\n[2026-04-30 14:33:51] [DEPLOY] strucit v2.3.0 — ROLLOUT START\n[2026-04-30 14:34:12] [BUILD ] vite build... OK (8.1s)\n[2026-04-30 14:34:20] [TEST  ] 47 passed, 0 failed.\n[2026-04-30 14:34:21] [PUSH  ] → production... OK\n[2026-04-30 14:34:22] [DEPLOY] strucit v2.3.0 — LIVE\n\n[2026-05-01 00:02:44] [DEPLOY] strucit v2.3.1 — hotfix: typo in dashboard label\n[2026-05-01 00:02:45] [DEPLOY] strucit v2.3.1 — LIVE (26 seconds. new record.)",
+          "size": 714
+        },
+        "coffee.log": {
+          "type": "file",
+          "name": "coffee.log",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "_live": true,
+          "_generator": "coffee-log",
+          "_interval": 5000,
+          "content": "[2026-05-01 08:00:00] [BREW ] Reservoir: full. Grounds: fresh. Initiating morning protocol.\n[2026-05-01 08:00:04] [BREW ] Heating element: 94°C. Optimal range confirmed.\n[2026-05-01 08:00:11] [BREW ] Extraction in progress. 28 seconds.\n[2026-05-01 08:00:39] [BREW ] Brew complete. Volume: 240ml. Crema: excellent.\n[2026-05-01 08:00:40] [WARN ] Cup detected. Proceed.\n[2026-05-01 09:15:22] [BREW ] Second cup initiated. No judgment.\n[2026-05-01 11:03:44] [BREW ] Third cup. System logging this for personal records.\n[2026-05-01 14:30:01] [WARN ] Grounds reservoir at 20%. Replenishment recommended.\n[2026-05-01 14:30:02] [INFO ] Alternative: water. Not recommended.",
+          "size": 596
+        },
+        "access.log": {
+          "type": "file",
+          "name": "access.log",
+          "owner": "root",
+          "permissions": "644",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "127.0.0.1 - - [01/May/2026:00:00:01 +0000] \"GET / HTTP/1.1\" 200 4823\n127.0.0.1 - - [01/May/2026:00:00:15 +0000] \"GET /projects HTTP/1.1\" 200 1247\n127.0.0.1 - - [01/May/2026:00:01:03 +0000] \"GET /about HTTP/1.1\" 200 2901\n127.0.0.1 - - [01/May/2026:00:02:44 +0000] \"POST /api/deploy HTTP/1.1\" 201 88\n127.0.0.1 - - [01/May/2026:00:04:12 +0000] \"GET /root/secrets.txt HTTP/1.1\" 403 212\n127.0.0.1 - - [01/May/2026:00:04:13 +0000] \"GET /etc/shadow HTTP/1.1\" 403 212\n127.0.0.1 - - [01/May/2026:08:30:00 +0000] \"GET /coffee HTTP/1.1\" 200 1\n127.0.0.1 - - [01/May/2026:08:30:00 +0000] \"GET /coffee HTTP/1.1\" 200 1",
+          "size": 560
+        }
+      }
+    },
+    "projects": {
+      "type": "directory",
+      "name": "projects",
+      "owner": "guest",
+      "permissions": "755",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        "strucit": {
+          "type": "directory",
+          "name": "strucit",
+          "owner": "guest",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "README.md": {
+              "type": "file",
+              "name": "README.md",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "# strucit\n\nA platform for structured content creation and management.\nCurrent version: 2.3.1\n\n## Stack\n- Frontend: React + TypeScript\n- Backend: Node.js + Postgres\n- Infra: Vercel + Supabase\n\n## Status\nLive at: https://strucit.app\n\n## Quick start\n```bash\nnpm install\nnpm run dev\n```\n\n## Endpoints\n  GET  /api/status      — system health\n  GET  /api/projects    — list projects\n  POST /api/projects    — create project\n\nSee also: manifest.json",
+              "size": 404
+            },
+            "manifest.json": {
+              "type": "file",
+              "name": "manifest.json",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "{\n  \"name\": \"strucit\",\n  \"version\": \"2.3.1\",\n  \"description\": \"Structured content creation platform\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://strucit.app\",\n  \"repository\": \"https://github.com/lucasfogolin/strucit\",\n  \"engines\": {\n    \"node\": \">=20.0.0\"\n  },\n  \"keywords\": [\"cms\", \"content\", \"structured\", \"react\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:02:45Z\"\n}",
+              "size": 410
+            }
+          }
+        },
+        "firelin": {
+          "type": "directory",
+          "name": "firelin",
+          "owner": "guest",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "README.md": {
+              "type": "file",
+              "name": "README.md",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "# firelin-terminal\n\nA retro CRT terminal web component. The one you are using right now.\nBuilt as an Easter egg for my personal site.\n\nActivate with: ↑↑↓↓←→←→BA  (Konami Code)\n\n## Stack\n- Vanilla JS\n- Web Components (Shadow DOM)\n- Webpack 5 + Babel\n- CSS custom properties (theming)\n\n## Features\n- Virtual filesystem (VFS) with UNIX-like permissions\n- 20+ commands\n- Command history\n- Tab completion\n- Syntax highlighting\n- Persistent session (localStorage)\n- Scramble text effect\n\n## Status\nEmbedded at: https://lucasfogolin.com\n\n## Meta\nYou found the project that is the terminal inside the terminal.\nCongratuations. This is turtles all the way down.",
+              "size": 610
+            },
+            "package.json": {
+              "type": "file",
+              "name": "package.json",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "{\n  \"name\": \"firelin-terminal\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Retro CRT terminal web component. An Easter egg for the web.\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"main\": \"dist/v1/firelin.widget.min.js\",\n  \"scripts\": {\n    \"build\": \"webpack --mode=production\",\n    \"dev\": \"webpack serve --mode=development\"\n  },\n  \"keywords\": [\"terminal\", \"web-component\", \"easter-egg\", \"retro\", \"crt\"]\n}",
+              "size": 412
+            }
+          }
+        }
+      }
+    },
+    "root": {
+      "type": "directory",
+      "name": "root",
+      "owner": "root",
+      "permissions": "700",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        ".ssh": {
+          "type": "directory",
+          "name": ".ssh",
+          "owner": "root",
+          "permissions": "700",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "id_rsa": {
+              "type": "file",
+              "name": "id_rsa",
+              "owner": "root",
+              "permissions": "600",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "-----BEGIN RSA PRIVATE KEY-----\nTGhpcyBpcyBub3QgYSByZWFsIGtleS4gWW91IGtub3cgdGhhdC4gSSBrbm93\ndGhhdC4gV2UncmUgY29vbC4gQnV0IHNlcmlvdXNseSwgd2h5IGFyZSB5b3Ug\naGVyZT8gR28gYnVpbGQgc29tZXRoaW5nLg==\n-----END RSA PRIVATE KEY-----",
+              "size": 245
+            },
+            "authorized_keys": {
+              "type": "file",
+              "name": "authorized_keys",
+              "owner": "root",
+              "permissions": "600",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC... lucas@firelin\n# Only the builder gets a key. Sorry.",
+              "size": 98
+            }
+          }
+        },
+        "diary.txt": {
+          "type": "file",
+          "name": "diary.txt",
+          "owner": "root",
+          "permissions": "600",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "Day 1\nStarted building the terminal. \"It'll be quick,\" I said.\n\nDay 8\nThe VFS took three rewrites. The parser ate two weekends.\n\"It's an Easter egg,\" I said. \"Nobody will go this deep.\"\n\nDay 14\nAdded lore to the logs. Coffee machine daemon has more personality than most\nSaaS products I've used.\n\nDay 21\nYou're reading this. You went deep.\nI respect that.\n\nSince you're here — check out /projects. Real stuff lives there.\nAnd if you find any bugs, it's a feature.\n\n  — Lucas",
+          "size": 490
+        },
+        ".env": {
+          "type": "file",
+          "name": ".env",
+          "owner": "root",
+          "permissions": "600",
+          "modified": "2026-05-01T00:00:00Z",
+          "content": "# Root environment\n# If you're reading this, you earned it.\n\nSECRET_KEY=not_a_real_secret_but_nice_try\nCOFFEE_API_KEY=beans2026\nDEPLOY_TOKEN=ship_it_and_pray\nDB_PASSWORD=correct_horse_battery_staple\nMEANING_OF_LIFE=42",
+          "size": 234
+        }
+      }
+    },
+    "tmp": {
+      "type": "directory",
+      "name": "tmp",
+      "owner": "root",
+      "permissions": "1777",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {}
+    },
+    "var": {
+      "type": "directory",
+      "name": "var",
+      "owner": "root",
+      "permissions": "755",
+      "modified": "2026-05-01T00:00:00Z",
+      "children": {
+        "log": {
+          "type": "directory",
+          "name": "log",
+          "owner": "root",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "auth.log": {
+              "type": "file",
+              "name": "auth.log",
+              "owner": "root",
+              "permissions": "640",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "May  1 00:00:01 firelin sshd[1]: Server listening on 0.0.0.0 port 22.\nMay  1 00:00:04 firelin login[42]: Guest login on tty1\nMay  1 00:04:12 firelin su[99]: (to root) guest on pts/0\nMay  1 00:04:12 firelin su[99]: pam_unix: session opened for user root by guest(uid=1000)\nMay  1 00:04:13 firelin su[99]: pam_unix: session closed for user root",
+              "size": 358
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -22,6 +22,17 @@ Every node in the tree is either a **directory** or a **file**.
 }
 ```
 
+**Live file** nodes add (optional — for `tail -f` generators):
+```json
+{
+  "_live": true,
+  "_generator": "system-log",
+  "_interval": 2800
+}
+```
+`_generator` keys reference entries in `src/shell/commands/data/log-generators.json`.
+`_interval` is milliseconds between generated lines (default 3000 if omitted).
+
 **Directory** nodes add:
 ```json
 {
@@ -179,6 +190,8 @@ resolveRelative("../etc", cwd)          → Node | null
 2. Otherwise → join `cwd + "/" + path`, then normalize.
 3. Normalize: collapse `./`, resolve `..` segments, strip trailing `/`.
 4. Special tokens: `.` = current, `..` = parent, `~` = `/home/{user}`.
+
+**Persistence:** VFS state is serialized to `localStorage` key `firelin_vfs` on every mutation. On boot, the runtime checks localStorage first; if present and valid, loads it. If absent or corrupt, falls back to `tree.json` (fresh session). This gives users a persistent home directory across visits.
 
 **VFS API (internal, not exposed to commands directly):**
 ```js

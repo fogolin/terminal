@@ -1,0 +1,75 @@
+{
+  "_version": "1.0",
+  "_description": "Live log generators for `tail -f`. Each generator produces randomized log lines on an interval. Add new generators to expand. Referenced by VFS nodes with `_live: true` and `_generator: <key>`.",
+  "_schema": {
+    "generator": {
+      "prefix": "string — tag shown in brackets before each line",
+      "timeFormat": "\"iso\" | \"syslog\" — timestamp style",
+      "messages": "array of strings — one picked at random each interval tick. Use {rand_N} for random int 1-N, {rand_float_N} for float."
+    }
+  },
+
+  "generators": {
+
+    "system-log": {
+      "prefix": "SYS",
+      "timeFormat": "iso",
+      "messages": [
+        "[{ts}] [CRON ] Heartbeat check: all services nominal.",
+        "[{ts}] [NET  ] Packet loss: 0%. Network is healthy.",
+        "[{ts}] [MEM  ] Memory usage: {rand_40}% — well within limits.",
+        "[{ts}] [CPU  ] Load average: 0.{rand_99}, 0.{rand_99}, 0.{rand_99}",
+        "[{ts}] [DISK ] /dev/sda1: {rand_60}% used. Plenty of space.",
+        "[{ts}] [CRON ] log-rotate.sh — completed in 0.00{rand_9}s",
+        "[{ts}] [WARN ] Brake fluid level dropped 1%. Still fine. Probably.",
+        "[{ts}] [WARN ] Brake fluid reminder: schedule service before 2026-06-01.",
+        "[{ts}] [DEP  ] CI pipeline triggered: strucit — branch main.",
+        "[{ts}] [DEP  ] Build passed. Tests: all green. Deploying.",
+        "[{ts}] [DEP  ] Deploy complete. Zero downtime. You're welcome.",
+        "[{ts}] [BREW ] Coffee machine daemon: idle. Awaiting next request.",
+        "[{ts}] [BREW ] Coffee temperature stable at 94°C.",
+        "[{ts}] [INFO ] Scheduled backup started: /projects → s3://firelin-backup",
+        "[{ts}] [INFO ] Backup complete. {rand_800} files archived.",
+        "[{ts}] [AUTH ] Session token refreshed for guest.",
+        "[{ts}] [KERN ] Kernel: no updates available. Stable is good.",
+        "[{ts}] [SYS  ] Uptime: {rand_20} days, {rand_23} hours, {rand_59} minutes.",
+        "[{ts}] [INFO ] /tmp cleaned: {rand_30} stale files removed.",
+        "[{ts}] [INFO ] TYR-255 still on backorder. Customer notified. Again.",
+        "[{ts}] [PERF ] API response avg: {rand_30}ms. Fast enough.",
+        "[{ts}] [INFO ] SPK-NGK spark plugs restock confirmed. ETA: tomorrow.",
+        "[{ts}] [WARN ] FLT-AIR air filter stock low: 3 units remaining.",
+        "[{ts}] [INFO ] /logs/system.log rotated. Fresh slate.",
+        "[{ts}] [META ] You are reading the logs. The logs know.",
+        "[{ts}] [KERN ] Page fault resolved. Everything is fine. Do not panic.",
+        "[{ts}] [CRON ] coffee-health-check.sh — status: optimal. Recommended: another cup.",
+        "[{ts}] [NET  ] DNS resolved api.firelin.sh in {rand_20}ms.",
+        "[{ts}] [INFO ] strucit dashboard: {rand_800} active sessions.",
+        "[{ts}] [WARN ] This log file is being watched. Behave accordingly."
+      ]
+    },
+
+    "coffee-log": {
+      "prefix": "BREW",
+      "timeFormat": "iso",
+      "messages": [
+        "[{ts}] [BREW ] Idle. Reservoir: {rand_60}% full.",
+        "[{ts}] [BREW ] Temperature holding at 94°C.",
+        "[{ts}] [BREW ] Auto-clean cycle initiated. Duration: 90 seconds.",
+        "[{ts}] [BREW ] Grounds compacted. Drawer needs emptying soon.",
+        "[{ts}] [BREW ] Descaling reminder: due in {rand_20} days.",
+        "[{ts}] [INFO ] Grind setting: medium-fine. Extraction optimal.",
+        "[{ts}] [INFO ] Crema quality: excellent. Today is a good day.",
+        "[{ts}] [INFO ] Crema quality: acceptable. Today is fine.",
+        "[{ts}] [INFO ] Shot timer: 28 seconds. Perfect.",
+        "[{ts}] [WARN ] Grounds drawer at {rand_20}%. Empty soon or face consequences.",
+        "[{ts}] [WARN ] Reservoir below 30%. Refill before tomorrow morning.",
+        "[{ts}] [BREW ] New brew initiated. User: root. Time: {ts}.",
+        "[{ts}] [BREW ] Brew complete. Volume: {rand_40}ml + 200ml base.",
+        "[{ts}] [INFO ] Cup {rand_5} of the day. Logging for productivity research.",
+        "[{ts}] [META ] Coffee consumed today: {rand_5} cups. Peak: 6 (2025-03-deadline).",
+        "[{ts}] [INFO ] Alternative hydration: water. Not recommended."
+      ]
+    }
+
+  }
+}

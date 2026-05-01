@@ -270,6 +270,73 @@
 }
 
 /* ============================================================
+   SHELL — HIGHLIGHT & OUTPUT COLORS
+   ============================================================ */
+:host {
+    --term-hl-cmd-known:   var(--term-text);
+    --term-hl-cmd-unknown: #e06c75;
+    --term-hl-flag:        #61afef;
+    --term-hl-string:      #98c379;
+    --term-hl-arg:         var(--term-text);
+}
+
+.hl-cmd-known   { color: var(--term-hl-cmd-known); }
+.hl-cmd-unknown { color: var(--term-hl-cmd-unknown); }
+.hl-flag        { color: var(--term-hl-flag); }
+.hl-string      { color: var(--term-hl-string); }
+.hl-arg         { color: var(--term-hl-arg); }
+
+.line-error { color: var(--term-hl-cmd-unknown); }
+.line-dim   { color: var(--term-text-dim); }
+
+.line-command .terminal-prompt {
+    color: var(--term-prompt);
+    text-shadow: var(--term-prompt-glow);
+}
+
+/* ============================================================
+   INTERACTIVE INPUT ROW
+   ============================================================ */
+.terminal-input-row {
+    position: relative;
+    min-height: calc(var(--term-font-size) * var(--term-line-height));
+    word-break: break-all;
+    margin-top: var(--term-gap-lines);
+}
+
+.terminal-input-row .terminal-prompt {
+    color: var(--term-prompt);
+    text-shadow: var(--term-prompt-glow);
+}
+
+.terminal-input-display {
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.terminal-input-capture {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    pointer-events: none;
+    font-family: var(--term-font);
+    font-size: var(--term-font-size);
+}
+
+/* Cursor only blinks when input is active */
+.terminal-cursor {
+    display: none;
+}
+.terminal-cursor.cursor-active {
+    display: inline-block;
+}
+
+/* ============================================================
    SCRAMBLE EFFECT
    ============================================================ */
 .scramble-char {

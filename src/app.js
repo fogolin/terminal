@@ -1,20 +1,19 @@
 import terminalStyles from './styles/terminal.css';
-import terminalFonts from './styles/fonts.css';
+import terminalFonts  from './styles/fonts.css';
 import terminalTemplate from './assets/template.html';
-import { scrambleElement } from './functions/scramble';
+import { Shell }       from './shell/shell.js';
+import { TerminalUI }  from './shell/ui.js';
+
 const WIDGET_TAG = 'firelin-terminal';
-const KONAMI_KEYS = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-const KONAMI_MOBILE = ['up', 'up', 'down', 'down', 'left', 'right', 'left', 'right', 'doubletap'];
-const SWIPE_THRESHOLD = 30;
+
+const KONAMI_KEYS   = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+const KONAMI_MOBILE = ['up','up','down','down','left','right','left','right','doubletap'];
+const SWIPE_THRESHOLD  = 30;
 const DOUBLE_TAP_WINDOW = 400;
 
 function parseConfig(value) {
     if (!value) return {};
-    try {
-        return JSON.parse(value);
-    } catch {
-        return {};
-    }
+    try { return JSON.parse(value); } catch { return {}; }
 }
 
 function injectFonts() {
@@ -35,26 +34,30 @@ class FirelinTerminalElement extends HTMLElement {
     constructor() {
         super();
         injectFonts();
-        this.config = parseConfig(this.getAttribute('data-config'));
-        this.touchStart = null;
+        this.config        = parseConfig(this.getAttribute('data-config'));
+        this.touchStart    = null;
         this.touchSequence = [];
-        this.lastTap = 0;
-        this.keySequence = [];
-        this._positioned = false;
-        this._dragState = null;
+        this.lastTap       = 0;
+        this.keySequence   = [];
+        this._positioned   = false;
+        this._dragState    = null;
+        this._shellBooted  = false;
+        this._ui           = null;
+        this._shell        = null;
+
         this._shadow = this.attachShadow({ mode: 'open' });
         this._shadow.appendChild(createTemplate().content.cloneNode(true));
     }
 
     connectedCallback() {
-        this.shell = this._shadow.querySelector('.terminal-window');
-        this.closeButton = this._shadow.querySelector('.btn-close');
+        this.shell         = this._shadow.querySelector('.terminal-window');
+        this.closeButton   = this._shadow.querySelector('.btn-close');
         this.minimizeButton = this._shadow.querySelector('.btn-minimize');
 
-        this.toggleHandler = () => this.toggleShell();
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handlePointerDown = this.handlePointerDown.bind(this);
-        this.handlePointerUp = this.handlePointerUp.bind(this);
+        this.toggleHandler          = () => this.toggleShell();
+        this.handleKeyDown          = this.handleKeyDown.bind(this);
+        this.handlePointerDown      = this.handlePointerDown.bind(this);
+        this.handlePointerUp        = this.handlePointerUp.bind(this);
         this.handleShellTriggerClick = this.handleShellTriggerClick.bind(this);
 
         this.handleRestoreClick = (e) => {
@@ -92,14 +95,13 @@ class FirelinTerminalElement extends HTMLElement {
             if (e.button !== 0 || e.target.closest('.terminal-btn')) return;
             const rect = this.getBoundingClientRect();
             this._dragState = {
-                startX: e.clientX,
-                startY: e.clientY,
-                origRight: window.innerWidth - rect.right,
-                origBottom: window.innerHeight - rect.bottom
+                startX: e.clientX, startY: e.clientY,
+                origRight:  window.innerWidth  - rect.right,
+                origBottom: window.innerHeight - rect.bottom,
             };
             this.style.transition = 'none';
             this.style.left = 'auto';
-            this.style.top = 'auto';
+            this.style.top  = 'auto';
             e.preventDefault();
         });
 
@@ -107,7 +109,7 @@ class FirelinTerminalElement extends HTMLElement {
             if (!this._dragState) return;
             const dx = e.clientX - this._dragState.startX;
             const dy = e.clientY - this._dragState.startY;
-            this.style.right = `${this._dragState.origRight - dx}px`;
+            this.style.right  = `${this._dragState.origRight  - dx}px`;
             this.style.bottom = `${this._dragState.origBottom - dy}px`;
         });
 
@@ -119,10 +121,18 @@ class FirelinTerminalElement extends HTMLElement {
     }
 
     handleKeyDown(event) {
-        const key = event.key.toLowerCase();
+        // Don't advance Konami while terminal is open
+        if (!this.shell.classList.contains('hidden')) {
+            this.keySequence = [];
+            return;
+        }
+
+        const key = event.key;
         this.keySequence.push(key);
-        if (!KONAMI_KEYS.slice(0, this.keySequence.length).every((expected, index) => expected.toLowerCase() === this.keySequence[index])) {
-            this.keySequence = key === 'arrowup' || key === 'arrowdown' || key === 'arrowleft' || key === 'arrowright' || key === 'b' || key === 'a' ? [key] : [];
+        if (!KONAMI_KEYS.slice(0, this.keySequence.length)
+                .every((expected, i) => expected.toLowerCase() === this.keySequence[i].toLowerCase())) {
+            const validStart = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','b','a'];
+            this.keySequence = validStart.some(k => k.toLowerCase() === key.toLowerCase()) ? [key] : [];
             return;
         }
         if (this.keySequence.length === KONAMI_KEYS.length) {
@@ -139,8 +149,7 @@ class FirelinTerminalElement extends HTMLElement {
         if (!this.touchStart) return;
         const dx = event.clientX - this.touchStart.x;
         const dy = event.clientY - this.touchStart.y;
-        const absX = Math.abs(dx);
-        const absY = Math.abs(dy);
+        const absX = Math.abs(dx), absY = Math.abs(dy);
         const isTap = absX < SWIPE_THRESHOLD && absY < SWIPE_THRESHOLD;
         let direction = null;
 
@@ -160,8 +169,10 @@ class FirelinTerminalElement extends HTMLElement {
 
         if (direction) {
             this.touchSequence.push(direction);
-            if (!KONAMI_MOBILE.slice(0, this.touchSequence.length).every((expected, index) => expected === this.touchSequence[index])) {
-                this.touchSequence = direction === 'up' || direction === 'down' || direction === 'left' || direction === 'right' || direction === 'doubletap' ? [direction] : [];
+            if (!KONAMI_MOBILE.slice(0, this.touchSequence.length)
+                    .every((expected, i) => expected === this.touchSequence[i])) {
+                const validStart = ['up','down','left','right','doubletap'];
+                this.touchSequence = validStart.includes(direction) ? [direction] : [];
                 return;
             }
             if (this.touchSequence.length === KONAMI_MOBILE.length) {
@@ -172,18 +183,20 @@ class FirelinTerminalElement extends HTMLElement {
     }
 
     handleShellTriggerClick(event) {
-        if (event.target.closest('.shell')) {
-            this.activateTerminal();
-        }
+        if (event.target.closest('.shell')) this.activateTerminal();
     }
 
     activateTerminal() {
-        console.log('%cshell activated.', 'color: #00ff00; font-weight: bold;');
+        console.log('%cshell activated.', 'color: #36ba2c; font-weight: bold;');
         this.showShell();
     }
 
     toggleShell() {
-        this.shell.classList.toggle('hidden', !this.shell.classList.contains('hidden'));
+        if (this.shell.classList.contains('hidden')) {
+            this.showShell();
+        } else {
+            this.shell.classList.add('hidden');
+        }
     }
 
     showShell() {
@@ -192,80 +205,60 @@ class FirelinTerminalElement extends HTMLElement {
         if (!this._positioned) {
             this.style.transition = 'none';
             this.style.left = 'auto';
-            this.style.top = 'auto';
+            this.style.top  = 'auto';
             this.shell.classList.remove('hidden');
             const h = this.offsetHeight;
-            this.style.right = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.style.right  = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
             this.style.bottom = `${window.innerHeight - 80 - h}px`;
             this._positioned = true;
             requestAnimationFrame(() => { this.style.transition = ''; });
         } else if (this.shell.classList.contains('minimized') && this._savedRight != null) {
-            this.style.right = this._savedRight;
+            this.style.right  = this._savedRight;
             this.style.bottom = this._savedBottom;
-            this._savedRight = null;
+            this._savedRight  = null;
             this._savedBottom = null;
         }
 
         this.shell.classList.remove('hidden');
         this.shell.classList.remove('minimized');
 
-        if (wasHidden) this._scrambleLines();
+        if (wasHidden && !this._shellBooted) {
+            this._shellBooted = true;
+            this._bootShell();
+        } else {
+            if (this._ui) this._ui.focus();
+        }
     }
 
-    _scrambleLines() {
-        const allLines = [...this._shadow.querySelectorAll('.terminal-line')];
-        const promptLine = allLines[allLines.length - 1];
-        const textLines = allLines.filter(line => !line.querySelector('.terminal-cursor'));
-
-        if (!promptLine) return;
-        promptLine.style.visibility = 'hidden';
-
-        const entries = textLines.map(line => {
-            if (!line._origText) line._origText = line.textContent;
-            return { el: line, text: line._origText };
-        });
-
-        const promises = entries.map(({ el, text }, i) =>
-            new Promise(resolve => {
-                setTimeout(() => scrambleElement(el, text).then(resolve), i * 120);
-            })
-        );
-
-        Promise.all(promises).then(() => {
-            promptLine.style.visibility = '';
-        });
-    }
-
-    addLine(text) {
-        const lines = this._shadow.querySelector('.terminal-lines');
-        const promptLine = lines.querySelector('.terminal-line:last-child');
-        const line = document.createElement('div');
-        line.className = 'terminal-line';
-        lines.insertBefore(line, promptLine);
-        scrambleElement(line, text);
-        this.scrollToBottom();
-        return line;
+    async _bootShell() {
+        this._ui    = new TerminalUI(this._shadow);
+        this._shell = new Shell();
+        this._ui.setShell(this._shell);
+        this._shell.setUI(this._ui);
+        await this._shell.boot();
+        this._ui.focus();
     }
 
     minimizeShell() {
         if (this.shell.classList.contains('minimized')) {
             this.shell.classList.remove('minimized');
-            this.style.right = this._savedRight != null ? this._savedRight : `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
-            this.style.bottom = this._savedBottom != null ? this._savedBottom : `${window.innerHeight - 80 - this.offsetHeight}px`;
-            this._savedRight = null;
+            this.style.right  = this._savedRight  ?? `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.style.bottom = this._savedBottom ?? `${window.innerHeight - 80 - this.offsetHeight}px`;
+            this._savedRight  = null;
             this._savedBottom = null;
+            if (this._ui) this._ui.focus();
         } else {
-            this._savedRight = this.style.right;
+            this._savedRight  = this.style.right;
             this._savedBottom = this.style.bottom;
-            this.style.right = '8px';
+            this.style.right  = '8px';
             this.style.bottom = '8px';
             this.shell.classList.add('minimized');
         }
     }
 
-    scrollToBottom() {
-        const lines = this._shadow.querySelector('.terminal-lines');
-        lines.scrollTop = lines.scrollHeight;
+    // kept for external backward-compat
+    addLine(text) {
+        if (this._ui) this._ui.print(text);
     }
 }
 
@@ -273,14 +266,8 @@ if (!customElements.get(WIDGET_TAG)) {
     customElements.define(WIDGET_TAG, FirelinTerminalElement);
 }
 
-function bootWidget() {
-    if (document.querySelector(WIDGET_TAG)) return;
-    const element = document.createElement(WIDGET_TAG);
-    document.body.appendChild(element);
-}
-
 window.FirelinTerminal = {
-    create: (config = {}) => {
+    create(config = {}) {
         let instance = document.querySelector(WIDGET_TAG);
         if (!instance) {
             instance = document.createElement(WIDGET_TAG);
@@ -289,10 +276,14 @@ window.FirelinTerminal = {
         }
         return instance;
     },
-    addLine: (text) => {
+    addLine(text) {
         const instance = document.querySelector(WIDGET_TAG);
         if (instance) return instance.addLine(text);
-    }
+    },
 };
 
-document.addEventListener('DOMContentLoaded', bootWidget);
+document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector(WIDGET_TAG)) {
+        document.body.appendChild(document.createElement(WIDGET_TAG));
+    }
+});

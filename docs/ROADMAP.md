@@ -146,9 +146,21 @@ src/shell/
 - On save: `ctx.vfs.writeFile(path, textarea.value)` then tear down overlay
 
 ### `curl` approach
-- Whitelist of "fetchable" URLs defined in config (e.g., the site's own API endpoints)
-- All other URLs → simulated response with fake headers + body
-- Real `fetch()` optional, behind a flag in shell config
+- All responses are simulated from `src/shell/commands/data/curl-responses.json`
+- Known endpoints: `strucit.app`, `api.firelin.sh/*`, `lucasfogolin.com`, `github.com/lucasfogolin`
+- Unknown hosts → fallback entry with helpful hint listing known hosts
+- Add new endpoints by editing the JSON; no code changes needed
+
+### `top` approach
+- Live-updating: clears previous top block and redraws every second via `setInterval`
+- Processes are randomized fiction; CPU/memory values drift subtly each redraw
+- `Ctrl+C` fires `AbortController` → clears interval → restores prompt
+
+### `tail -f` approach
+- Static files: print last N lines then return (no live mode)
+- Files with `_live: true` in VFS: print content then start `setInterval` pulling random messages from `log-generators.json` matching `_generator` key
+- `_interval` field on the node controls cadence; default 3000ms
+- `Ctrl+C` stops the interval
 
 ### Files
 ```
@@ -203,7 +215,7 @@ src/shell/commands/index.js   ← registry builder
    - Command not found → `bash: <cmd>: command not found`
    - Deeply nested `..` beyond root → clamp at `/`
    - Symlink-like aliases in VFS (stretch goal)
-6. **Persistence (optional)** — serialise live VFS tree to `sessionStorage` on every mutation; restore on page reload within same session
+6. **Persistence** — serialize live VFS tree to `localStorage` key `firelin_vfs` on every mutation; restore on next visit. On corrupt/missing data, reset to `tree.json`. Tree is deep-cloned from `tree.json` at boot if no localStorage found.
 
 ---
 
