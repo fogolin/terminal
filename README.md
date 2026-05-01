@@ -27,6 +27,32 @@ The widget listens for the Konami code:
 - desktop keyboard: `↑ ↑ ↓ ↓ ← → ← → B A`
 - mobile swipe version: `up up down down left right left right` + double tap
 
+### Adding scrambled lines
+
+Use `FirelinTerminal.addLine(text)` to append a line to the terminal with the scramble effect:
+
+```js
+FirelinTerminal.addLine('Scanning network interfaces...');
+```
+
+To scramble text in any arbitrary element on your page, import `scrambleElement` directly:
+
+```js
+import { scrambleElement } from './src/functions/scramble.js';
+
+const el = document.querySelector('#my-element');
+scrambleElement(el, 'Hello, world.'); // returns a Promise that resolves when done
+```
+
+Or chain multiple lines sequentially:
+
+```js
+const lines = ['Initializing...', 'Loading config.', 'Ready.'];
+lines.reduce((p, text) => p.then(() => scrambleElement(el, text)), Promise.resolve());
+```
+
+`scrambleElement(el, text)` clears the element's content and animates each character through random glyphs before resolving to `text`. It returns a `Promise` that resolves when the animation completes.
+
 ### Build commands
 
 - `npm run dev` — start local development server
