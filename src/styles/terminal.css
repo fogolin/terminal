@@ -229,6 +229,11 @@
 /* ============================================================
    BODY / CONTENT
    ============================================================ */
+.terminal-window,
+.terminal-window * {
+	box-sizing: border-box;
+}
+
 .terminal-window * {
 	scrollbar-width: thin;
 	scrollbar-color: var(--term-scrollbar) transparent;
