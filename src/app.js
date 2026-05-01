@@ -1,7 +1,6 @@
 import terminalStyles from './styles/terminal.css';
 import terminalFonts from './styles/fonts.css';
 import terminalTemplate from './assets/template.html';
-
 const WIDGET_TAG = 'firelin-terminal';
 const KONAMI_KEYS = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 const KONAMI_MOBILE = ['up', 'up', 'down', 'down', 'left', 'right', 'left', 'right', 'doubletap'];

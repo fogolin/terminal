@@ -4,9 +4,10 @@
 :host {
 	/* --- Colors ------------------------------------------- */
 	--term-text: #36ba2c; /* phosphor green */
+	--term-text-glow-color: #79ba48;
 	--term-text-dim: #2a8a22; /* dimmed / secondary text */
-	--term-text-glow-color: #79ba48; /* glow halo color */
 	--term-prompt: #e8f7dc; /* prompt symbol */
+	--term-prompt-glow-color: #ffffff;
 	--term-cursor: #36ba2c;
 	--term-btn: #888;
 	--term-btn-hover: #ddd;
@@ -29,6 +30,7 @@
 	--term-outer-glow:
 		0 22px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.07);
 	--term-text-glow: 0 0 8px var(--term-text-glow-color);
+	--term-prompt-glow: 0 0 8px var(--term-prompt-glow-color);
 
 	/* --- Typography --------------------------------------- */
 	--term-font:
@@ -264,7 +266,7 @@
 
 .terminal-prompt {
 	color: var(--term-prompt);
-	text-shadow: var(--term-text-glow);
+	text-shadow: var(--term-prompt-glow);
 }
 
 /* ============================================================
