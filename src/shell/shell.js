@@ -24,9 +24,9 @@ class Shell {
             cwd: '/home/guest',
             hostname: 'firelin',
             env: new Map([
-                ['HOME',  '/home/guest'],
-                ['PATH',  '/bin:/usr/bin'],
-                ['USER',  'guest'],
+                ['HOME', '/home/guest'],
+                ['PATH', '/bin:/usr/bin'],
+                ['USER', 'guest'],
                 ['SHELL', '/bin/bash'],
             ]),
         };
@@ -121,8 +121,8 @@ class Shell {
         const shell = this;
         return {
             print(text, cls) { shell._ui.print(text, cls); },
-            error(text)      { shell._ui.error(text); },
-            clear()          { shell._ui.clear(); },
+            error(text) { shell._ui.error(text); },
+            clear() { shell._ui.clear(); },
             session: shell.session,
             setCwd(path) {
                 shell.session.cwd = path;
@@ -146,11 +146,12 @@ class Shell {
                     shell._ui.setInputLocked(false);
                 });
             },
-            createBlock()               { return shell._ui.createBlock(); },
+            createBlock() { return shell._ui.createBlock(); },
+            createOverlay() { return shell._ui.createOverlay(); },
             setInputRowVisible(visible) { shell._ui.setInputRowVisible(visible); },
-            mountOverlay(el)            { shell._ui.mountOverlay(el); },
-            unmountOverlay(el)          { shell._ui.unmountOverlay(el); },
-            injectStyle(id, css)        { shell._ui.injectStyle(id, css); },
+            mountOverlay(el) { shell._ui.mountOverlay(el); },
+            unmountOverlay(el) { shell._ui.unmountOverlay(el); },
+            injectStyle(id, css) { shell._ui.injectStyle(id, css); },
             abort: abortSignal,
             sleep(ms) {
                 return new Promise((resolve, reject) => {

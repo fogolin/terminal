@@ -117,11 +117,21 @@
 		opacity 0.3s;
 }
 
-/* Scanlines — horizontal CRT lines overlay (body only, not titlebar) */
-.terminal-window::before {
+.scanline {
+	/* position: relative; */
+	overflow: hidden;
+	--scanline-top: 0;
+}
+
+.terminal-window.scanline {
+	--scanline-top: var(--term-titlebar-height);
+}
+
+/* Scanlines — horizontal CRT lines overlay for any element with .scanline */
+.scanline::before {
 	content: "";
 	position: absolute;
-	top: var(--term-titlebar-height);
+	top: var(--scanline-top, 0);
 	left: 0;
 	right: 0;
 	bottom: 0;
@@ -135,18 +145,80 @@
 	);
 	pointer-events: none;
 	z-index: 10;
-	border-radius: var(--term-border-radius);
+	border-radius: inherit;
 }
 
 /* Vignette — darkens corners like a CRT bezel */
-.terminal-window::after {
+.scanline::after {
 	content: "";
 	position: absolute;
 	inset: 0;
 	box-shadow: var(--term-vignette);
 	pointer-events: none;
 	z-index: 11;
-	border-radius: var(--term-border-radius);
+	border-radius: inherit;
+}
+
+.terminal-overlay {
+	display: none;
+	position: absolute;
+	inset: 0;
+	/* background: var(--term-bg);
+	color: var(--term-text);
+	font-family: var(--term-font);
+	font-size: var(--term-font-size);
+	font-weight: var(--term-font-weight); */
+	z-index: 20;
+}
+
+.terminal-body.has-overlay .terminal-overlay {
+	display: flex;
+	flex-direction: column;
+}
+
+.terminal-body.has-overlay .terminal-lines {
+	display: none;
+}
+
+.terminal-overlay-bar,
+.nano-bar {
+	padding: 3px 10px;
+	flex-shrink: 0;
+	color: var(--term-text-dim);
+	font-size: var(--term-font-size);
+	font-family: var(--term-font);
+	font-weight: var(--term-font-weight);
+}
+
+.terminal-overlay-bar-top,
+.nano-bar-top {
+	border-bottom: 1px solid var(--term-text);
+}
+
+.terminal-overlay-bar-bottom,
+.nano-bar-bottom {
+	border-top: 1px solid var(--term-text);
+}
+
+.nano-overlay {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.nano-textarea {
+	flex: 1;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	border: none;
+	outline: none;
+	padding: 8px 10px;
+	resize: none;
+	caret-color: currentColor;
+	line-height: 1.6;
+	width: 100%;
+	min-height: 0;
 }
 
 .terminal-window.minimized {
@@ -263,22 +335,6 @@
 		padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
 		opacity 0.25s;
 } */
-
-.nano-bar {
-	padding: 3px 10px;
-	flex-shrink: 0;
-	color: var(--term-text-dim);
-	font-size: var(--term-font-size);
-	font-family: var(--term-font);
-	font-weight: var(--term-font-weight);
-}
-
-.nano-bar-top {
-	border-bottom: 1px solid var(--term-text);
-}
-.nano-bar-bottom {
-	border-top: 1px solid var(--term-text);
-}
 
 /* Transition on the minimized state animates the MINIMIZE direction */
 .terminal-window.minimized .terminal-body {

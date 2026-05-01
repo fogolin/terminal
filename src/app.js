@@ -1,6 +1,6 @@
 import terminalStyles from './styles/terminal.css';
 import terminalFonts from './styles/fonts.css';
-import terminalTemplate from './assets/template.html';
+import terminalTemplate from './templates/terminal.html';
 import { Shell } from './shell/shell.js';
 import { TerminalUI } from './shell/ui.js';
 
@@ -118,14 +118,17 @@ class FirelinTerminalElement extends HTMLElement {
             if (!this._dragState) return;
             const dx = e.clientX - this._dragState.startX;
             const dy = e.clientY - this._dragState.startY;
-            const newLeft = Math.min(
-                Math.max(0, this._dragState.startLeft + dx),
-                window.innerWidth - this.shell.offsetWidth
-            );
-            const newTop = Math.min(
-                Math.max(0, this._dragState.startTop + dy),
-                window.innerHeight - this.shell.offsetHeight
-            );
+            // const newLeft = Math.min(
+            //     Math.max(0, this._dragState.startLeft + dx),
+            //     window.innerWidth - this.shell.offsetWidth
+            // );
+            // const newTop = Math.min(
+            //     Math.max(0, this._dragState.startTop + dy),
+            //     window.innerHeight - this.shell.offsetHeight
+            // );
+
+            const newLeft = this._dragState.startLeft + dx;
+            const newTop = this._dragState.startTop + dy;
             this.shell.style.left = `${newLeft}px`;
             this.shell.style.top = `${newTop}px`;
         });

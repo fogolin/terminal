@@ -4,18 +4,19 @@ import registry from './commands/index.js';
 
 class TerminalUI {
     constructor(shadow) {
-        this._shadow   = shadow;
-        this._shell    = null;
-        this._locked   = false;
+        this._shadow = shadow;
+        this._shell = null;
+        this._locked = false;
         this._maskMode = false;
 
-        this._body     = shadow.querySelector('.terminal-body');
-        this._lines    = shadow.querySelector('.terminal-lines');
+        this._body = shadow.querySelector('.terminal-body');
+        this._overlay = shadow.querySelector('.terminal-overlay');
+        this._lines = shadow.querySelector('.terminal-lines');
         this._inputRow = shadow.querySelector('.terminal-input-row');
         this._promptEl = shadow.querySelector('.terminal-prompt');
-        this._display  = shadow.querySelector('.terminal-input-display');
-        this._cursor   = shadow.querySelector('.terminal-cursor');
-        this._capture  = shadow.querySelector('.terminal-input-capture');
+        this._display = shadow.querySelector('.terminal-input-display');
+        this._cursor = shadow.querySelector('.terminal-cursor');
+        this._capture = shadow.querySelector('.terminal-input-capture');
 
         this._bindEvents();
     }
@@ -86,7 +87,7 @@ class TerminalUI {
         this._capture.value = value;
         this._updateDisplay();
         const len = value.length;
-        try { this._capture.setSelectionRange(len, len); } catch (_) {}
+        try { this._capture.setSelectionRange(len, len); } catch (_) { }
     }
 
     setInputLocked(locked) {
@@ -111,7 +112,7 @@ class TerminalUI {
         this._scrollToBottom();
         return {
             update(text) { el.textContent = text; ui._scrollToBottom(); },
-            remove()     { el.remove(); },
+            remove() { el.remove(); },
         };
     }
 
@@ -123,15 +124,33 @@ class TerminalUI {
         this._shadow.appendChild(style);
     }
 
+    createOverlay() {
+        if (!this._overlay) return null;
+        this._overlay.textContent = '';
+        this._body.classList.add('has-overlay');
+        return this._overlay;
+    }
+
     mountOverlay(el) {
-        // Mount on .terminal-window (position:relative, overflow:hidden),
-        // not on .terminal-body which scrolls — otherwise position:absolute inset:0
-        // anchors to the full scroll height instead of the visible area.
-        this._shadow.querySelector('.terminal-window').appendChild(el);
+        if (!this._overlay) return;
+        if (el !== this._overlay) {
+            this._overlay.appendChild(el);
+        }
+        this._body.classList.add('has-overlay');
     }
 
     unmountOverlay(el) {
+        if (!this._overlay) return;
+        if (el === this._overlay) {
+            this._overlay.textContent = '';
+            this._body.classList.remove('has-overlay');
+            return;
+        }
+
         el.remove();
+        if (!this._overlay.hasChildNodes()) {
+            this._body.classList.remove('has-overlay');
+        }
     }
 
     focus() {
@@ -149,7 +168,7 @@ class TerminalUI {
         // Click anywhere in body → focus hidden input
         this._body.addEventListener('click', () => this._capture.focus());
 
-        this._capture.addEventListener('input',   () => this._onInput());
+        this._capture.addEventListener('input', () => this._onInput());
         this._capture.addEventListener('keydown', (e) => this._onKeyDown(e));
 
         this._capture.addEventListener('focus', () => {
