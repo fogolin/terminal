@@ -1,0 +1,43 @@
+:root {
+	/* Core UI Colors */
+	--name: "Amber";
+
+	/* The iconic cursor color */
+	--cursor: #ff9800;
+
+	/* The main amber color used for most prompt text (e.g., 'swordfish@soldier76') */
+	--accent: #cc7a00;
+
+	/* The deep, slightly glowing background */
+	--background: #0d0903;
+
+	/* The standard text color used for file listings and generic output */
+	--foreground: #b36b00;
+
+	/* UI Details setting */
+	--details: glow;
+
+	/* --- Monochromatic ANSI Mapping --- */
+	/* Since the interface is single-hue, the bright variants generally use the main accent. */
+	/* The normal variants use the slightly dimmer foreground. */
+
+	/* Normal/Dimmed Output (mapped to Normal ANSI) */
+	--black: #1a1206; /* Slightly lighter than background for selections */
+	--blue: #b36b00;
+	--cyan: #b36b00;
+	--green: #b36b00;
+	--magenta: #b36b00;
+	--red: #b36b00;
+	--yellow: #b36b00; /* Primary mapping */
+	--white: #b36b00;
+
+	/* Prompts and Bold Text (mapped to Bright ANSI) */
+	--bright-black: #4d3000;
+	--bright-blue: #cc7a00;
+	--bright-cyan: #cc7a00;
+	--bright-green: #cc7a00;
+	--bright-magenta: #cc7a00;
+	--bright-red: #cc7a00;
+	--bright-yellow: #cc7a00; /* Primary mapping */
+	--bright-white: #e68a00; /* Brightest highlights */
+}
