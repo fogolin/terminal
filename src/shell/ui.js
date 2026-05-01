@@ -7,6 +7,7 @@ class TerminalUI {
         this._shadow   = shadow;
         this._shell    = null;
         this._locked   = false;
+        this._maskMode = false;
 
         this._body     = shadow.querySelector('.terminal-body');
         this._lines    = shadow.querySelector('.terminal-lines');
@@ -90,6 +91,37 @@ class TerminalUI {
 
     setInputLocked(locked) {
         this._locked = locked;
+    }
+
+    setMaskMode(mask) {
+        this._maskMode = mask;
+        this._updateDisplay();
+    }
+
+    setInputRowVisible(visible) {
+        this._inputRow.style.display = visible ? '' : 'none';
+    }
+
+    createBlock() {
+        const ui = this;
+        const el = document.createElement('div');
+        el.style.whiteSpace = 'pre';
+        el.className = 'terminal-block';
+        this._lines.insertBefore(el, this._inputRow);
+        this._scrollToBottom();
+        return {
+            update(text) { el.textContent = text; ui._scrollToBottom(); },
+            remove()     { el.remove(); },
+        };
+    }
+
+    mountOverlay(el) {
+        this._body.style.position = 'relative';
+        this._body.appendChild(el);
+    }
+
+    unmountOverlay(el) {
+        el.remove();
     }
 
     focus() {
@@ -178,6 +210,10 @@ class TerminalUI {
 
     _updateDisplay() {
         const val = this._capture.value;
+        if (this._maskMode) {
+            this._display.textContent = '•'.repeat(val.length);
+            return;
+        }
         const spans = renderHighlighted(val, registry);
         this._display.textContent = '';
         spans.forEach(span => this._display.appendChild(span));

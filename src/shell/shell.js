@@ -18,6 +18,7 @@ class Shell {
         this.vfs = new VFS();
         this._running = false;
         this._currentAbort = null;
+        this._readline = null;
         this.session = {
             user: 'guest',
             cwd: '/home/guest',
@@ -55,6 +56,17 @@ class Shell {
     }
 
     async submit(input) {
+        // Readline mode: a command is waiting for interactive input
+        if (this._readline) {
+            const { resolve, mask } = this._readline;
+            this._readline = null;
+            this._ui.setMaskMode(false);
+            this._ui.setInput('');
+            this._ui.setPrompt(this.prompt);
+            resolve(input);
+            return;
+        }
+
         if (this._running) return;
 
         this._ui.printCommand(this.prompt, input);
@@ -124,6 +136,19 @@ class Shell {
                 shell._ui.setPrompt(shell.prompt);
             },
             vfs: shell.vfs,
+            readline(prompt, mask = false) {
+                return new Promise(resolve => {
+                    shell._readline = { resolve, mask };
+                    shell._ui.setPrompt(prompt);
+                    shell._ui.setMaskMode(mask);
+                    shell._ui.setInput('');
+                    shell._ui.setInputLocked(false);
+                });
+            },
+            createBlock()               { return shell._ui.createBlock(); },
+            setInputRowVisible(visible) { shell._ui.setInputRowVisible(visible); },
+            mountOverlay(el)            { shell._ui.mountOverlay(el); },
+            unmountOverlay(el)          { shell._ui.unmountOverlay(el); },
             abort: abortSignal,
             sleep(ms) {
                 return new Promise((resolve, reject) => {
