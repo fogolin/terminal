@@ -1,6 +1,7 @@
 import terminalStyles from './styles/terminal.css';
 import terminalFonts from './styles/fonts.css';
 import terminalTemplate from './assets/template.html';
+import { scrambleElement } from './functions/scramble';
 const WIDGET_TAG = 'firelin-terminal';
 const KONAMI_KEYS = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 const KONAMI_MOBILE = ['up', 'up', 'down', 'down', 'left', 'right', 'left', 'right', 'doubletap'];
@@ -186,6 +187,8 @@ class FirelinTerminalElement extends HTMLElement {
     }
 
     showShell() {
+        const wasHidden = this.shell.classList.contains('hidden');
+
         if (!this._positioned) {
             this.style.transition = 'none';
             this.style.left = 'auto';
@@ -202,8 +205,46 @@ class FirelinTerminalElement extends HTMLElement {
             this._savedRight = null;
             this._savedBottom = null;
         }
+
         this.shell.classList.remove('hidden');
         this.shell.classList.remove('minimized');
+
+        if (wasHidden) this._scrambleLines();
+    }
+
+    _scrambleLines() {
+        const allLines = [...this._shadow.querySelectorAll('.terminal-line')];
+        const promptLine = allLines[allLines.length - 1];
+        const textLines = allLines.filter(line => !line.querySelector('.terminal-cursor'));
+
+        if (!promptLine) return;
+        promptLine.style.visibility = 'hidden';
+
+        const entries = textLines.map(line => {
+            if (!line._origText) line._origText = line.textContent;
+            return { el: line, text: line._origText };
+        });
+
+        const promises = entries.map(({ el, text }, i) =>
+            new Promise(resolve => {
+                setTimeout(() => scrambleElement(el, text).then(resolve), i * 120);
+            })
+        );
+
+        Promise.all(promises).then(() => {
+            promptLine.style.visibility = '';
+        });
+    }
+
+    addLine(text) {
+        const lines = this._shadow.querySelector('.terminal-lines');
+        const promptLine = lines.querySelector('.terminal-line:last-child');
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        lines.insertBefore(line, promptLine);
+        scrambleElement(line, text);
+        this.scrollToBottom();
+        return line;
     }
 
     minimizeShell() {
@@ -247,6 +288,10 @@ window.FirelinTerminal = {
             document.body.appendChild(instance);
         }
         return instance;
+    },
+    addLine: (text) => {
+        const instance = document.querySelector(WIDGET_TAG);
+        if (instance) return instance.addLine(text);
     }
 };
 
