@@ -19,27 +19,21 @@ function createTemplate() {
     const template = document.createElement('template');
     template.innerHTML = `
       <style>${terminalStyles}</style>
-      <div class="terminal-wrapper">
-        <div class="terminal-shell hidden" role="dialog" aria-label="Firelin terminal window">
-          <div class="terminal-header">
-            <span class="terminal-title">Firelin Terminal</span>
-            <button class="terminal-close" type="button" aria-label="Close terminal">×</button>
+      <div class="terminal-window hidden" role="dialog" aria-label="Firelin terminal window">
+        <div class="terminal-titlebar">
+          <span class="terminal-title">firelin — bash</span>
+          <div class="terminal-controls">
+            <button class="terminal-btn btn-minimize" type="button" aria-label="Minimize terminal">&#x2013;</button>
+            <button class="terminal-btn btn-close" type="button" aria-label="Close terminal">&#x2715;</button>
           </div>
-          <div class="terminal-body">
-            <div class="terminal-lines">
-              <div class="terminal-line">Welcome to Firelin.</div>
-              <div class="terminal-line">Enter the Konami code to open this terminal.</div>
-              <div class="terminal-line">Desktop: ↑ ↑ ↓ ↓ ← → ← → B A</div>
-              <div class="terminal-line">Mobile: swipe up, up, down, down, left, right, left, right, double tap</div>
-            </div>
-            <div class="terminal-input">
-              <span>&gt;</span>
-              <input type="text" placeholder="Type help and hit Enter" aria-label="Terminal command input">
-            </div>
-          </div>
-          <div class="terminal-hint">Use keyboard or gesture sequence to toggle this widget.</div>
         </div>
-        <span class="terminal-open-hint">Konami mode enabled</span>
+        <div class="terminal-body">
+          <div class="terminal-lines">
+            <div class="terminal-line">Welcome to Firelin.</div>
+            <div class="terminal-line">Konami sequence detected.</div>
+            <div class="terminal-line"><span class="terminal-prompt">user@firelin:~$</span> <span class="terminal-cursor"></span></div>
+          </div>
+        </div>
       </div>
     `;
     return template;
@@ -53,49 +47,72 @@ class FirelinTerminalElement extends HTMLElement {
         this.touchSequence = [];
         this.lastTap = 0;
         this.keySequence = [];
+        this._positioned = false;
+        this._dragState = null;
         this._shadow = this.attachShadow({ mode: 'open' });
         this._shadow.appendChild(createTemplate().content.cloneNode(true));
     }
 
     connectedCallback() {
-        this.shell = this._shadow.querySelector('.terminal-shell');
-        this.input = this._shadow.querySelector('.terminal-input input');
-        this.closeButton = this._shadow.querySelector('.terminal-close');
+        this.shell = this._shadow.querySelector('.terminal-window');
+        this.closeButton = this._shadow.querySelector('.btn-close');
+        this.minimizeButton = this._shadow.querySelector('.btn-minimize');
 
         this.toggleHandler = () => this.toggleShell();
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handlePointerDown = this.handlePointerDown.bind(this);
         this.handlePointerUp = this.handlePointerUp.bind(this);
-        this.handleInputSubmit = this.handleInputSubmit.bind(this);
         this.handleShellTriggerClick = this.handleShellTriggerClick.bind(this);
 
+        this.handleRestoreClick = (e) => {
+            if (!this.shell.classList.contains('minimized')) return;
+            const path = e.composedPath();
+            if (!path.includes(this)) return;
+            if (path.includes(this.closeButton) || path.includes(this.minimizeButton)) return;
+            this.minimizeShell();
+        };
+
         this.closeButton.addEventListener('click', this.toggleHandler);
-        this.input.addEventListener('keydown', this.handleInputSubmit);
+        this.minimizeButton.addEventListener('click', () => this.minimizeShell());
         window.addEventListener('keydown', this.handleKeyDown);
         window.addEventListener('pointerdown', this.handlePointerDown);
         window.addEventListener('pointerup', this.handlePointerUp);
         document.addEventListener('click', this.handleShellTriggerClick);
+        document.addEventListener('click', this.handleRestoreClick);
+
+        this.initDrag();
     }
 
     disconnectedCallback() {
         this.closeButton.removeEventListener('click', this.toggleHandler);
-        this.input.removeEventListener('keydown', this.handleInputSubmit);
         window.removeEventListener('keydown', this.handleKeyDown);
         window.removeEventListener('pointerdown', this.handlePointerDown);
         window.removeEventListener('pointerup', this.handlePointerUp);
         document.removeEventListener('click', this.handleShellTriggerClick);
+        document.removeEventListener('click', this.handleRestoreClick);
     }
 
-    handleInputSubmit(event) {
-        if (event.key !== 'Enter') return;
-        const value = event.target.value.trim();
-        if (!value) return;
-        const line = document.createElement('div');
-        line.className = 'terminal-line';
-        line.textContent = `> ${value}`;
-        this._shadow.querySelector('.terminal-lines').appendChild(line);
-        event.target.value = '';
-        this.scrollToBottom();
+    initDrag() {
+        const titlebar = this._shadow.querySelector('.terminal-titlebar');
+
+        titlebar.addEventListener('mousedown', (e) => {
+            if (e.button !== 0 || e.target.closest('.terminal-btn')) return;
+            const rect = this.getBoundingClientRect();
+            this._dragState = { startX: e.clientX, startY: e.clientY, origLeft: rect.left, origTop: rect.top };
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!this._dragState) return;
+            const dx = e.clientX - this._dragState.startX;
+            const dy = e.clientY - this._dragState.startY;
+            this.style.left = `${this._dragState.origLeft + dx}px`;
+            this.style.top = `${this._dragState.origTop + dy}px`;
+            this.style.right = 'auto';
+            this.style.bottom = 'auto';
+        });
+
+        window.addEventListener('mouseup', () => { this._dragState = null; });
     }
 
     handleKeyDown(event) {
@@ -112,7 +129,7 @@ class FirelinTerminalElement extends HTMLElement {
     }
 
     handlePointerDown(event) {
-        this.touchStart = { x: event.clientX, y: event.clientY, time: Date.now() };
+        this.touchStart = { x: event.clientX, y: event.clientY };
     }
 
     handlePointerUp(event) {
@@ -121,7 +138,6 @@ class FirelinTerminalElement extends HTMLElement {
         const dy = event.clientY - this.touchStart.y;
         const absX = Math.abs(dx);
         const absY = Math.abs(dy);
-        const elapsed = Date.now() - this.touchStart.time;
         const isTap = absX < SWIPE_THRESHOLD && absY < SWIPE_THRESHOLD;
         let direction = null;
 
@@ -161,19 +177,39 @@ class FirelinTerminalElement extends HTMLElement {
     activateTerminal() {
         console.log('%cshell activated.', 'color: #00ff00; font-weight: bold;');
         this.showShell();
-        this.input.focus();
     }
 
     toggleShell() {
-        const isHidden = this.shell.classList.contains('hidden');
-        this.shell.classList.toggle('hidden', !isHidden);
-        if (!isHidden) return;
-        this.input.focus();
+        this.shell.classList.toggle('hidden', !this.shell.classList.contains('hidden'));
     }
 
     showShell() {
+        if (!this._positioned) {
+            this.style.transition = 'none';
+            this.style.top = '80px';
+            this.style.left = `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.style.right = 'auto';
+            this.style.bottom = 'auto';
+            this._positioned = true;
+            requestAnimationFrame(() => { this.style.transition = ''; });
+        }
         this.shell.classList.remove('hidden');
-        this.input.focus();
+        this.shell.classList.remove('minimized');
+    }
+
+    minimizeShell() {
+        if (this.shell.classList.contains('minimized')) {
+            this.shell.classList.remove('minimized');
+            this.style.left = this._savedLeft || `${Math.max(16, (window.innerWidth - 480) / 2)}px`;
+            this.style.top = this._savedTop || '80px';
+        } else {
+            this._savedLeft = this.style.left;
+            this._savedTop = this.style.top;
+            const right = 22, bottom = 8;
+            this.style.left = `${window.innerWidth - 220 - right}px`;
+            this.style.top = `${window.innerHeight - 38 - bottom}px`;
+            this.shell.classList.add('minimized');
+        }
     }
 
     scrollToBottom() {
