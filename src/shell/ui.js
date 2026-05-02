@@ -264,14 +264,20 @@ class TerminalUI {
     }
 
     _positionCursor(val, pos) {
+        const rowRect = this._inputRow.getBoundingClientRect();
+        const offsetX = 8;
+        const offsetY = 2;
+
         if (!val.length) {
-            this._cursor.style.left = '0';
+            const rect = this._display.getBoundingClientRect();
+            console.log("test", rect, rowRect);
+            this._cursor.style.left = (rect.left - rowRect.left) + offsetX + 'px';
+            this._cursor.style.top = (rect.top - rowRect.top) + offsetY + 'px';
             return;
         }
 
         const atEnd = pos >= val.length;
         const targetPos = atEnd ? val.length - 1 : pos;
-        const naturalLeft = this._display.getBoundingClientRect().right;
 
         const walker = document.createTreeWalker(this._display, NodeFilter.SHOW_TEXT);
         let node, charCount = 0;
@@ -284,7 +290,8 @@ class TerminalUI {
                 range.setStart(node, offset);
                 range.setEnd(node, offset + 1);
                 const rect = range.getBoundingClientRect();
-                this._cursor.style.left = ((atEnd ? rect.right : rect.left) - naturalLeft) + 'px';
+                this._cursor.style.left = ((atEnd ? rect.right : rect.left) - rowRect.left) + 'px';
+                this._cursor.style.top = (rect.top - rowRect.top) + offsetY + 'px';
                 return;
             }
             charCount = nodeEnd;

@@ -471,16 +471,14 @@
    CURSOR
    ============================================================ */
 .terminal-cursor {
-	position: relative;
+	position: absolute;
 	width: var(--term-cursor-w);
 	height: var(--term-cursor-h, 0.85em);
 	background: var(--term-cursor);
 	mix-blend-mode: difference;
-	vertical-align: text-bottom;
 	box-shadow: 0 0 6px var(--term-cursor-glow);
 	pointer-events: none;
 	animation: cursor-blink 1.1s step-start infinite;
-	margin-bottom: var(--term-cursor-margin-bottom, 2px);
 	z-index: 50;
 }
 
