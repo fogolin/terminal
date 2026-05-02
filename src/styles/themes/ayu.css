@@ -1,29 +1,28 @@
-:root {
-	/* Core UI Colors */
-	--theme-name: "Ayu Dark";
-	--accent: #e6b450;
-	--cursor: #e6b450;
-	--background: #0b0e14;
+/* Theme: Ayu Dark */
+:host {
+	--background: rgba(11, 14, 20, 0.92);
 	--foreground: #bfbdb6;
-	--details: darker;
+	--accent:     #e6b450;
+	--cursor:     #e6b450;
 
-	/* Normal Terminal Colors */
-	--black: #686868;
-	--blue: #59c2ff;
-	--cyan: #95e6cb;
-	--green: #aad94c;
+	--black:   #686868;
+	--red:     #f07178;
+	--green:   #aad94c;
+	--yellow:  #ffb454;
+	--blue:    #59c2ff;
 	--magenta: #d2a6ff;
-	--red: #f07178;
-	--yellow: #ffb454;
-	--white: #ffffff;
+	--cyan:    #95e6cb;
+	--white:   #ffffff;
 
-	/* Bright Terminal Colors */
-	--bright-black: #1e232b;
-	--bright-blue: #53bdfa;
-	--bright-cyan: #90e1c6;
-	--bright-green: #7fd962;
+	--bright-black:   #1e232b;
+	--bright-red:     #ea6c73;
+	--bright-green:   #7fd962;
+	--bright-yellow:  #f9af4f;
+	--bright-blue:    #53bdfa;
 	--bright-magenta: #cda1fa;
-	--bright-red: #ea6c73;
-	--bright-white: #c7c7c7;
-	--bright-yellow: #f9af4f;
+	--bright-cyan:    #90e1c6;
+	--bright-white:   #c7c7c7;
+
+	--term-text-glow:   none;
+	--term-prompt-glow: none;
 }

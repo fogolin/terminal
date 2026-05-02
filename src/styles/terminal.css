@@ -5,50 +5,50 @@
    DESIGN TOKENS — tweak these to restyle everything
    ============================================================ */
 :host {
-	/* --- Colors ------------------------------------------- */
-	--term-text: #36ba2c; /* phosphor green */
-	--term-text-glow-color: #79ba48;
-	--term-text-dim: #2a8a22; /* dimmed / secondary text */
-	--term-prompt: #e8f7dc; /* prompt symbol */
-	--term-prompt-glow-color: #ffffff;
-	--term-cursor: #36ba2c;
-	--term-cursor-glow: #79ba48;
-	--term-btn: #888;
-	--term-btn-hover: #ddd;
-	--term-title: #aaa;
-	--term-scrollbar: #2a5a22;
+	/* Semantic color tokens — Phosphor Green (default theme)     */
+	/* These are overridden at runtime by the active theme style. */
+	--background: rgba(4, 8, 5, 0.88);
+	--foreground: #36ba2c;
+	--accent:     #e8f7dc;
+	--cursor:     #36ba2c;
 
-	/* Terminal */
-	--term-hl-cmd-known: var(--term-text);
-	--term-hl-cmd-unknown: var(--term-text);
-	--term-hl-error: #e06c75;
-	--term-hl-error-glow-color: #ff8993;
-	--term-hl-error-glow: 0 0 8px var(--term-hl-error-glow-color);
-	--term-hl-flag: #61afef;
-	--term-hl-flag-glow-color: #94cfff;
-	--term-hl-flag-glow: 0 0 8px var(--term-hl-error-glow-color);
-	--term-hl-string: #98c379;
-	--term-hl-string-glow-color: #98c379;
-	--term-hl-sring-glow: 0 0 8px var(--term-hl-error-glow-color);
-	--term-hl-arg: var(--term-text);
+	/* ANSI palette */
+	--black:   #0d1a0d;
+	--red:     #e06c75;
+	--green:   #36ba2c;
+	--yellow:  #e5c07b;
+	--blue:    #61afef;
+	--magenta: #c678dd;
+	--cyan:    #56b6c2;
+	--white:   #abb2bf;
+
+	--bright-black:   #2a8a22;
+	--bright-red:     #ff8993;
+	--bright-green:   #79ba48;
+	--bright-yellow:  #e5b04b;
+	--bright-blue:    #94cfff;
+	--bright-magenta: #da8ee7;
+	--bright-cyan:    #7dcfe0;
+	--bright-white:   #e8f7dc;
+
+	/* Glow effects — override with 'none' in non-glow themes */
+	--term-text-glow:   0 0 8px var(--foreground);
+	--term-prompt-glow: 0 0 8px var(--accent);
 
 	/* --- Backgrounds -------------------------------------- */
-	--term-bg: rgba(4, 8, 5, 0.88); /* main window */
-	--term-titlebar-bg: rgba(45, 45, 45, 0.5);
+	--term-titlebar-bg:  rgba(45, 45, 45, 0.5);
 	--term-btn-hover-bg: rgba(255, 255, 255, 0.1);
 
 	/* --- Blur / transparency ------------------------------ */
 	--term-blur: 6px;
 
 	/* --- Monitor effects ---------------------------------- */
-	--term-scanline-color: rgba(0, 0, 0, 0.18); /* darker = heavier lines */
-	--term-scanline-size: 4px; /* total row height */
-	--term-scanline-line: 1px; /* opaque line thickness */
+	--term-scanline-color: rgba(0, 0, 0, 0.18);
+	--term-scanline-size: 4px;
+	--term-scanline-line: 1px;
 	--term-vignette: inset 0 0 80px 20px rgba(0, 0, 0, 0.2);
 	--term-outer-glow:
 		0 22px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.07);
-	--term-text-glow: 0 0 8px var(--term-text-glow-color);
-	--term-prompt-glow: 0 0 8px var(--term-prompt-glow-color);
 
 	/* --- Typography --------------------------------------- */
 	--term-font:
@@ -99,8 +99,8 @@
 }
 
 ::selection {
-	color: var(--term-bg);
-	background: var(--term-text);
+	color: var(--background);
+	background: var(--foreground);
 }
 
 /* ============================================================
@@ -115,14 +115,14 @@
 	height: calc(var(--term-titlebar-height) + var(--term-body-max-h));
 	max-width: calc(100vw - 32px);
 
-	background-color: var(--term-bg);
+	background-color: var(--background);
 	backdrop-filter: blur(var(--term-blur));
 	-webkit-backdrop-filter: blur(var(--term-blur));
 
 	border-radius: var(--term-border-radius);
 	overflow: hidden;
 	box-shadow: var(--term-outer-glow);
-	color: var(--term-text);
+	color: var(--foreground);
 	font-size: var(--term-font-size);
 	line-height: var(--term-line-height);
 	text-shadow: var(--term-text-glow);
@@ -183,11 +183,6 @@
 	display: none;
 	position: absolute;
 	inset: 0;
-	/* background: var(--term-bg);
-	color: var(--term-text);
-	font-family: var(--term-font);
-	font-size: var(--term-font-size);
-	font-weight: var(--term-font-weight); */
 	z-index: 20;
 }
 
@@ -204,7 +199,7 @@
 .nano-bar {
 	padding: 3px 10px;
 	flex-shrink: 0;
-	color: var(--term-text-dim);
+	color: var(--bright-black);
 	font-size: var(--term-font-size);
 	font-family: var(--term-font);
 	font-weight: var(--term-font-weight);
@@ -212,12 +207,12 @@
 
 .terminal-overlay-bar-top,
 .nano-bar-top {
-	border-bottom: 1px solid var(--term-text);
+	border-bottom: 1px solid var(--foreground);
 }
 
 .terminal-overlay-bar-bottom,
 .nano-bar-bottom {
-	border-top: 1px solid var(--term-text);
+	border-top: 1px solid var(--foreground);
 }
 
 .nano-overlay {
@@ -285,7 +280,7 @@
 
 .terminal-title {
 	font-size: var(--term-title-font-size);
-	color: var(--term-title);
+	color: #aaa;
 	font-family: var(--term-font-ui);
 	font-weight: 500;
 	pointer-events: none;
@@ -303,7 +298,7 @@
 	height: var(--term-btn-h);
 	border: none;
 	background: transparent;
-	color: var(--term-btn);
+	color: #888;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
@@ -317,7 +312,7 @@
 
 .terminal-btn:hover {
 	background: var(--term-btn-hover-bg);
-	color: var(--term-btn-hover);
+	color: #ddd;
 }
 
 /* ============================================================
@@ -330,7 +325,7 @@
 
 .terminal-window * {
 	scrollbar-width: thin;
-	scrollbar-color: var(--term-scrollbar) transparent;
+	scrollbar-color: var(--bright-black) transparent;
 }
 
 .terminal-window *::-webkit-scrollbar {
@@ -338,7 +333,7 @@
 }
 
 .terminal-window *::-webkit-scrollbar-thumb {
-	background: var(--term-scrollbar);
+	background: var(--bright-black);
 	border-radius: 3px;
 }
 
@@ -349,14 +344,6 @@
 	position: relative;
 	z-index: 1;
 }
-
-/* Transition on the normal state animates the RESTORE direction */
-/* .terminal-body {
-	transition:
-		height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-		padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-		opacity 0.25s;
-} */
 
 /* Transition on the minimized state animates the MINIMIZE direction */
 .terminal-window.minimized .terminal-body {
@@ -385,11 +372,11 @@
 	white-space: pre-wrap;
 	word-break: break-all;
 	font-size: var(--term-font-size);
-	color: var(--term-text);
+	color: var(--foreground);
 }
 
 .terminal-prompt {
-	color: var(--term-prompt);
+	color: var(--accent);
 	text-shadow: var(--term-prompt-glow);
 }
 
@@ -398,33 +385,33 @@
    ============================================================ */
 
 .hl-cmd-known {
-	color: var(--term-hl-cmd-known);
+	color: var(--foreground);
 }
 .hl-cmd-unknown {
-	color: var(--term-hl-cmd-unknown);
+	color: var(--foreground);
 }
 .hl-flag {
-	color: var(--term-hl-flag);
-	text-shadow: var(--term-hl-flag-glow);
+	color: var(--blue);
+	text-shadow: 0 0 8px var(--blue);
 }
 .hl-string {
-	color: var(--term-hl-string);
-	text-shadow: var(--term-hl-string-glow);
+	color: var(--green);
+	text-shadow: 0 0 8px var(--green);
 }
 .hl-arg {
-	color: var(--term-hl-arg);
+	color: var(--foreground);
 }
 
 .line-error {
-	color: var(--term-hl-error);
-	text-shadow: var(--term-hl-error-glow);
+	color: var(--red);
+	text-shadow: 0 0 8px var(--red);
 }
 .line-dim {
-	color: var(--term-text-dim);
+	color: var(--bright-black);
 }
 
 .line-command .terminal-prompt {
-	color: var(--term-prompt);
+	color: var(--accent);
 	text-shadow: var(--term-prompt-glow);
 }
 
@@ -439,7 +426,7 @@
 }
 
 .terminal-input-row .terminal-prompt {
-	color: var(--term-prompt);
+	color: var(--accent);
 	text-shadow: var(--term-prompt-glow);
 }
 
@@ -474,7 +461,7 @@
    SCRAMBLE EFFECT
    ============================================================ */
 .scramble-char {
-	color: var(--term-text-dim);
+	color: var(--bright-black);
 	opacity: 0.7;
 }
 
@@ -485,9 +472,9 @@
 	position: absolute;
 	width: var(--term-cursor-w);
 	height: var(--term-cursor-h, 0.85em);
-	background: var(--term-cursor);
+	background: var(--cursor);
 	mix-blend-mode: difference;
-	box-shadow: 0 0 6px var(--term-cursor-glow);
+	box-shadow: 0 0 6px var(--cursor);
 	pointer-events: none;
 	animation: cursor-blink 1.1s step-start infinite;
 	z-index: 50;
@@ -552,8 +539,8 @@
 	content: "";
 	position: absolute;
 	border-radius: 0 0 calc(var(--term-border-radius) * 0.8) 0;
-	border-right: 1px solid var(--term-cursor);
-	border-bottom: 1px solid var(--term-cursor);
+	border-right: 1px solid var(--cursor);
+	border-bottom: 1px solid var(--cursor);
 	width: 10px;
 	height: 10px;
 	margin: 0 0 4px 0;
@@ -570,8 +557,8 @@
 	content: "";
 	position: absolute;
 	border-radius: 0 0 0 calc(var(--term-border-radius) * 0.8);
-	border-left: 1px solid var(--term-cursor);
-	border-bottom: 1px solid var(--term-cursor);
+	border-left: 1px solid var(--cursor);
+	border-bottom: 1px solid var(--cursor);
 	width: 10px;
 	height: 10px;
 	margin: 0 0 0 4px;

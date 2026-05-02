@@ -2,6 +2,7 @@ import { parse } from './parser.js';
 import { HistoryManager } from './history.js';
 import registry from './commands/index.js';
 import { VFS } from './vfs/vfs.js';
+import { THEMES, loadTheme } from './themes.js';
 
 const MOTD = [
     'Welcome to Firelin OS 1.0.0 LTS (Phosphor)',
@@ -23,6 +24,7 @@ class Shell {
             user: 'guest',
             cwd: '/home/guest',
             hostname: 'firelin',
+            theme: 'phosphor',
             env: new Map([
                 ['HOME', '/home/guest'],
                 ['PATH', '/bin:/usr/bin'],
@@ -48,6 +50,15 @@ class Shell {
     }
 
     async boot() {
+        const savedTheme = loadTheme();
+        if (savedTheme && savedTheme !== 'phosphor') {
+            const theme = THEMES.get(savedTheme);
+            if (theme && theme.css) {
+                this._ui.applyTheme(theme.css);
+                this.session.theme = savedTheme;
+            }
+        }
+
         for (let i = 0; i < MOTD.length; i++) {
             await new Promise(r => setTimeout(r, i * 90));
             this._ui.printBoot(MOTD[i]);
@@ -152,6 +163,7 @@ class Shell {
             mountOverlay(el) { shell._ui.mountOverlay(el); },
             unmountOverlay(el) { shell._ui.unmountOverlay(el); },
             injectStyle(id, css) { shell._ui.injectStyle(id, css); },
+            applyTheme(id, css) { shell._ui.applyTheme(css); },
             abort: abortSignal,
             sleep(ms) {
                 return new Promise((resolve, reject) => {

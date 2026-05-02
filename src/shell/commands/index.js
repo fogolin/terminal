@@ -19,6 +19,7 @@ import ping    from './ping.js';
 import curl    from './curl.js';
 import top     from './top.js';
 import nano    from './nano.js';
+import theme   from './theme.js';
 
 const ALL_COMMANDS = [
     clear, help, print,
@@ -26,7 +27,7 @@ const ALL_COMMANDS = [
     cat, tail,
     touch, mkdir, rm, cp, mv,
     find, grep,
-    su, ping, curl, top, nano,
+    su, ping, curl, top, nano, theme,
 ];
 
 const registry = new Map();

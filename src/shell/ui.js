@@ -118,11 +118,23 @@ class TerminalUI {
     }
 
     injectStyle(id, css) {
-        if (this._shadow.getElementById(id)) return;
-        const style = document.createElement('style');
-        style.id = id;
+        let style = this._shadow.getElementById(id);
+        if (!style) {
+            style = document.createElement('style');
+            style.id = id;
+            this._shadow.appendChild(style);
+        }
         style.textContent = css;
-        this._shadow.appendChild(style);
+    }
+
+    applyTheme(css) {
+        const THEME_ID = 'firelin-active-theme';
+        const existing = this._shadow.getElementById(THEME_ID);
+        if (!css) {
+            if (existing) existing.remove();
+            return;
+        }
+        this.injectStyle(THEME_ID, css);
     }
 
     createOverlay() {
