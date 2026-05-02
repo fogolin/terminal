@@ -166,8 +166,13 @@ class TerminalUI {
     // ── Private ─────────────────────────────────────────────────────────────
 
     _bindEvents() {
-        // Click anywhere in body → focus hidden input
-        this._body.addEventListener('click', () => this._capture.focus());
+        // Click anywhere in body → focus hidden input, but not when user is selecting text
+        let _pointerMoved = false;
+        this._body.addEventListener('mousedown', () => { _pointerMoved = false; });
+        this._body.addEventListener('mousemove', () => { _pointerMoved = true; });
+        this._body.addEventListener('click', () => {
+            if (!_pointerMoved) this._capture.focus();
+        });
 
         this._capture.addEventListener('input', () => this._onInput());
         this._capture.addEventListener('keydown', (e) => this._onKeyDown(e));
