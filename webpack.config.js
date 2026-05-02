@@ -24,7 +24,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, 'dist', `v${major}`),
-        filename: `firelin.widget${isProduction ? '.min' : ''}.js`,
+        filename: `firelin.widget.${version}${isProduction ? '.min' : ''}.js`,
         clean: true,
         environment: {
             // Support for older browsers
@@ -93,7 +93,7 @@ module.exports = {
                         fs.copyFile(path.resolve(__dirname, 'LICENSE'), dest, cb);
                     });
                 }
-              }
+            }
             : null,
     ].filter(Boolean),
 };
