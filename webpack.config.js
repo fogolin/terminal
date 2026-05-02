@@ -1,6 +1,8 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 const { version } = require('./package.json');
 const semver = require('semver');
@@ -11,13 +13,21 @@ module.exports = {
     mode: isProduction ? 'production' : 'development',
 
     // devtool: 'inline-source-map',
-    // optimization: { minimize: false },
+    optimization: {
+        minimize: isProduction ? true : false,
+        minimizer: [
+            new TerserPlugin({
+                extractComments: false,
+            }),
+        ],
+    },
 
     output: {
         path: path.resolve(__dirname, 'dist', `v${major}`),
         filename: `firelin.widget${isProduction ? '.min' : ''}.js`,
         clean: true,
         environment: {
+            // Support for older browsers
             arrowFunction: false
         }
     },
@@ -51,7 +61,10 @@ module.exports = {
                 use: [{
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env']
+                        presets: ['@babel/preset-env', {
+                            // With older browser suppor in arrow functions we can't use esmodules.
+                            // targets: { esmodules: true }
+                        }]
                     }
                 }],
             },
@@ -72,5 +85,15 @@ module.exports = {
             })
             : null,
         new webpack.HotModuleReplacementPlugin(),
+        isProduction
+            ? {
+                apply(compiler) {
+                    compiler.hooks.afterEmit.tapAsync('CopyLicense', (_compilation, cb) => {
+                        const dest = path.resolve(__dirname, 'dist', `v${major}`, 'LICENSE');
+                        fs.copyFile(path.resolve(__dirname, 'LICENSE'), dest, cb);
+                    });
+                }
+              }
+            : null,
     ].filter(Boolean),
 };

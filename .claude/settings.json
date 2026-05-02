@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Read(//mnt/dev/dram-app/**)",
+      "Read(//mnt/dev/that-should-be-an-email/**)"
     ]
   }
 }

@@ -354,9 +354,10 @@ class FirelinTerminalElement extends HTMLElement {
 
     async _bootShell() {
         this._ui = new TerminalUI(this._shadow);
-        this._shell = new Shell();
+        this._shell = new Shell(this.config);
         this._ui.setShell(this._shell);
         this._shell.setUI(this._ui);
+        if (this.config.title) this._ui.setTitle(this.config.title);
         await this._shell.boot();
         this._ui.focus();
     }
@@ -431,9 +432,9 @@ window.FirelinTerminal = {
         let instance = document.querySelector(WIDGET_TAG);
         if (!instance) {
             instance = document.createElement(WIDGET_TAG);
-            instance.setAttribute('data-config', JSON.stringify(config));
             document.body.appendChild(instance);
         }
+        instance.config = config;
         return instance;
     },
     addLine(text) {

@@ -126,7 +126,7 @@
           "owner": "root",
           "permissions": "644",
           "modified": "2026-05-01T00:00:00Z",
-          "content": "NAME=\"Firelin OS\"\nVERSION=\"1.0.0 (Phosphor)\"\nID=firelin\nID_LIKE=debian\nPRETTY_NAME=\"Firelin OS 1.0.0 Phosphor\"\nHOME_URL=\"https://lucasfogolin.com\"\nBUG_REPORT_URL=\"https://github.com/lucasfogolin/firelin-terminal/issues\"",
+          "content": "NAME=\"Firelin OS\"\nVERSION=\"1.0.0 (Phosphor)\"\nID=firelin\nID_LIKE=debian\nPRETTY_NAME=\"Firelin OS 1.0.0 Phosphor\"\nHOME_URL=\"https://fogol.in\"\nBUG_REPORT_URL=\"https://github.com/fogolin/terminal/issues\"",
           "size": 218
         },
         "passwd": {
@@ -279,6 +279,60 @@
             }
           }
         },
+        "dramclub": {
+          "type": "directory",
+          "name": "dramclub",
+          "owner": "guest",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "README.md": {
+              "type": "file",
+              "name": "README.md",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "# The Dram Club\n\nGuided whisky tasting app for enthusiasts and clubs.\nRecord noses, palates, finishes. Offline-first. Syncs when you're ready.\n\n## Stack\n- Web: React 19 + Vite + Tailwind CSS v4 (PWA)\n- Mobile: Expo 54 / React Native 0.81\n- Marketing: Astro 6\n- API: Cloudflare Pages Functions\n- DB: PostgreSQL + Drizzle ORM (UUID v7)\n- Auth: Clerk\n- i18n: EN + PT-BR\n- Deploy: Cloudflare Pages\n\n## Features\n- Personal whisky library\n- Detailed tasting profiles (aroma, palate, finish, harmonization)\n- Offline-first with background cloud sync\n- Installable PWA + native mobile app\n\n## Status\nLive at: https://dramclub.app\n\nSee also: manifest.json",
+              "size": 560
+            },
+            "manifest.json": {
+              "type": "file",
+              "name": "manifest.json",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "{\n  \"name\": \"dram-club\",\n  \"version\": \"1.0.1\",\n  \"description\": \"Guided whisky tasting app for enthusiasts and clubs\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://dramclub.app\",\n  \"repository\": \"https://github.com/fogolin/dram-app\",\n  \"keywords\": [\"whisky\", \"tasting\", \"pwa\", \"offline-first\", \"react-native\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:00:00Z\"\n}",
+              "size": 390
+            }
+          }
+        },
+        "thatshouldbeanemail": {
+          "type": "directory",
+          "name": "thatshouldbeanemail",
+          "owner": "guest",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "README.md": {
+              "type": "file",
+              "name": "README.md",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "# That Should Be an Email\n\nBrowser extension that calculates the real-time cost of meetings\nand nudges you to send an email instead.\n\nWorks on Google Calendar and Microsoft 365 Outlook.\n\n## How it works\n1. Scrapes attendee list and duration from the browser DOM.\n2. Cross-references roles against a local salary database.\n3. Computes cost: sum(Rate_i × Duration/60) for all attendees.\n4. If cost exceeds threshold: suggests an email alternative.\n\n## Stack\n- Browser Extension: Chrome + Edge (Manifest V3)\n- Salary DB: CSV → built JS module\n- Website: Astro\n\n## Status\nLive at: https://thatshouldbeanemail.com\nExtension v1.4.1\n\n## Note\nThe real cost of this README is approximately $0.00.\nMeetings are less lucky.\n\nSee also: manifest.json",
+              "size": 540
+            },
+            "manifest.json": {
+              "type": "file",
+              "name": "manifest.json",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "{\n  \"name\": \"that-should-be-an-email\",\n  \"version\": \"1.4.1\",\n  \"description\": \"Browser extension that calculates the real cost of meetings and suggests an email instead\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://thatshouldbeanemail.com\",\n  \"repository\": \"https://github.com/fogolin/that-should-be-an-email\",\n  \"keywords\": [\"browser-extension\", \"productivity\", \"meetings\", \"calendar\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:00:00Z\"\n}",
+              "size": 450
+            }
+          }
+        },
         "firelin": {
           "type": "directory",
           "name": "firelin",
@@ -292,7 +346,7 @@
               "owner": "guest",
               "permissions": "644",
               "modified": "2026-05-01T00:00:00Z",
-              "content": "# firelin-terminal\n\nA retro CRT terminal web component. The one you are using right now.\nBuilt as an Easter egg for my personal site.\n\nActivate with: ↑↑↓↓←→←→BA  (Konami Code)\n\n## Stack\n- Vanilla JS\n- Web Components (Shadow DOM)\n- Webpack 5 + Babel\n- CSS custom properties (theming)\n\n## Features\n- Virtual filesystem (VFS) with UNIX-like permissions\n- 20+ commands\n- Command history\n- Tab completion\n- Syntax highlighting\n- Persistent session (localStorage)\n- Scramble text effect\n\n## Status\nEmbedded at: https://lucasfogolin.com\n\n## Meta\nYou found the project that is the terminal inside the terminal.\nCongratuations. This is turtles all the way down.",
+              "content": "# firelin-terminal\n\nA retro CRT terminal web component. The one you are using right now.\nBuilt as an Easter egg for my personal site.\n\nActivate with: ↑↑↓↓←→←→BA  (Konami Code)\n\n## Stack\n- Vanilla JS\n- Web Components (Shadow DOM)\n- Webpack 5 + Babel\n- CSS custom properties (theming)\n\n## Features\n- Virtual filesystem (VFS) with UNIX-like permissions\n- 20+ commands\n- Command history\n- Tab completion\n- Syntax highlighting\n- Persistent session (localStorage)\n- Scramble text effect\n\n## Status\nEmbedded at: https://fogol.in\n\n## Meta\nYou found the project that is the terminal inside the terminal.\nCongratuations. This is turtles all the way down.",
               "size": 610
             },
             "package.json": {
@@ -348,7 +402,7 @@
           "owner": "root",
           "permissions": "600",
           "modified": "2026-05-01T00:00:00Z",
-          "content": "Day 1\nStarted building the terminal. \"It'll be quick,\" I said.\n\nDay 8\nThe VFS took three rewrites. The parser ate two weekends.\n\"It's an Easter egg,\" I said. \"Nobody will go this deep.\"\n\nDay 14\nAdded lore to the logs. Coffee machine daemon has more personality than most\nSaaS products I've used.\n\nDay 21\nYou're reading this. You went deep.\nI respect that.\n\nSince you're here — check out /projects. Real stuff lives there.\nAnd if you find any bugs, it's a feature.\n\n  — Lucas",
+          "content": "Day 1\nStarted building the terminal. \"It'll be quick,\" I said.\n\nDay 8\nThe VFS took three rewrites. The parser ate two weekends.\n\"It's an Easter egg,\" I said. \"Nobody will go this deep.\"\n\nDay 14\nAdded lore to the logs. Coffee machine daemon has more personality than most\nSaaS products I've used.\n\nDay 21\nYou're reading this. You went deep.\nI respect that.\n\nSince you're here — check out /projects. Real stuff lives there.\nAnd if you find any bugs, it's a feature.\n\n— Lucas Fogolin",
           "size": 490
         },
         ".env": {

@@ -3,6 +3,7 @@
 
 <head>
     <title>Firelin Terminal Example (Testing Environment)</title>
+    <link rel="icon" type="image/png" href="../public/favicon.png">
     <style>
         body {
             font-family: sans-serif;
@@ -62,7 +63,7 @@
             // assign an id so we can detect if we already added it
             js.id = id;
             // assign the src to the script's widget URL
-            js.src = 'dist/v1/firelin.widget.min.js';
+            js.src = '../dist/v1/firelin.widget.min.js';
             js.defer = true;
             el.parentNode.insertBefore(js, el);
             // initializes the widget when the script is ready
@@ -72,14 +73,21 @@
                 }
             };
         })(document, 'script', 'firelin-terminal-js', {
-            // pass configuration here
+            theme: 'amber',                       // 'phosphor' | 'amber' | 'ayu' | 'noctis'
+            title: 'Terminal — bash',             // titlebar label
+            osName: 'firelin',                    // used across the app
+            user: 'MacGyver',                     // default logged in user
+            welcomeMessage: 'Hello from mysite!', // string or array of strings
+            history: ['ls /projects', 'whoami'],  // pre-seeded history entries
         });
     </script>
 </head>
-<h1>Tag examples</h1>
-<div class="block">
-    <h2>Script Injection Example</h2>
-    <code class="content">
+
+<body>
+    <h1>Tag examples</h1>
+    <div class="block">
+        <h2>Script Injection Example</h2>
+        <code class="content">
             &lt;script&gt;<br>
             &nbsp; (function (d, s, id, config) {<br>
             &nbsp; &nbsp; var js, el = d.getElementsByTagName(s)[0];<br>
@@ -95,21 +103,26 @@
             &nbsp; &nbsp; &nbsp; }<br>
             &nbsp; &nbsp; };<br>
             &nbsp; })(document, 'script', 'firelin-terminal-js', {<br>
-            &nbsp; &nbsp; /* pass config here */<br>
+            &nbsp; &nbsp; theme: 'amber',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 'phosphor' | 'amber' | 'ayu' | 'noctis'<br>
+            &nbsp; &nbsp; title: 'mysite — bash',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// titlebar label<br>
+            &nbsp; &nbsp; osName: 'firelin',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// used across the app<br>
+            &nbsp; &nbsp; user: 'guest',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default logged in user<br>
+            &nbsp; &nbsp; welcomeMessage: 'Hello from mysite!',&nbsp;// string or array of strings<br>
+            &nbsp; &nbsp; history: ['ls /projects', 'whoami'],&nbsp;&nbsp;// pre-seeded history entries<br>
             &nbsp; });<br>
             &lt;/script&gt;
         </code>
-</div>
-<div class="block">
-    <h2>Instructions</h2>
-    <div class="content">
-        <p>The widget automatically activates when the Konami code is entered:</p>
-        <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
-        <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
-        <p>The shell can also be activated by clicking elements using the "shell" class.</p>
-        <button class="shell">Shell trigger</button>
     </div>
-</div>
+    <div class="block">
+        <h2>Instructions</h2>
+        <div class="content">
+            <p>The widget automatically activates when the Konami code is entered:</p>
+            <p><strong>Desktop:</strong> ↑ ↑ ↓ ↓ ← → ← → B A</p>
+            <p><strong>Mobile:</strong> swipe up, up, down, down, left, right, left, right, then double tap</p>
+            <p>The shell can also be activated by clicking elements using the "shell" class.</p>
+            <button class="shell">Shell trigger</button>
+        </div>
+    </div>
 </body>
 
 </html>

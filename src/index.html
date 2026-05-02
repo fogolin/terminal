@@ -53,7 +53,7 @@
 </head>
 
 <body>
-    <h1>Firelin Terminal Widget</h1>
+    <h1>For development use</h1>
     <div class="block">
         <h2>Script Injection Example</h2>
         <code class="content">
@@ -72,7 +72,12 @@
             &nbsp; &nbsp; &nbsp; }<br>
             &nbsp; &nbsp; };<br>
             &nbsp; })(document, 'script', 'firelin-terminal-js', {<br>
-            &nbsp; &nbsp; /* pass config here */<br>
+            &nbsp; &nbsp; theme: 'amber',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 'phosphor' | 'amber' | 'ayu' | 'noctis'<br>
+            &nbsp; &nbsp; title: 'mysite — bash',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// titlebar label<br>
+            &nbsp; &nbsp; osName: 'firelin',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// used across the app<br>
+            &nbsp; &nbsp; user: 'guest',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// default logged in user<br>
+            &nbsp; &nbsp; welcomeMessage: 'Hello from mysite!',&nbsp;// string or array of strings<br>
+            &nbsp; &nbsp; history: ['ls /projects', 'whoami'],&nbsp;&nbsp;// pre-seeded history entries<br>
             &nbsp; });<br>
             &lt;/script&gt;
         </code>

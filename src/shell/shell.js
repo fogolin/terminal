@@ -1,19 +1,15 @@
 import { parse } from './parser.js';
+import capitalize from '../functions/capitalize.js';
+import pkg from '../../package.json';
+const { version } = pkg;
 import { HistoryManager } from './history.js';
 import registry from './commands/index.js';
 import { VFS } from './vfs/vfs.js';
 import { THEMES, loadTheme } from './themes.js';
 
-const MOTD = [
-    'Welcome to Firelin OS 1.0.0 LTS (Phosphor)',
-    '',
-    "Type 'help' to list available commands.",
-    "Type 'ls /projects' to see what's been built.",
-    '',
-];
-
 class Shell {
-    constructor() {
+    constructor(config = {}) {
+        this.config = config;
         this._ui = null;
         this.history = new HistoryManager();
         this.vfs = new VFS();
@@ -21,14 +17,14 @@ class Shell {
         this._currentAbort = null;
         this._readline = null;
         this.session = {
-            user: 'guest',
+            user: config?.user || 'guest',
             cwd: '/home/guest',
-            hostname: 'firelin',
-            theme: 'phosphor',
+            hostname: config?.osName || 'firelin',
+            theme: config?.theme || 'phosphor',
             env: new Map([
                 ['HOME', '/home/guest'],
                 ['PATH', '/bin:/usr/bin'],
-                ['USER', 'guest'],
+                ['USER', config?.user || 'guest'],
                 ['SHELL', '/bin/bash'],
             ]),
         };
@@ -50,18 +46,35 @@ class Shell {
     }
 
     async boot() {
-        const savedTheme = loadTheme();
-        if (savedTheme && savedTheme !== 'phosphor') {
-            const theme = THEMES.get(savedTheme);
+        if (Array.isArray(this.config.history)) {
+            this.config.history.forEach(entry => this.history.push(entry));
+        }
+
+        const userTheme = (() => { try { return localStorage.getItem('firelin_theme'); } catch (_) { return null; } })();
+        const themeId = userTheme || this.config.theme || 'phosphor';
+        if (themeId !== 'phosphor') {
+            const theme = THEMES.get(themeId);
             if (theme && theme.css) {
                 this._ui.applyTheme(theme.css);
-                this.session.theme = savedTheme;
+                this.session.theme = themeId;
             }
         }
 
-        for (let i = 0; i < MOTD.length; i++) {
+        const DEFAULT_MOTD = [
+            `Welcome to ${capitalize(this.session.hostname)} OS ${version} LTS (${capitalize(this.session.theme)})`,
+            '',
+            "Type 'help' to list available commands.",
+            "Type 'ls /projects' to see what's been built.",
+            '',
+        ];
+
+        const motd = this.config.welcomeMessage
+            ? (Array.isArray(this.config.welcomeMessage) ? this.config.welcomeMessage : [this.config.welcomeMessage])
+            : DEFAULT_MOTD;
+
+        for (let i = 0; i < motd.length; i++) {
             await new Promise(r => setTimeout(r, i * 90));
-            this._ui.printBoot(MOTD[i]);
+            this._ui.printBoot(motd[i]);
         }
         this._ui.setPrompt(this.prompt);
     }

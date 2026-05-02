@@ -100,6 +100,11 @@ class TerminalUI {
         this._updateDisplay();
     }
 
+    setTitle(text) {
+        const el = this._shadow.querySelector('.terminal-title');
+        if (el) el.textContent = text;
+    }
+
     setInputRowVisible(visible) {
         this._inputRow.style.display = visible ? '' : 'none';
     }

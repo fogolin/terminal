@@ -2,13 +2,13 @@
 
 ## Phase Overview
 
-| Phase | Name          | Output                                      | Depends On |
-|-------|---------------|---------------------------------------------|------------|
-| 1     | Parser        | Tokenizer, flag parser, syntax highlighter  | —          |
-| 2     | VFS           | JSON tree engine, path resolver, permissions| —          |
-| 3     | UI Layer      | Input line, history, hotkeys, theming       | Phase 1    |
-| 4     | Commands      | All 20 commands wired to VFS + shell        | 1, 2, 3    |
-| 5     | Polish        | Tab completion, man pages, boot sequence    | 1–4        |
+| Phase | Name     | Output                                       | Depends On |
+| ----- | -------- | -------------------------------------------- | ---------- |
+| 1     | Parser   | Tokenizer, flag parser, syntax highlighter   | —          |
+| 2     | VFS      | JSON tree engine, path resolver, permissions | —          |
+| 3     | UI Layer | Input line, history, hotkeys, theming        | Phase 1    |
+| 4     | Commands | All 20 commands wired to VFS + shell         | 1, 2, 3    |
+| 5     | Polish   | Tab completion, man pages, boot sequence     | 1–4        |
 
 Phases 1 and 2 are independent — can be built in parallel.
 
@@ -19,6 +19,7 @@ Phases 1 and 2 are independent — can be built in parallel.
 **Goal:** Transform raw input string → structured `ParsedArgs`.
 
 ### Steps
+
 1. **Tokenizer** — split input respecting quoting rules:
    - `"hello world"` → one token
    - `'it\'s'` → one token (escaped)
@@ -37,12 +38,14 @@ Phases 1 and 2 are independent — can be built in parallel.
    - positional args: apply `--color-arg`
 
 ### Files
+
 ```
 src/shell/parser.js        ← tokenizer + ParsedArgs builder
 src/shell/highlighter.js   ← maps token types → CSS class names
 ```
 
 ### Test vectors (no framework needed — plain assertions)
+
 ```
 "ls -la /home"      → { command:"ls", flags:{"-l","-a"}, positional:["/home"] }
 "cat 'my file.txt'" → { command:"cat", positional:["my file.txt"] }
@@ -57,6 +60,7 @@ src/shell/highlighter.js   ← maps token types → CSS class names
 **Goal:** In-memory, mutable JSON tree with UNIX-like semantics.
 
 ### Steps
+
 1. **Static tree** — define initial VFS state as `vfs.json` (see VFS_SCHEMA.md); import and deep-clone at boot so each session gets a fresh tree
 2. **Node resolver** — `resolve(path, cwd)` returns reference into live tree or `null`:
    - normalise path (collapse `..`, `.`, strip trailing `/`)
@@ -70,6 +74,7 @@ src/shell/highlighter.js   ← maps token types → CSS class names
 5. **VFSError types** — `NotFoundError`, `PermissionError`, `NotDirectoryError`, `AlreadyExistsError` — plain JS classes extending `Error`
 
 ### Files
+
 ```
 src/shell/vfs/
   tree.json          ← initial filesystem state
@@ -84,6 +89,7 @@ src/shell/vfs/
 **Goal:** Interactive input line that plugs into the existing terminal window.
 
 ### Steps
+
 1. **Input component** — add `<div class="terminal-input-row">` below `.terminal-lines`:
    - prompt span: `guest@firelin:~$`
    - hidden `<input>` captures keystrokes (never visible)
@@ -104,16 +110,17 @@ src/shell/vfs/
 5. **Theming** — shell adds CSS custom properties on top of existing terminal tokens:
    ```css
    :host {
-     --color-cmd:    var(--terminal-text);      /* known command */
-     --color-error:  #e06c75;                   /* unknown command / errors */
-     --color-flag:   #61afef;                   /* -x --flags */
-     --color-string: #98c379;                   /* "quoted strings" */
-     --color-arg:    var(--terminal-text);      /* positional args */
-     --color-prompt: var(--terminal-accent);    /* prompt $ glyph */
+   	--color-cmd: var(--terminal-text); /* known command */
+   	--color-error: #e06c75; /* unknown command / errors */
+   	--color-flag: #61afef; /* -x --flags */
+   	--color-string: #98c379; /* "quoted strings" */
+   	--color-arg: var(--terminal-text); /* positional args */
+   	--color-prompt: var(--terminal-accent); /* prompt $ glyph */
    }
    ```
 
 ### Files
+
 ```
 src/shell/
   history.js         ← HistoryManager class
@@ -128,41 +135,46 @@ src/shell/
 
 ### Implementation order (dependency-first)
 
-| Batch | Commands                          | Notes                                           |
-|-------|-----------------------------------|-------------------------------------------------|
-| A     | `whoami`, `pwd`, `clear`, `print` | No VFS reads; easiest smoke-test                |
-| B     | `ls`, `cd`, `cat`, `tail`         | Read-only VFS                                   |
-| C     | `touch`, `mkdir`, `rm`, `cp`, `mv`| Mutating VFS                                    |
-| D     | `find`, `grep`                    | Recursive VFS traversal                         |
-| E     | `nano`                            | Modal inline editor (biggest UI lift)           |
-| F     | `su`, `help`                      | Session mutation, registry introspection        |
-| G     | `ping`, `curl`                    | Async, simulated network, abort-aware           |
-| H     | `top`                             | Live-updating output, interval, Ctrl+C to exit  |
+| Batch | Commands                           | Notes                                          |
+| ----- | ---------------------------------- | ---------------------------------------------- |
+| A     | `whoami`, `pwd`, `clear`, `print`  | No VFS reads; easiest smoke-test               |
+| B     | `ls`, `cd`, `cat`, `tail`          | Read-only VFS                                  |
+| C     | `touch`, `mkdir`, `rm`, `cp`, `mv` | Mutating VFS                                   |
+| D     | `find`, `grep`                     | Recursive VFS traversal                        |
+| E     | `nano`                             | Modal inline editor (biggest UI lift)          |
+| F     | `su`, `help`                       | Session mutation, registry introspection       |
+| G     | `ping`, `curl`                     | Async, simulated network, abort-aware          |
+| H     | `top`                              | Live-updating output, interval, Ctrl+C to exit |
 
 ### `nano` approach
+
 - On execute: hide normal input row, inject a full-screen editor overlay inside `.terminal-body`
 - Simple `<textarea>` styled to match terminal theme
 - Status bar: `^X Exit  ^S Save  ^G Help`
 - On save: `ctx.vfs.writeFile(path, textarea.value)` then tear down overlay
 
 ### `curl` approach
+
 - All responses are simulated from `src/shell/commands/data/curl-responses.json`
-- Known endpoints: `strucit.app`, `api.firelin.sh/*`, `lucasfogolin.com`, `github.com/lucasfogolin`
+- Known endpoints: `strucit.com`, `api.firelin.sh/*`, `fogol.in`, `bitsti.com.br`, `github.com/fogolin`
 - Unknown hosts → fallback entry with helpful hint listing known hosts
 - Add new endpoints by editing the JSON; no code changes needed
 
 ### `top` approach
+
 - Live-updating: clears previous top block and redraws every second via `setInterval`
 - Processes are randomized fiction; CPU/memory values drift subtly each redraw
 - `Ctrl+C` fires `AbortController` → clears interval → restores prompt
 
 ### `tail -f` approach
+
 - Static files: print last N lines then return (no live mode)
 - Files with `_live: true` in VFS: print content then start `setInterval` pulling random messages from `log-generators.json` matching `_generator` key
 - `_interval` field on the node controls cadence; default 3000ms
 - `Ctrl+C` stops the interval
 
 ### Files
+
 ```
 src/shell/commands/
   whoami.js  pwd.js  clear.js  print.js
@@ -182,6 +194,7 @@ src/shell/commands/index.js   ← registry builder
 **Goal:** Completions, man pages, boot sequence, edge cases.
 
 ### Steps
+
 1. **Tab completion**:
    - token 0: complete against command registry names
    - token 1+: complete against VFS paths (relative to cwd), respecting read permissions

@@ -1,6 +1,3 @@
-/* Import Themes */
-/* @import "./themes.css"; */
-
 /* ============================================================
    DESIGN TOKENS — tweak these to restyle everything
    ============================================================ */
@@ -9,34 +6,34 @@
 	/* These are overridden at runtime by the active theme style. */
 	--background: rgba(4, 8, 5, 0.88);
 	--foreground: #36ba2c;
-	--accent:     #e8f7dc;
-	--cursor:     #36ba2c;
+	--accent: #e8f7dc;
+	--cursor: #36ba2c;
 
 	/* ANSI palette */
-	--black:   #0d1a0d;
-	--red:     #e06c75;
-	--green:   #36ba2c;
-	--yellow:  #e5c07b;
-	--blue:    #61afef;
+	--black: #0d1a0d;
+	--red: #e06c75;
+	--green: #36ba2c;
+	--yellow: #e5c07b;
+	--blue: #61afef;
 	--magenta: #c678dd;
-	--cyan:    #56b6c2;
-	--white:   #abb2bf;
+	--cyan: #56b6c2;
+	--white: #abb2bf;
 
-	--bright-black:   #2a8a22;
-	--bright-red:     #ff8993;
-	--bright-green:   #79ba48;
-	--bright-yellow:  #e5b04b;
-	--bright-blue:    #94cfff;
+	--bright-black: #2a8a22;
+	--bright-red: #ff8993;
+	--bright-green: #79ba48;
+	--bright-yellow: #e5b04b;
+	--bright-blue: #94cfff;
 	--bright-magenta: #da8ee7;
-	--bright-cyan:    #7dcfe0;
-	--bright-white:   #e8f7dc;
+	--bright-cyan: #7dcfe0;
+	--bright-white: #e8f7dc;
 
 	/* Glow effects — override with 'none' in non-glow themes */
-	--term-text-glow:   0 0 8px var(--foreground);
+	--term-text-glow: 0 0 8px var(--foreground);
 	--term-prompt-glow: 0 0 8px var(--accent);
 
 	/* --- Backgrounds -------------------------------------- */
-	--term-titlebar-bg:  rgba(45, 45, 45, 0.5);
+	--term-titlebar-bg: rgba(45, 45, 45, 0.5);
 	--term-btn-hover-bg: rgba(255, 255, 255, 0.1);
 
 	/* --- Blur / transparency ------------------------------ */
