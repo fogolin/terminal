@@ -20,6 +20,7 @@ import curl    from './curl.js';
 import top     from './top.js';
 import nano    from './nano.js';
 import theme   from './theme.js';
+import man     from './man.js';
 
 const ALL_COMMANDS = [
     clear, help, print,
@@ -27,7 +28,7 @@ const ALL_COMMANDS = [
     cat, tail,
     touch, mkdir, rm, cp, mv,
     find, grep,
-    su, ping, curl, top, nano, theme,
+    su, ping, curl, top, nano, theme, man,
 ];
 
 const registry = new Map();
@@ -37,7 +38,8 @@ ALL_COMMANDS.forEach(cmd => {
     (cmd.aliases || []).forEach(alias => registry.set(alias, cmd));
 });
 
-// Inject registry into help for introspection without circular import
+// Inject registry into help/man for introspection without circular import
 help._registry = registry;
+man._registry  = registry;
 
 export default registry;

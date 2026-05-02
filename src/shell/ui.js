@@ -232,7 +232,7 @@ class TerminalUI {
 
             case 'Tab':
                 e.preventDefault();
-                // Phase 5: tab completion
+                if (!this._locked) this._tabComplete();
                 break;
 
             case 'c':
@@ -312,6 +312,89 @@ class TerminalUI {
                 return;
             }
             charCount = nodeEnd;
+        }
+    }
+
+    _tabComplete() {
+        const val = this._capture.value;
+        const pos = this._capture.selectionStart ?? val.length;
+        const beforeCursor = val.slice(0, pos);
+
+        const trimmed = beforeCursor.trimStart();
+        const leadingLen = beforeCursor.length - trimmed.length;
+        const tokens = trimmed === '' ? [] : trimmed.split(/\s+/);
+        const endsWithSpace = beforeCursor.length > 0 && /\s$/.test(beforeCursor);
+
+        // Token 0: complete command name
+        if (tokens.length <= 1 && !endsWithSpace) {
+            const partial = tokens[0] || '';
+            const seen = new Set();
+            const names = [];
+            registry.forEach(cmd => {
+                if (!seen.has(cmd)) { seen.add(cmd); names.push(cmd.name); }
+            });
+            const matches = names.filter(n => n.startsWith(partial)).sort();
+            if (matches.length === 0) return;
+            if (matches.length === 1) {
+                const completed = ' '.repeat(leadingLen) + matches[0] + ' ' + val.slice(pos);
+                this.setInput(completed);
+                const newPos = leadingLen + matches[0].length + 1;
+                this._capture.setSelectionRange(newPos, newPos);
+                this._updateDisplay();
+            } else {
+                this.print(matches.join('  '));
+            }
+            return;
+        }
+
+        // Token 1+: complete VFS path
+        const partial = endsWithSpace ? '' : (tokens[tokens.length - 1] || '');
+        this._completeVFSPath(val, pos, partial);
+    }
+
+    _completeVFSPath(val, pos, partial) {
+        const lastSlash = partial.lastIndexOf('/');
+        let dirPart, filePart;
+
+        if (lastSlash === -1) {
+            dirPart = this._shell.session.cwd;
+            filePart = partial;
+        } else if (lastSlash === 0) {
+            dirPart = '/';
+            filePart = partial.slice(1);
+        } else {
+            dirPart = partial.slice(0, lastSlash);
+            filePart = partial.slice(lastSlash + 1);
+        }
+
+        let nodes;
+        try {
+            nodes = this._shell.vfs.list(dirPart, this._shell.session);
+        } catch (_) {
+            return;
+        }
+
+        const matches = nodes
+            .filter(n => n.name.startsWith(filePart))
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        if (matches.length === 0) return;
+
+        const prefix = lastSlash === -1 ? '' : partial.slice(0, lastSlash + 1);
+
+        if (matches.length === 1) {
+            const m = matches[0];
+            const suffix = m.type === 'directory' ? '/' : ' ';
+            const completed = prefix + m.name + suffix;
+            const before = val.slice(0, pos - partial.length);
+            const after = val.slice(pos);
+            this.setInput(before + completed + after);
+            const newPos = before.length + completed.length;
+            this._capture.setSelectionRange(newPos, newPos);
+            this._updateDisplay();
+        } else {
+            const display = matches.map(m => prefix + m.name + (m.type === 'directory' ? '/' : '')).join('  ');
+            this.print(display);
         }
     }
 
