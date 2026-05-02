@@ -170,9 +170,15 @@ class TerminalUI {
 
         this._capture.addEventListener('input', () => this._onInput());
         this._capture.addEventListener('keydown', (e) => this._onKeyDown(e));
+        this._capture.addEventListener('keyup', (e) => {
+            if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) {
+                this._updateDisplay();
+            }
+        });
 
         this._capture.addEventListener('focus', () => {
             this._cursor.classList.add('cursor-active');
+            this._updateDisplay();
         });
         this._capture.addEventListener('blur', () => {
             this._cursor.classList.remove('cursor-active');
@@ -244,13 +250,45 @@ class TerminalUI {
 
     _updateDisplay() {
         const val = this._capture.value;
+        const pos = this._capture.selectionStart ?? val.length;
+
         if (this._maskMode) {
             this._display.textContent = '•'.repeat(val.length);
+        } else {
+            const spans = renderHighlighted(val, registry);
+            this._display.textContent = '';
+            spans.forEach(s => this._display.appendChild(s));
+        }
+
+        this._positionCursor(val, pos);
+    }
+
+    _positionCursor(val, pos) {
+        if (!val.length) {
+            this._cursor.style.left = '0';
             return;
         }
-        const spans = renderHighlighted(val, registry);
-        this._display.textContent = '';
-        spans.forEach(span => this._display.appendChild(span));
+
+        const atEnd = pos >= val.length;
+        const targetPos = atEnd ? val.length - 1 : pos;
+        const naturalLeft = this._display.getBoundingClientRect().right;
+
+        const walker = document.createTreeWalker(this._display, NodeFilter.SHOW_TEXT);
+        let node, charCount = 0;
+
+        while ((node = walker.nextNode())) {
+            const nodeEnd = charCount + node.textContent.length;
+            if (targetPos < nodeEnd) {
+                const offset = targetPos - charCount;
+                const range = document.createRange();
+                range.setStart(node, offset);
+                range.setEnd(node, offset + 1);
+                const rect = range.getBoundingClientRect();
+                this._cursor.style.left = ((atEnd ? rect.right : rect.left) - naturalLeft) + 'px';
+                return;
+            }
+            charCount = nodeEnd;
+        }
     }
 
     _scrollToBottom() {

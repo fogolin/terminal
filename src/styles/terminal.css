@@ -12,6 +12,7 @@
 	--term-prompt: #e8f7dc; /* prompt symbol */
 	--term-prompt-glow-color: #ffffff;
 	--term-cursor: #36ba2c;
+	--term-cursor-glow: #79ba48;
 	--term-btn: #888;
 	--term-btn-hover: #ddd;
 	--term-title: #aaa;
@@ -45,7 +46,7 @@
 	--term-font-weight: 600;
 
 	/* --- Layout ------------------------------------------- */
-	--term-width: 480px;
+	--term-width: 550px;
 	--term-border-radius: 10px;
 	--term-titlebar-height: 38px;
 	--term-body-min-h: 2200px;
@@ -64,7 +65,7 @@
 	--term-btn-gap: 4px;
 	--term-title-font-size: 12px;
 	--term-cursor-h: 1em;
-	--term-cursor-w: 6px;
+	--term-cursor-w: 8px;
 	--term-cursor-margin-bottom: 2px;
 	--term-scrollbar-w: 6px;
 
@@ -81,6 +82,11 @@
 	pointer-events: none;
 	font-family: var(--term-font);
 	font-weight: var(--term-font-weight);
+}
+
+::selection {
+	color: var(--term-bg);
+	background: var(--term-text);
 }
 
 /* ============================================================
@@ -216,6 +222,7 @@
 	padding: 8px 10px;
 	resize: none;
 	caret-color: currentColor;
+	caret-shape: block;
 	line-height: 1.6;
 	width: 100%;
 	min-height: 0;
@@ -464,15 +471,17 @@
    CURSOR
    ============================================================ */
 .terminal-cursor {
-	display: inline-block;
+	position: relative;
 	width: var(--term-cursor-w);
 	height: var(--term-cursor-h, 0.85em);
 	background: var(--term-cursor);
-	box-shadow: 0 0 6px var(--term-text-glow-color);
+	mix-blend-mode: difference;
 	vertical-align: text-bottom;
-	margin-left: 1px;
+	box-shadow: 0 0 6px var(--term-cursor-glow);
+	pointer-events: none;
 	animation: cursor-blink 1.1s step-start infinite;
 	margin-bottom: var(--term-cursor-margin-bottom, 2px);
+	z-index: 50;
 }
 
 @keyframes cursor-blink {
