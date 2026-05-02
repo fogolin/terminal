@@ -18,6 +18,20 @@
 	--term-title: #aaa;
 	--term-scrollbar: #2a5a22;
 
+	/* Terminal */
+	--term-hl-cmd-known: var(--term-text);
+	--term-hl-cmd-unknown: var(--term-text);
+	--term-hl-error: #e06c75;
+	--term-hl-error-glow-color: #ff8993;
+	--term-hl-error-glow: 0 0 8px var(--term-hl-error-glow-color);
+	--term-hl-flag: #61afef;
+	--term-hl-flag-glow-color: #94cfff;
+	--term-hl-flag-glow: 0 0 8px var(--term-hl-error-glow-color);
+	--term-hl-string: #98c379;
+	--term-hl-string-glow-color: #98c379;
+	--term-hl-sring-glow: 0 0 8px var(--term-hl-error-glow-color);
+	--term-hl-arg: var(--term-text);
+
 	/* --- Backgrounds -------------------------------------- */
 	--term-bg: rgba(4, 8, 5, 0.88); /* main window */
 	--term-titlebar-bg: rgba(45, 45, 45, 0.5);
@@ -381,20 +395,6 @@
 /* ============================================================
    SHELL — HIGHLIGHT & OUTPUT COLORS
    ============================================================ */
-:host {
-	--term-hl-cmd-known: var(--term-text);
-	--term-hl-cmd-unknown: var(--term-text, #e06c75);
-	--term-hl-error: #e06c75;
-	--term-hl-error-glow-color: #ff8993;
-	--term-hl-error-glow: 0 0 8px var(--term-hl-error-glow-color);
-	--term-hl-flag: #61afef;
-	--term-hl-flag-glow-color: #94cfff;
-	--term-hl-flag-glow: 0 0 8px var(--term-hl-error-glow-color);
-	--term-hl-string: #98c379;
-	--term-hl-string-glow-color: #98c379;
-	--term-hl-sring-glow: 0 0 8px var(--term-hl-error-glow-color);
-	--term-hl-arg: var(--term-text);
-}
 
 .hl-cmd-known {
 	color: var(--term-hl-cmd-known);
