@@ -81,6 +81,7 @@ class TerminalUI {
 
     setPrompt(text) {
         this._promptEl.textContent = text + ' ';
+        this._updateDisplay();
     }
 
     setInput(value) {
@@ -269,9 +270,8 @@ class TerminalUI {
         const offsetY = 2;
 
         if (!val.length) {
-            const rect = this._display.getBoundingClientRect();
-            console.log("test", rect, rowRect);
-            this._cursor.style.left = (rect.left - rowRect.left) + offsetX + 'px';
+            const rect = this._promptEl.getBoundingClientRect();
+            this._cursor.style.left = (rect.right - rowRect.left) + offsetX + 'px';
             this._cursor.style.top = (rect.top - rowRect.top) + offsetY + 'px';
             return;
         }
