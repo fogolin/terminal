@@ -383,9 +383,16 @@
    ============================================================ */
 :host {
 	--term-hl-cmd-known: var(--term-text);
-	--term-hl-cmd-unknown: #e06c75;
+	--term-hl-cmd-unknown: var(--term-text, #e06c75);
+	--term-hl-error: #e06c75;
+	--term-hl-error-glow-color: #ff8993;
+	--term-hl-error-glow: 0 0 8px var(--term-hl-error-glow-color);
 	--term-hl-flag: #61afef;
+	--term-hl-flag-glow-color: #94cfff;
+	--term-hl-flag-glow: 0 0 8px var(--term-hl-error-glow-color);
 	--term-hl-string: #98c379;
+	--term-hl-string-glow-color: #98c379;
+	--term-hl-sring-glow: 0 0 8px var(--term-hl-error-glow-color);
 	--term-hl-arg: var(--term-text);
 }
 
@@ -397,16 +404,19 @@
 }
 .hl-flag {
 	color: var(--term-hl-flag);
+	text-shadow: var(--term-hl-flag-glow);
 }
 .hl-string {
 	color: var(--term-hl-string);
+	text-shadow: var(--term-hl-string-glow);
 }
 .hl-arg {
 	color: var(--term-hl-arg);
 }
 
 .line-error {
-	color: var(--term-hl-cmd-unknown);
+	color: var(--term-hl-error);
+	text-shadow: var(--term-hl-error-glow);
 }
 .line-dim {
 	color: var(--term-text-dim);
