@@ -1,0 +1,125 @@
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    environment: Development
+    env:
+      TAG_EXISTS: ""
+      RELEASE_VERSION: ""
+      LATEST_CHANGES: ""
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Validate Versions
+        id: version_check
+        run: |
+          MANIFEST_VER=$(grep '"version":' apps/extension/public/manifest.json | cut -d'"' -f4)
+
+          echo "Detected Version - $MANIFEST_VER"
+
+          if git rev-parse "$MANIFEST_VER" >/dev/null 2>&1; then
+              echo "TAG_EXISTS=true" >> $GITHUB_ENV
+              echo "::warning::Tag $MANIFEST_VER already exists. Skipping release process."
+          else
+              echo "TAG_EXISTS=false" >> $GITHUB_ENV
+              echo "RELEASE_VERSION=$MANIFEST_VER" >> $GITHUB_ENV
+          fi
+
+      - name: Install Dependencies
+        if: env.TAG_EXISTS == 'false'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Extension
+        if: env.TAG_EXISTS == 'false'
+        working-directory: apps/extension
+        env:
+          CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
+          API_URL: ${{ secrets.API_URL }}
+        run: pnpm build
+
+      - name: Build Website
+        if: env.TAG_EXISTS == 'false'
+        working-directory: apps/website
+        run: pnpm build
+
+      - name: Build Changelog
+        if: env.TAG_EXISTS == 'false'
+        run: |
+          PREV_TAG=$(git tag --sort=-version:refname | head -n 1)
+
+          LOG_FORMAT="- %s ([%h]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/%H))"
+
+          if [ -z "$PREV_TAG" ]; then
+              LATEST=$(git log --pretty=format:"$LOG_FORMAT" HEAD)
+          else
+              LATEST=$(git log --pretty=format:"$LOG_FORMAT" "$PREV_TAG"..HEAD)
+          fi
+
+          echo "LATEST_CHANGES<<EOF" >> $GITHUB_ENV
+          echo "$LATEST" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          ALL_TAGS=$(git tag --sort=-version:refname)
+          FULL_CHANGELOG=""
+
+          if [ -z "$ALL_TAGS" ]; then
+              FULL_CHANGELOG="## ${{ env.RELEASE_VERSION }}"$'\n'"$LATEST"
+          else
+              FULL_CHANGELOG="## ${{ env.RELEASE_VERSION }}"$'\n'"$LATEST"
+              TAGS_ARRAY=($ALL_TAGS)
+              for i in "${!TAGS_ARRAY[@]}"; do
+                  CURRENT="${TAGS_ARRAY[$i]}"
+                  NEXT="${TAGS_ARRAY[$((i + 1))]}"
+                  if [ -z "$NEXT" ]; then
+                      SECTION=$(git log --pretty=format:"$LOG_FORMAT" "$CURRENT")
+                  else
+                      SECTION=$(git log --pretty=format:"$LOG_FORMAT" "$NEXT".."$CURRENT")
+                  fi
+                  FULL_CHANGELOG="$FULL_CHANGELOG"$'\n\n'"## $CURRENT"$'\n'"$SECTION"
+              done
+          fi
+
+          echo "$FULL_CHANGELOG" > changelog.txt
+
+      - name: Prepare Archives
+        if: env.TAG_EXISTS == 'false'
+        run: |
+          cd apps/extension/dist
+          zip -r ../../../that-should-be-an-email-extension.zip . -x "*.git*" ".github*" "*.gitignore*" "*.DS_Store*" "*.map"
+          cd ../../..
+          cd apps/website/dist
+          zip -r ../../../that-should-be-an-email-website.zip . -x "*.git*" ".github*" "*.gitignore*" "*.DS_Store*"
+          cd ../../..
+
+      - name: Publish Tag and Release
+        if: env.TAG_EXISTS == 'false'
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "that-should-be-an-email-extension.zip, that-should-be-an-email-website.zip, changelog.txt"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.RELEASE_VERSION }}
+          name: Release ${{ env.RELEASE_VERSION }}
+          body: |
+            ### Automated Release ${{ env.RELEASE_VERSION }}
+            ${{ env.LATEST_CHANGES }}
