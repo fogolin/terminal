@@ -126,7 +126,7 @@
           "owner": "root",
           "permissions": "644",
           "modified": "2026-05-01T00:00:00Z",
-          "content": "NAME=\"Firelin OS\"\nVERSION=\"1.0.0 (Phosphor)\"\nID=firelin\nID_LIKE=debian\nPRETTY_NAME=\"Firelin OS 1.0.0 Phosphor\"\nHOME_URL=\"https://fogol.in\"\nBUG_REPORT_URL=\"https://github.com/fogolin/terminal/issues\"",
+          "content": "NAME=\"Firelin OS\"\nVERSION=\"1.0.0 (Phosphor)\"\nID=firelin\nID_LIKE=debian\nPRETTY_NAME=\"Firelin OS 1.0.0 Phosphor\"\nHOME_URL=\"https://fogol.in\"\nBUG_REPORT_URL=\"https://github.com/fogolin/firelin-terminal/issues\"",
           "size": 218
         },
         "passwd": {
