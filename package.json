@@ -1,6 +1,6 @@
 {
 	"name": "firelin-terminal",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "A modern javascript terminal with a retro feel.",
 	"main": "index.js",
 	"scripts": {
@@ -11,15 +11,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/fogolin/terminal.git"
+		"url": "git+https://github.com/fogolin/firelin-terminal.git"
 	},
 	"keywords": [],
 	"author": "Lucas Fogolin <lucas@fogol.in> (https://fogol.in)",
 	"license": "GPL-3.0",
 	"bugs": {
-		"url": "https://github.com/fogolin/terminal/issues"
+		"url": "https://github.com/fogolin/firelin-terminal/issues"
 	},
-	"homepage": "https://github.com/fogolin/terminal#readme",
+	"homepage": "https://github.com/fogolin/firelin-terminal#readme",
 	"devDependencies": {
 		"@babel/preset-env": "^7.29.3",
 		"babel-loader": "^9.1.2",

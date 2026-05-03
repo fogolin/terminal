@@ -87,7 +87,7 @@ module.exports = {
         isProduction
             ? new HTMLWebpackPlugin({
                 title: 'Firelin Terminal Example',
-                filename: 'index.html',
+                filename: 'example.html',
                 template: path.resolve(__dirname, 'src/index.html'),
             })
             : null,
@@ -95,9 +95,17 @@ module.exports = {
         isProduction
             ? {
                 apply(compiler) {
-                    compiler.hooks.afterEmit.tapAsync('CopyLicense', (_compilation, cb) => {
-                        const dest = path.resolve(__dirname, 'dist', 'LICENSE');
-                        fs.copyFile(path.resolve(__dirname, 'LICENSE'), dest, cb);
+                    compiler.hooks.afterEmit.tapAsync('CopyAssets', (_compilation, cb) => {
+                        const distDir = path.resolve(__dirname, 'dist');
+                        fs.copyFile(path.resolve(__dirname, 'LICENSE'), path.join(distDir, 'LICENSE'), (err) => {
+                            if (err) return cb(err);
+                            fs.cp(
+                                path.resolve(__dirname, 'src/public'),
+                                path.join(distDir, 'public'),
+                                { recursive: true },
+                                cb
+                            );
+                        });
                     });
                 }
             }

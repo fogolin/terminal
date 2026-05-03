@@ -21,6 +21,7 @@ import top     from './top.js';
 import nano    from './nano.js';
 import theme   from './theme.js';
 import man     from './man.js';
+import apt     from './apt.js';
 
 const ALL_COMMANDS = [
     clear, help, print,
@@ -29,6 +30,7 @@ const ALL_COMMANDS = [
     touch, mkdir, rm, cp, mv,
     find, grep,
     su, ping, curl, top, nano, theme, man,
+    apt,
 ];
 
 const registry = new Map();
