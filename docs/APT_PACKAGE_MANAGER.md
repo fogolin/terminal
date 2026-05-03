@@ -589,16 +589,16 @@ Work in this order. Registry repo setup (Step 0) can run in parallel with termin
 
 ### Step 0 — Create `fogolin/firelin-registry` repo
 
-- [ ] Create new public GitHub repository `fogolin/firelin-registry`.
-- [ ] Add folder structure: `packages/`, `scripts/`, `registry/v1/`.
-- [ ] Write `scripts/build-registry.js` — walks `packages/`, computes SRI hashes, writes `registry/v1/index.json`.
-- [ ] Write `scripts/validate-package.js` — checks manifest fields, IIFE shape, command name collisions.
-- [ ] Add `package.json` with `build` and `validate` scripts.
-- [ ] Add `.github/workflows/publish.yml` — build + deploy to GitHub Pages on push to `main`.
-- [ ] Add `.github/workflows/validate.yml` — validate on PRs touching `packages/`.
-- [ ] Enable GitHub Pages in repo Settings → Pages → Source: GitHub Actions.
-- [ ] Add a seed package (`git` or `calc`) to verify the full pipeline end-to-end.
-- [ ] Confirm `https://fogolin.github.io/firelin-registry/registry/v1/index.json` is reachable.
+- Create new public GitHub repository `fogolin/firelin-registry`.
+- Add folder structure: `packages/`, `scripts/`, `registry/v1/`.
+- Write `scripts/build-registry.js` — walks `packages/`, computes SRI hashes, writes `registry/v1/index.json`.
+- Write `scripts/validate-package.js` — checks manifest fields, IIFE shape, command name collisions.
+- Add `package.json` with `build` and `validate` scripts.
+- Add `.github/workflows/publish.yml` — build + deploy to GitHub Pages on push to `main`.
+- Add `.github/workflows/validate.yml` — validate on PRs touching `packages/`.
+- Enable GitHub Pages in repo Settings → Pages → Source: GitHub Actions.
+- Add a seed package (`git` or `calc`) to verify the full pipeline end-to-end.
+- Confirm `https://fogolin.github.io/firelin-registry/registry/v1/index.json` is reachable.
 
 ### Step 1 — `store.js` (terminal repo)
 

@@ -235,7 +235,7 @@
 
         .site-main {
             flex-grow: 1;
-            padding: 8rem 1.5rem 6rem;
+            padding: 8rem 1.5rem 1.5rem;
             max-width: 80rem;
             margin: 0 auto;
             width: 100%;
@@ -583,6 +583,7 @@
                     GitHub
                 </a>
                 <a href="https://github.com/fogolin/firelin-terminal/tree/main/docs" target="_blank">Docs</a>
+                <a href="https://github.com/fogolin/firelin-registry" target="_blank">Registry</a>
             </nav>
             <a href="https://github.com/fogolin/firelin-terminal" target="_blank" class="btn btn-outline">
                 Install CLI
@@ -653,6 +654,17 @@
                                 <span>39</span>
                                 <span>40</span>
                                 <span>41</span>
+                                <span>42</span>
+                                <span>43</span>
+                                <span>44</span>
+                                <span>45</span>
+                                <span>46</span>
+                                <span>47</span>
+                                <span>48</span>
+                                <span>49</span>
+                                <span>50</span>
+                                <span>51</span>
+                                <span>52</span>
                             </div>
                             <div class="code-text">
                                 <div>&lt;<span class="hl-cmd">script</span>&gt;</div>
@@ -762,6 +774,37 @@
                                 </div>
 
                                 <div>&nbsp; &nbsp; }]</div>
+
+                                <div>&nbsp; &nbsp; <span class="hl-var">packages</span>:
+                                    {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-comment">// package manager config</span></div>
+
+                                <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">preload</span>: [<span
+                                        class="hl-str">'hello'</span>],&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-comment">// auto-install from public registry</span></div>
+
+                                <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">local</span>:
+                                    [{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-comment">// private commands (your server)</span></div>
+
+                                <div>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hl-var">name</span>: <span
+                                        class="hl-str">'myapp'</span>,</div>
+
+                                <div>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hl-var">description</span>: <span
+                                        class="hl-str">'My company commands'</span>,</div>
+
+                                <div>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hl-var">version</span>: <span
+                                        class="hl-str">'1.0.0'</span>,</div>
+
+                                <div>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hl-var">src</span>: <span
+                                        class="hl-str">'/js/myapp-cmd.js'</span>,</div>
+
+                                <div>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hl-var">commands</span>: [<span
+                                        class="hl-str">'myapp'</span>]</div>
+
+                                <div>&nbsp; &nbsp; &nbsp; }]</div>
+
+                                <div>&nbsp; &nbsp; }</div>
 
                                 <div>&nbsp; });</div>
                                 <div>&lt;/<span class="hl-var">script</span>&gt;</div>

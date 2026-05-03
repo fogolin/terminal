@@ -6,6 +6,7 @@ import { HistoryManager } from './history.js';
 import registry from './commands/index.js';
 import { VFS } from './vfs/vfs.js';
 import { THEMES, loadTheme } from './themes.js';
+import { boot as bootPackages } from './packages/index.js';
 
 class Shell {
     constructor(config = {}) {
@@ -71,6 +72,8 @@ class Shell {
         const motd = this.config.welcomeMessage
             ? (Array.isArray(this.config.welcomeMessage) ? this.config.welcomeMessage : [this.config.welcomeMessage])
             : DEFAULT_MOTD;
+
+        await bootPackages(this.config.packages, registry);
 
         for (let i = 0; i < motd.length; i++) {
             await new Promise(r => setTimeout(r, i * 90));
