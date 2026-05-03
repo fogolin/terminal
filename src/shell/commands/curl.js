@@ -27,7 +27,14 @@ export default {
         const inclHeaders = args.flags.has('-i');
         const silent      = args.flags.has('-s') || args.flags.has('--silent');
 
-        const ep = data.endpoints[url] || (() => {
+        const merged = Object.assign({}, data.endpoints);
+        if (Array.isArray(ctx.config?.curl)) {
+            for (const { url: u, ...fields } of ctx.config.curl) {
+                if (u) merged[u] = { status: 200, statusText: 'OK', delay: 500, headers: {}, body: '', ...fields };
+            }
+        }
+
+        const ep = merged[url] || (() => {
             const host = url.replace(/^https?:\/\//, '').split('/')[0];
             const fb = Object.assign({}, data.fallback);
             fb.body = fb.body.replace('{host}', host);

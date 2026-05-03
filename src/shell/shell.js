@@ -160,6 +160,7 @@ class Shell {
                 shell.session.cwd = home;
                 shell._ui.setPrompt(shell.prompt);
             },
+            config: shell.config,
             vfs: shell.vfs,
             readline(prompt, mask = false) {
                 return new Promise(resolve => {
