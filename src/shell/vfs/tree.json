@@ -274,7 +274,7 @@
               "owner": "guest",
               "permissions": "644",
               "modified": "2026-05-01T00:00:00Z",
-              "content": "{\n  \"name\": \"strucit\",\n  \"version\": \"2.3.1\",\n  \"description\": \"Structured content creation platform\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://strucit.app\",\n  \"repository\": \"https://github.com/lucasfogolin/strucit\",\n  \"engines\": {\n    \"node\": \">=20.0.0\"\n  },\n  \"keywords\": [\"cms\", \"content\", \"structured\", \"react\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:02:45Z\"\n}",
+              "content": "{\n  \"name\": \"strucit\",\n  \"version\": \"2.3.1\",\n  \"description\": \"Structured content creation platform\",\n  \"author\": \"Lucas Fogolin <lucas@fogo.l.in>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://strucit.app\",\n  \"repository\": \"https://github.com/lucasfogolin/strucit\",\n  \"engines\": {\n    \"node\": \">=20.0.0\"\n  },\n  \"keywords\": [\"cms\", \"content\", \"structured\", \"react\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:02:45Z\"\n}",
               "size": 410
             }
           }
@@ -301,7 +301,7 @@
               "owner": "guest",
               "permissions": "644",
               "modified": "2026-05-01T00:00:00Z",
-              "content": "{\n  \"name\": \"dram-club\",\n  \"version\": \"1.0.1\",\n  \"description\": \"Guided whisky tasting app for enthusiasts and clubs\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://dramclub.app\",\n  \"repository\": \"https://github.com/fogolin/dram-app\",\n  \"keywords\": [\"whisky\", \"tasting\", \"pwa\", \"offline-first\", \"react-native\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:00:00Z\"\n}",
+              "content": "{\n  \"name\": \"dram-club\",\n  \"version\": \"1.0.1\",\n  \"description\": \"Guided whisky tasting app for enthusiasts and clubs\",\n  \"author\": \"Lucas Fogolin <lucas@fogo.l.in>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://dramclub.app\",\n  \"repository\": \"https://github.com/fogolin/dram-app\",\n  \"keywords\": [\"whisky\", \"tasting\", \"pwa\", \"offline-first\", \"react-native\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:00:00Z\"\n}",
               "size": 390
             }
           }
@@ -328,7 +328,7 @@
               "owner": "guest",
               "permissions": "644",
               "modified": "2026-05-01T00:00:00Z",
-              "content": "{\n  \"name\": \"that-should-be-an-email\",\n  \"version\": \"1.4.1\",\n  \"description\": \"Browser extension that calculates the real cost of meetings and suggests an email instead\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://thatshouldbeanemail.com\",\n  \"repository\": \"https://github.com/fogolin/that-should-be-an-email\",\n  \"keywords\": [\"browser-extension\", \"productivity\", \"meetings\", \"calendar\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:00:00Z\"\n}",
+              "content": "{\n  \"name\": \"that-should-be-an-email\",\n  \"version\": \"1.4.1\",\n  \"description\": \"Browser extension that calculates the real cost of meetings and suggests an email instead\",\n  \"author\": \"Lucas Fogolin <lucas@fogo.l.in>\",\n  \"license\": \"MIT\",\n  \"homepage\": \"https://thatshouldbeanemail.com\",\n  \"repository\": \"https://github.com/fogolin/that-should-be-an-email\",\n  \"keywords\": [\"browser-extension\", \"productivity\", \"meetings\", \"calendar\"],\n  \"status\": \"production\",\n  \"deployed\": \"2026-05-01T00:00:00Z\"\n}",
               "size": 450
             }
           }
@@ -355,8 +355,35 @@
               "owner": "guest",
               "permissions": "644",
               "modified": "2026-05-01T00:00:00Z",
-              "content": "{\n  \"name\": \"firelin-terminal\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Retro CRT terminal web component. An Easter egg for the web.\",\n  \"author\": \"Lucas Fogolin <lucasfogolin@gmail.com>\",\n  \"license\": \"MIT\",\n  \"main\": \"dist/v1/firelin.widget.min.js\",\n  \"scripts\": {\n    \"build\": \"webpack --mode=production\",\n    \"dev\": \"webpack serve --mode=development\"\n  },\n  \"keywords\": [\"terminal\", \"web-component\", \"easter-egg\", \"retro\", \"crt\"]\n}",
+              "content": "{\n  \"name\": \"firelin-terminal\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Retro CRT terminal web component. An Easter egg for the web.\",\n  \"author\": \"Lucas Fogolin <lucas@fogo.l.in>\",\n  \"license\": \"MIT\",\n  \"main\": \"dist/v1/firelin.widget.min.js\",\n  \"scripts\": {\n    \"build\": \"webpack --mode=production\",\n    \"dev\": \"webpack serve --mode=development\"\n  },\n  \"keywords\": [\"terminal\", \"web-component\", \"easter-egg\", \"retro\", \"crt\"]\n}",
               "size": 412
+            }
+          }
+        },
+        "groupon-fighter": {
+          "type": "directory",
+          "name": "groupon-fighter",
+          "owner": "guest",
+          "permissions": "755",
+          "modified": "2026-05-01T00:00:00Z",
+          "children": {
+            "README.md": {
+              "type": "file",
+              "name": "README.md",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "# Groupon Fighter\n\nA vanilla JavaScript fighting game inspired by Street Fighter 2.\nBuilt in the browser. No frameworks. Just fists.\n\n## Stack\n- Vanilla JavaScript\n- HTML5 Canvas\n- CSS animations\n\n## Features\n- Street Fighter 2-style combat mechanics\n- Special moves\n- Health bars\n- Local multiplayer\n\n## Status\nSource: https://github.com/fogolin/js-fighter\n\n## Note\nFight like nobody is watching.\nBecause nobody is. It's just you and the canvas.",
+              "size": 420
+            },
+            "package.json": {
+              "type": "file",
+              "name": "package.json",
+              "owner": "guest",
+              "permissions": "644",
+              "modified": "2026-05-01T00:00:00Z",
+              "content": "{\n  \"name\": \"groupon-fighter\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Vanilla JavaScript fighting game inspired by Street Fighter 2\",\n  \"author\": \"Lucas Fogolin <lucas@fogo.l.in>\",\n  \"license\": \"MIT\",\n  \"repository\": \"https://github.com/fogolin/js-fighter\",\n  \"keywords\": [\"game\", \"fighting\", \"canvas\", \"vanilla-js\", \"street-fighter\"]\n}",
+              "size": 320
             }
           }
         }
