@@ -1,6 +1,6 @@
 {
 	"name": "firelin-terminal",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "A modern javascript terminal with a retro feel.",
 	"main": "index.js",
 	"scripts": {
