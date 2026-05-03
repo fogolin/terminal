@@ -100,7 +100,7 @@ jobs:
 
       - name: Publish to npm
         if: env.TAG_EXISTS == 'false'
-        run: npm publish --provenance
+        run: npm publish --provenance --access public
 
       - name: Publish Tag and Release
         if: env.TAG_EXISTS == 'false'
