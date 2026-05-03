@@ -12,4 +12,3 @@ This document lists all expected future functionality and actions related to thi
 ## Chores
 
 - Document how to contribute
-- Build script for Github Actions.

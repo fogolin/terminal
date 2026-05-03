@@ -12,7 +12,6 @@ jobs:
   build-and-release:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    environment: Development
     env:
       TAG_EXISTS: ""
       RELEASE_VERSION: ""
@@ -23,45 +22,33 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
 
-      - name: Validate Versions
+      - name: Validate Version
         id: version_check
         run: |
-          MANIFEST_VER=$(grep '"version":' apps/extension/public/manifest.json | cut -d'"' -f4)
+          PACKAGE_VER=$(node -p "require('./package.json').version")
 
-          echo "Detected Version - $MANIFEST_VER"
+          echo "Detected Version - $PACKAGE_VER"
 
-          if git rev-parse "$MANIFEST_VER" >/dev/null 2>&1; then
+          if git rev-parse "$PACKAGE_VER" >/dev/null 2>&1; then
               echo "TAG_EXISTS=true" >> $GITHUB_ENV
-              echo "::warning::Tag $MANIFEST_VER already exists. Skipping release process."
+              echo "::warning::Tag $PACKAGE_VER already exists. Skipping release process."
           else
               echo "TAG_EXISTS=false" >> $GITHUB_ENV
-              echo "RELEASE_VERSION=$MANIFEST_VER" >> $GITHUB_ENV
+              echo "RELEASE_VERSION=$PACKAGE_VER" >> $GITHUB_ENV
           fi
 
       - name: Install Dependencies
         if: env.TAG_EXISTS == 'false'
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
-      - name: Build Extension
+      - name: Build
         if: env.TAG_EXISTS == 'false'
-        working-directory: apps/extension
-        env:
-          CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
-          API_URL: ${{ secrets.API_URL }}
-        run: pnpm build
-
-      - name: Build Website
-        if: env.TAG_EXISTS == 'false'
-        working-directory: apps/website
-        run: pnpm build
+        run: npm run build
 
       - name: Build Changelog
         if: env.TAG_EXISTS == 'false'
@@ -102,21 +89,18 @@ jobs:
 
           echo "$FULL_CHANGELOG" > changelog.txt
 
-      - name: Prepare Archives
+      - name: Prepare Archive
         if: env.TAG_EXISTS == 'false'
         run: |
-          cd apps/extension/dist
-          zip -r ../../../that-should-be-an-email-extension.zip . -x "*.git*" ".github*" "*.gitignore*" "*.DS_Store*" "*.map"
-          cd ../../..
-          cd apps/website/dist
-          zip -r ../../../that-should-be-an-email-website.zip . -x "*.git*" ".github*" "*.gitignore*" "*.DS_Store*"
-          cd ../../..
+          cd dist
+          zip -r ../firelin-terminal.${{ env.RELEASE_VERSION }}.zip . -x "*.git*" ".github*" "*.gitignore*" "*.DS_Store*" "*.map"
+          cd ../
 
       - name: Publish Tag and Release
         if: env.TAG_EXISTS == 'false'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "that-should-be-an-email-extension.zip, that-should-be-an-email-website.zip, changelog.txt"
+          artifacts: "firelin-terminal.${{ env.RELEASE_VERSION }}.zip, changelog.txt"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.RELEASE_VERSION }}
           name: Release ${{ env.RELEASE_VERSION }}

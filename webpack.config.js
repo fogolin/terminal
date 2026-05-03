@@ -5,8 +5,8 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 const { version } = require('./package.json');
-const semver = require('semver');
-const { major } = semver.parse(version);
+// const semver = require('semver');
+// const { major } = semver.parse(version);
 
 module.exports = {
     entry: './src/app.js',
@@ -23,8 +23,10 @@ module.exports = {
     },
 
     output: {
-        path: path.resolve(__dirname, 'dist', `v${major}`),
-        filename: `firelin.widget.${version}${isProduction ? '.min' : ''}.js`,
+        // path: path.resolve(__dirname, 'dist', `v${major}`),
+        path: path.resolve(__dirname, 'dist'),
+        // filename: `firelin.widget.${version}${isProduction ? '.min' : ''}.js`,
+        filename: `firelin${isProduction ? '.min' : ''}.js`,
         clean: true,
         environment: {
             // Support for older browsers
@@ -32,13 +34,18 @@ module.exports = {
         }
     },
 
+    watchOptions: {
+        poll: 1000,
+        ignored: /node_modules/
+    },
+
     devServer: {
         static: [
             {
-                directory: path.resolve(__dirname, 'dist')
+                directory: path.resolve(__dirname, 'src')
             },
             {
-                directory: path.resolve(__dirname, 'src')
+                directory: path.resolve(__dirname, 'dist')
             }
         ],
         port: 3333,
@@ -89,7 +96,7 @@ module.exports = {
             ? {
                 apply(compiler) {
                     compiler.hooks.afterEmit.tapAsync('CopyLicense', (_compilation, cb) => {
-                        const dest = path.resolve(__dirname, 'dist', `v${major}`, 'LICENSE');
+                        const dest = path.resolve(__dirname, 'dist', 'LICENSE');
                         fs.copyFile(path.resolve(__dirname, 'LICENSE'), dest, cb);
                     });
                 }

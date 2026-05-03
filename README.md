@@ -1,4 +1,4 @@
-# <img src="./public/favicon.png" alt="logo" width="20"/> Firelin Terminal
+# ![firelin-logo](./public/emoji.png) Firelin Terminal
 
 A bash-like easter egg terminal widget for websites. Drop one script tag in — users unlock it with the Konami code.
 
@@ -9,7 +9,7 @@ A bash-like easter egg terminal widget for websites. Drop one script tag in — 
 No package manager needed. Copy the built file into your project:
 
 ```
-dist/{version}/firelin.widget.min.js
+dist/firelin.min.js
 ```
 
 Then include it in your HTML. Two integration patterns are supported.
@@ -19,7 +19,7 @@ Then include it in your HTML. Two integration patterns are supported.
 ### Option A — HTML custom element
 
 ```html
-<script defer src="/dist/v1/firelin.widget.min.js"></script>
+<script defer src="/dist/firelin.min.js"></script>
 ```
 
 ### Option B — Script injection (recommended for production)
@@ -34,7 +34,7 @@ Loads the script once, configures the widget on load. Safe to paste into any `<h
 		if (d.getElementById(id)) return;
 		js = d.createElement(s);
 		js.id = id;
-		js.src = "/dist/v1/firelin.widget.min.js";
+		js.src = "/dist/firelin.min.js";
 		js.defer = true;
 		el.parentNode.insertBefore(js, el);
 		js.onload = function () {
