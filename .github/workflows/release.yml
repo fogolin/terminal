@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Validate Version
         id: version_check
@@ -95,6 +96,12 @@ jobs:
           cd dist
           zip -r ../firelin-terminal.${{ env.RELEASE_VERSION }}.zip . -x "*.git*" ".github*" "*.gitignore*" "*.DS_Store*" "*.map"
           cd ../
+
+      - name: Publish to npm
+        if: env.TAG_EXISTS == 'false'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Tag and Release
         if: env.TAG_EXISTS == 'false'
