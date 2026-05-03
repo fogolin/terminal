@@ -2,8 +2,6 @@
 
 A browser-native package manager that lets the terminal dynamically fetch, install, and execute external commands hosted outside the core bundle.
 
----
-
 ## Table of Contents
 
 1. [Goals](#goals)
@@ -17,8 +15,6 @@ A browser-native package manager that lets the terminal dynamically fetch, insta
 9. [Command Interface](#command-interface)
 10. [Implementation Steps](#implementation-steps)
 
----
-
 ## Goals
 
 - `apt install <pkg>` fetches and registers external commands at runtime — no rebuild needed.
@@ -26,8 +22,6 @@ A browser-native package manager that lets the terminal dynamically fetch, insta
 - Host websites can preload public packages and inject private/local commands via the config object.
 - Installed state persists across sessions via `localStorage`.
 - Core bundle stays decoupled from any package code.
-
----
 
 ## High-Level Architecture
 
@@ -53,8 +47,6 @@ firelin.min.js (core bundle)                     fogolin/firelin-registry
 ```
 
 **Key invariant:** the core bundle never imports package code. Packages inject themselves into the live command registry via a global callback exposed by the core.
-
----
 
 ## Registry Repository — `fogolin/firelin-registry`
 
@@ -231,8 +223,6 @@ jobs:
 | Registry index | `https://fogolin.github.io/firelin-registry/registry/v1/index.json`      |
 | Package script | `https://fogolin.github.io/firelin-registry/packages/git/1.2.0/index.js` |
 
----
-
 ## New Module Structure (terminal repo)
 
 ```
@@ -251,8 +241,6 @@ Touch existing files:
 
 - `src/shell/commands/index.js` — import and register `apt`
 - `src/app.js` — call `PackageManager.boot(config.packages)` on init
-
----
 
 ## Data Structures & Schemas
 
@@ -353,8 +341,6 @@ Stored in `localStorage` under key `firelin_registry_cache`.
 }
 ```
 
----
-
 ## Dynamic Loading Strategy
 
 ### Why `<script>` injection, not `dynamic import()`
@@ -426,8 +412,6 @@ function loadScript(src, integrity) {
 | `registry` | Required (computed by `build-registry.js` at publish time) | Loader rejects missing hash    |
 | `local`    | Not required                                               | Host controls their own server |
 
----
-
 ## State Management
 
 ### localStorage Keys
@@ -472,8 +456,6 @@ const Store = {
 - **`apt remove`** — unregisters commands from the live Map. Keeps package metadata in `localStorage`. Fast reinstall path; `apt upgrade` can still track the package.
 - **`apt purge`** — unregisters commands and deletes the `localStorage` entry completely. Package treated as never installed.
 
----
-
 ## Boot Sequence
 
 Called from `src/app.js` inside `FirelinTerminal.create(config)`, before the terminal becomes interactive.
@@ -500,8 +482,6 @@ Called from `src/app.js` inside `FirelinTerminal.create(config)`, before the ter
 ```
 
 A returning visitor skips steps 4–5 for already-installed packages. First visit only installs `preload` list.
-
----
 
 ## Command Interface
 
@@ -581,8 +561,6 @@ apt list           # all available (from registry cache)
 apt list --installed
 ```
 
----
-
 ## Implementation Steps
 
 Work in this order. Registry repo setup (Step 0) can run in parallel with terminal work (Steps 1–8).
@@ -649,9 +627,18 @@ Work in this order. Registry repo setup (Step 0) can run in parallel with termin
 
 ### Step 8 — Package authoring guide
 
-- Add `docs/PACKAGE_AUTHORING.md` with the IIFE contract, registration API, and a minimal example package.
+See [`docs/PACKAGE_AUTHORING.md`](PACKAGE_AUTHORING.md) for the full guide.
 
----
+Checklist:
+
+- [x] IIFE contract and `_registerPackage` callback signature documented.
+- [x] Command definition shape (`name`, `aliases`, `execute`, `options`, `examples`).
+- [x] `ParsedArgs` and `ShellContext` API reference.
+- [x] `package.json` manifest field table.
+- [x] Local testing workflow via `config.packages.local`.
+- [x] Complete working example (`greet` command).
+- [x] Registry submission process and PR validation checklist.
+- [x] Reserved command name list.
 
 ## Open Questions / Deferred Decisions
 
