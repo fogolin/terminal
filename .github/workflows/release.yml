@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   build-and-release:
@@ -99,9 +100,7 @@ jobs:
 
       - name: Publish to npm
         if: env.TAG_EXISTS == 'false'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance
 
       - name: Publish Tag and Release
         if: env.TAG_EXISTS == 'false'
