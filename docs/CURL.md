@@ -1,4 +1,4 @@
-# curl endpoints
+# cURL endpoints
 
 Each entry in the `curl` array defines a simulated HTTP response for a specific URL. Custom entries take priority over the built-in ones, so you can also override defaults.
 
