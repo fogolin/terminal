@@ -12,7 +12,7 @@ No package manager needed. Copy the built file into your project:
 dist/firelin.min.js
 ```
 
-Then include it in your HTML. Two integration patterns are supported, check [Docs/CONFIGURATION.md](docs/SETUP.md) for all settings and options.
+Then include it in your HTML. Two integration patterns are supported, check [Steup Guide](docs/SETUP.md) for all settings and options.
 
 ## How To Use
 
