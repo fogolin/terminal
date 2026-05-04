@@ -5,21 +5,18 @@ The project is a browser component ready to use. It is possible to customize the
 Index:
 
 1. Installation:
-   - [Option A — HTML custom element](#option-a-html-custom-element)
-   - [Option B — Script injection](#option-b-script-injection)
-2. Activation:
-   - [Desktop](#desktop)
-   - [Mobile](#mobile)
-   - [CSS class](#css-class)
+   - [Option A - HTML custom element](#option-a---html-custom-element)
+   - [Option B - Script injection](#option-b---script-injection-recommended-for-production)
+2. [Activation](#activation): How to enable it on Desktop, Mobile and using CSS Class
 3. [Configuration](#configuration)
 
-## Option A — HTML custom element
+## Option A - HTML custom element
 
 ```html
 <script defer src="/dist/firelin.min.js"></script>
 ```
 
-## Option B — Script injection (recommended for production)
+## Option B - Script injection (recommended for production)
 
 Loads the script once, configures the widget on load. Safe to paste into any `<head>`.
 
