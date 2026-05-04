@@ -10,7 +10,8 @@
 		"build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
 		"build:widget": "npm run build",
 		"dev": "cross-env NODE_ENV=development webpack serve --config webpack.config.js --open",
-		"start": "npm run dev"
+		"start": "npm run dev",
+		"lock": "pnpm install --lockfile-only && npm install --package-lock-only"
 	},
 	"repository": {
 		"type": "git",
@@ -25,15 +26,12 @@
 	"homepage": "https://github.com/fogolin/firelin-terminal#readme",
 	"devDependencies": {
 		"@babel/preset-env": "^7.29.3",
-		"babel-loader": "^9.1.2",
-		"cross-env": "^7.0.3",
-		"css-loader": "^6.7.3",
-		"html-loader": "^4.2.0",
+		"babel-loader": "^10.1.1",
+		"cross-env": "^10.1.0",
+		"html-loader": "^5.1.0",
 		"html-webpack-plugin": "^5.5.0",
-		"semver": "^7.3.8",
-		"style-loader": "^3.3.1",
-		"webpack": "^5.75.0",
-		"webpack-cli": "^5.0.1",
-		"webpack-dev-server": "^4.11.1"
+		"webpack": "^5.106.2",
+		"webpack-cli": "^7.0.2",
+		"webpack-dev-server": "^5.2.3"
 	}
 }
