@@ -26,7 +26,7 @@ Documentation related to the development of the core terminal functionality:
 The **Package Manager** for this terminal project lives in a separate repository [Firelin Registry](https://github.com/fogolin/firelin-registry). The documentation here is related to the **package manager develpment** and **command modules** that can be used to replicate more _bash-like_ fucntionality:
 
 1. [APT Package Manager](APT_PACKAGE_MANAGER.md): Implementation plan for the package manager
-2. [Package Authoring (External)](https://github.com/firelin/firelin-terminal/blob/main/docs/README.md): How to build and distribute custom commands for **Firelin Terminal**.
+2. [Package Authoring (External)](https://github.com/fogolin/firelin-terminal/blob/main/docs/README.md): How to build and distribute custom commands for **Firelin Terminal**.
 3. [Command Module (Internal)](COMMAND_MODULE.md): Interface contract for command modules — how to author a new command, required fields, and the execution API
 
 ## APIs
