@@ -50,7 +50,7 @@ firelin.min.js (core bundle)                     fogolin/firelin-registry
 
 ## Registry Repository — `fogolin/firelin-registry`
 
-A dedicated GitHub repository that serves as the public package registry via GitHub Pages.
+A dedicated GitHub repository that serves as the public package registry via GitHub Pages. You cen access at [Github/Fogolin/Firelin-Registry](https://github.com/fogolin/firelin-registry).
 
 ### Why a separate repo
 
@@ -646,3 +646,7 @@ Checklist:
 - **Dependency resolution** — `requires` field exists in schema but resolution logic is deferred (no packages currently have dependencies).
 - **`apt search`** — useful but not in MVP scope.
 - **Custom domain** — GitHub Pages URL can later be aliased to `packages.firelin.io` via a CNAME if desired.
+
+### Navigation
+
+_Back to Docs home:_ **[Documentation Index ➔](./README.md)**

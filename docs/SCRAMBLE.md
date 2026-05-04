@@ -26,3 +26,7 @@ lines.reduce(
 ```
 
 `scrambleElement(el, text)` clears the element's content and animates each character through random glyphs before resolving to `text`. It returns a `Promise` that resolves when the animation completes.
+
+### Navigation
+
+_Back to Docs home:_ **[Documentation Index ➔](./README.md)**

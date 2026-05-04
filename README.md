@@ -12,7 +12,7 @@ No package manager needed. Copy the built file into your project:
 dist/firelin.min.js
 ```
 
-Then include it in your HTML. Two integration patterns are supported.
+Then include it in your HTML. Two integration patterns are supported, check [Docs/CONFIGURATION.md](docs/SETUP.md) for all settings and options.
 
 ## How To Use
 
@@ -34,7 +34,8 @@ Loads the script once, configures the widget on load. Safe to paste into any `<h
 		if (d.getElementById(id)) return;
 		js = d.createElement(s);
 		js.id = id;
-		js.src = "/dist/firelin.min.js";
+		js.src =
+			"https://cdn.jsdelivr.net/npm/firelin-terminal/dist/firelin.min.js";
 		js.defer = true;
 		el.parentNode.insertBefore(js, el);
 		js.onload = function () {
@@ -50,8 +51,9 @@ Loads the script once, configures the widget on load. Safe to paste into any `<h
 		welcomeMessage: "Welcome! Type help to get started.",
 		history: ["ls /projects", "whoami"],
 		packages: {
-			preload: ["hello"],        // auto-install from public registry on first load
-			local: [                   // private commands — never published to public registry
+			preload: ["hello"], // auto-install from public registry on first load
+			local: [
+				// private commands — never published to public registry
 				{
 					name: "myapp",
 					description: "My company commands",
@@ -79,118 +81,6 @@ The terminal is hidden by default and revealed through:
 <!-- Button that opens the terminal -->
 <button class="shell">Open terminal</button>
 ```
-
-## Configuration
-
-All options are optional.
-
-| Option           | Type                 | Default             | Description                                     |
-| ---------------- | -------------------- | ------------------- | ----------------------------------------------- |
-| `theme`          | `string`             | `'phosphor'`        | Active color theme                              |
-| `title`          | `string`             | `'Terminal — bash'` | Titlebar label                                  |
-| `osName`         | `string`             | `'firelin'`         | OS name shown in prompts and `uname`            |
-| `user`           | `string`             | `'guest'`           | Default logged-in username                      |
-| `welcomeMessage` | `string \| string[]` | —                   | Message(s) shown on boot                        |
-| `history`        | `string[]`           | `[]`                | Pre-seeded command history (Up arrow to access) |
-| `curl`           | `object[]`           | `[]`                | Custom simulated `curl` endpoints               |
-| `packages`       | `object`             | —                   | Package manager config (preload + local)        |
-
-### curl endpoints
-
-Each entry in the `curl` array defines a simulated HTTP response for a specific URL. Custom entries take priority over the built-in ones, so you can also override defaults.
-
-| Field        | Type     | Default          | Description                          |
-| ------------ | -------- | ---------------- | ------------------------------------ |
-| `url`        | `string` | —                | **Required.** Full URL to match      |
-| `status`     | `number` | `200`            | HTTP status code                     |
-| `statusText` | `string` | `'OK'`           | HTTP status text                     |
-| `delay`      | `number` | `500`            | Simulated latency in milliseconds    |
-| `headers`    | `object` | `{}`             | Response headers map                 |
-| `body`       | `string` | `''`             | Raw response body                    |
-
-```js
-FirelinTerminal.create({
-  curl: [
-    {
-      url: 'https://api.mysite.com/status',
-      status: 200,
-      statusText: 'OK',
-      delay: 400,
-      headers: { 'Content-Type': 'application/json' },
-      body: '{"status": "ok", "version": "1.0.0"}',
-    },
-    {
-      url: 'https://api.mysite.com/error',
-      status: 500,
-      statusText: 'Internal Server Error',
-      delay: 800,
-      headers: { 'Content-Type': 'application/json' },
-      body: '{"error": "something went wrong"}',
-    },
-  ],
-});
-```
-
-### packages
-
-Configures the built-in package manager (`apt`). All sub-fields are optional.
-
-| Field      | Type       | Description                                                                 |
-| ---------- | ---------- | --------------------------------------------------------------------------- |
-| `registry` | `string`   | Override the default public registry URL                                    |
-| `preload`  | `string[]` | Public package names to auto-install on first load                          |
-| `local`    | `object[]` | Private commands hosted on your own server — never published to the registry |
-
-Each entry in `local`:
-
-| Field         | Type       | Description                                              |
-| ------------- | ---------- | -------------------------------------------------------- |
-| `name`        | `string`   | **Required.** Unique name — must not collide with public registry |
-| `description` | `string`   | Short description shown in `apt list`                    |
-| `version`     | `string`   | Version string                                           |
-| `src`         | `string`   | **Required.** URL or path to the command script          |
-| `commands`    | `string[]` | **Required.** Command names the script registers         |
-
-```js
-FirelinTerminal.create({
-  packages: {
-    preload: ['hello'],      // install from public registry on first load
-    local: [
-      {
-        name: 'myapp',
-        description: 'My company commands',
-        version: '1.0.0',
-        src: '/js/myapp-cmd.js',
-        commands: ['myapp'],
-      },
-    ],
-  },
-});
-```
-
-Public packages are fetched from the [firelin-registry](https://github.com/fogolin/firelin-registry). Use `apt update` inside the terminal to refresh the list, `apt list` to browse, and `apt install <name>` to install.
-
-## Themes
-
-Switch at runtime with the `theme` command, or set via config.
-
-| ID         | Name                                                    | Style                        |
-| ---------- | ------------------------------------------------------- | ---------------------------- |
-| `phosphor` | Phosphor                                                | Classic green CRT (default)  |
-| `amber`    | Amber                                                   | Warm amber phosphor CRT      |
-| `ayu`      | [Ayu Dark](https://terminalcolors.com/themes/ayu/dark/) | Modern dark with warm accent |
-| `noctis`   | [Noctis](https://terminalcolors.com/themes/noctis/)     | Cool teal dark theme         |
-
-Inside the terminal, you can view and set themes using:
-
-```bash
-theme       # Shows a list of themes an the currently selected one
-theme amber # Sets the "amber" theme
-```
-
-Theme persists across sessions via `localStorage`.
-
-> Themes AYU and NOCTIS were provided by [TerminalColors](https://terminalcolors.com/).
 
 ## Commands
 

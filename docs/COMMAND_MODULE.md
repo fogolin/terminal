@@ -26,6 +26,7 @@ Every command is a plain JS object (or default export from a file) conforming to
 ## Supporting Types
 
 ### OptionDef
+
 ```js
 {
   flag:        String | null,   // short form, e.g. "-a"  (null if no short form)
@@ -37,6 +38,7 @@ Every command is a plain JS object (or default export from a file) conforming to
 ```
 
 ### ExampleDef
+
 ```js
 {
   command:     String,          // literal command string, e.g. "ls -la /home"
@@ -115,15 +117,16 @@ src/
 ```
 
 `index.js` auto-registers aliases:
+
 ```js
-import ls from './commands/ls.js';
+import ls from "./commands/ls.js";
 // ...
 
 const registry = new Map();
 
-[ls, cd, cat /*, ... */].forEach(cmd => {
-  registry.set(cmd.name, cmd);
-  cmd.aliases.forEach(alias => registry.set(alias, cmd));
+[ls, cd, cat /*, ... */].forEach((cmd) => {
+	registry.set(cmd.name, cmd);
+	cmd.aliases.forEach((alias) => registry.set(alias, cmd));
 });
 
 export default registry;
@@ -136,18 +139,16 @@ export default registry;
 ```js
 // src/shell/commands/whoami.js
 export default {
-  name: 'whoami',
-  aliases: [],
-  synopsis: 'whoami',
-  description: 'Print the current user name.',
-  options: [],
-  examples: [
-    { command: 'whoami', description: 'Prints "guest" or "root".' }
-  ],
+	name: "whoami",
+	aliases: [],
+	synopsis: "whoami",
+	description: "Print the current user name.",
+	options: [],
+	examples: [{ command: "whoami", description: 'Prints "guest" or "root".' }],
 
-  execute(args, ctx) {
-    ctx.print(ctx.session.user);
-  }
+	execute(args, ctx) {
+		ctx.print(ctx.session.user);
+	},
 };
 ```
 
@@ -158,37 +159,46 @@ export default {
 ```js
 // src/shell/commands/ping.js
 export default {
-  name: 'ping',
-  aliases: [],
-  synopsis: 'ping [-c count] HOST',
-  description: 'Send simulated ICMP echo requests to HOST.',
-  options: [
-    { flag: '-c', long: '--count', description: 'Number of packets.', takesValue: true, valueHint: 'N' }
-  ],
-  examples: [
-    { command: 'ping -c 3 google.com', description: 'Ping 3 times.' }
-  ],
+	name: "ping",
+	aliases: [],
+	synopsis: "ping [-c count] HOST",
+	description: "Send simulated ICMP echo requests to HOST.",
+	options: [
+		{
+			flag: "-c",
+			long: "--count",
+			description: "Number of packets.",
+			takesValue: true,
+			valueHint: "N",
+		},
+	],
+	examples: [{ command: "ping -c 3 google.com", description: "Ping 3 times." }],
 
-  async execute(args, ctx) {
-    const host = args.positional[0];
-    if (!host) return ctx.error('ping: missing host operand');
+	async execute(args, ctx) {
+		const host = args.positional[0];
+		if (!host) return ctx.error("ping: missing host operand");
 
-    const count = parseInt(args.options.get('-c') ?? args.options.get('--count') ?? '4', 10);
+		const count = parseInt(
+			args.options.get("-c") ?? args.options.get("--count") ?? "4",
+			10,
+		);
 
-    ctx.print(`PING ${host}: 56 data bytes`);
+		ctx.print(`PING ${host}: 56 data bytes`);
 
-    for (let i = 1; i <= count; i++) {
-      if (ctx.abort.aborted) break;           // respect Ctrl+C
-      await ctx.sleep(800);
-      const ms = (Math.random() * 20 + 10).toFixed(3);
-      ctx.print(`64 bytes from ${host}: icmp_seq=${i} ttl=64 time=${ms} ms`);
-    }
+		for (let i = 1; i <= count; i++) {
+			if (ctx.abort.aborted) break; // respect Ctrl+C
+			await ctx.sleep(800);
+			const ms = (Math.random() * 20 + 10).toFixed(3);
+			ctx.print(`64 bytes from ${host}: icmp_seq=${i} ttl=64 time=${ms} ms`);
+		}
 
-    if (!ctx.abort.aborted) {
-      ctx.print(`\n--- ${host} ping statistics ---`);
-      ctx.print(`${count} packets transmitted, ${count} received, 0% packet loss`);
-    }
-  }
+		if (!ctx.abort.aborted) {
+			ctx.print(`\n--- ${host} ping statistics ---`);
+			ctx.print(
+				`${count} packets transmitted, ${count} received, 0% packet loss`,
+			);
+		}
+	},
 };
 ```
 
@@ -205,3 +215,7 @@ cd: not a directory: readme.txt
 ```
 
 Commands **never throw** — catch internally and route to `ctx.error()`.
+
+### Navigation
+
+_Back to Docs home:_ **[Documentation Index ➔](./README.md)**

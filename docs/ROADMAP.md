@@ -258,3 +258,7 @@ src/
 ```
 
 Total estimated new files: ~28. No new dependencies.
+
+### Navigation
+
+_Back to Docs home:_ **[Documentation Index ➔](./README.md)**
