@@ -751,26 +751,29 @@
                                         class="hl-str">'script'</span>, <span
                                         class="hl-str">'firelin-terminal-js'</span>, {</div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">theme</span>: <span
-                                        class="hl-str">'amber'</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-str">'amber'</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// 'phosphor' | 'amber' | 'ayu' | 'noctis'</span></div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">title</span>: <span class="hl-str">'mysite —
-                                        bash'</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        bash'</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// titlebar label</span></div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">osName</span>: <span
-                                        class="hl-str">'firelin'</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-str">'firelin'</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// used across the app</span></div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">user</span>: <span
-                                        class="hl-str">'guest',</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-str">'guest',</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// default logged in user</span></div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">welcomeMessage</span>: <span
                                         class="hl-str">'Hello from
-                                        my site!'</span>, <span class="hl-comment">// string or array of strings</span>
+                                        my site!'</span>, <span
+                                        class="hl-comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//
+                                        string or array of strings</span>
                                 </div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">history</span>: [<span class="hl-str">'ls
-                                        /projects'</span>, <span class="hl-str">'whoami'</span>],&nbsp;&nbsp;&nbsp;<span
+                                        /projects'</span>, <span
+                                        class="hl-str">'whoami'</span>],&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// pre-seeded history entries</span></div>
                                 <div>&nbsp; &nbsp; <span class="hl-var">curl</span>:
-                                    [{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    [{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// custom curl endpoints</span></div>
 
                                 <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">url</span>: <span
@@ -800,15 +803,19 @@
                                 <div>&nbsp; &nbsp; }]</div>
 
                                 <div>&nbsp; &nbsp; <span class="hl-var">packages</span>:
-                                    {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// package manager config</span></div>
 
+                                <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">registry</span>: <span
+                                        class="hl-str">'https://myregistry.com/index.json'</span>],&nbsp;<span
+                                        class="hl-comment">// Your custom alternative registry</span></div>
+
                                 <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">preload</span>: [<span
-                                        class="hl-str">'hello'</span>],&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                        class="hl-str">'hello'</span>],&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// auto-install from public registry</span></div>
 
                                 <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">local</span>:
-                                    [{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                    [{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                                         class="hl-comment">// private commands (your server)</span></div>
 
                                 <div>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hl-var">name</span>: <span
@@ -840,7 +847,8 @@
 
             <div class="showcase-glow-section">
                 <div class="showcase-glow"></div>
-                <img class="showcase-particles" alt="" aria-hidden="true" loading="lazy" src="../src/public/particles.png">
+                <img class="showcase-particles" alt="" aria-hidden="true" loading="lazy"
+                    src="../src/public/particles.png">
             </div>
 
         </div>
