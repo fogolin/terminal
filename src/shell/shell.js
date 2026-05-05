@@ -148,6 +148,7 @@ class Shell {
         const shell = this;
         return {
             print(text, cls) { shell._ui.print(text, cls); },
+            printSpans(segments) { shell._ui.printSpans(segments); },
             error(text) { shell._ui.error(text); },
             clear() { shell._ui.clear(); },
             session: shell.session,

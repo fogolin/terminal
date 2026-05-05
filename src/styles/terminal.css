@@ -407,6 +407,24 @@
 	color: var(--bright-black);
 }
 
+/* ANSI span colors — use with ctx.printSpans() */
+.fg-black         { color: var(--black); }
+.fg-red           { color: var(--red); }
+.fg-green         { color: var(--green); }
+.fg-yellow        { color: var(--yellow); }
+.fg-blue          { color: var(--blue); }
+.fg-magenta       { color: var(--magenta); }
+.fg-cyan          { color: var(--cyan); }
+.fg-white         { color: var(--white); }
+.fg-bright-black  { color: var(--bright-black); }
+.fg-bright-red    { color: var(--bright-red); }
+.fg-bright-green  { color: var(--bright-green); }
+.fg-bright-yellow { color: var(--bright-yellow); }
+.fg-bright-blue   { color: var(--bright-blue); }
+.fg-bright-magenta{ color: var(--bright-magenta); }
+.fg-bright-cyan   { color: var(--bright-cyan); }
+.fg-bright-white  { color: var(--bright-white); }
+
 .line-command .terminal-prompt {
 	color: var(--accent);
 	text-shadow: var(--term-prompt-glow);

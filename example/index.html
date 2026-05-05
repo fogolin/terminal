@@ -586,6 +586,17 @@
                 }
             };
         })(document, 'script', 'firelin-terminal-js', {
+            packages: {
+                local: [
+                    {
+                        name: "diff",
+                        description: "Compare two files line by line",
+                        version: "1.0.0",
+                        src: "http://localhost:8080/index.js",
+                        commands: ["diff"],
+                    },
+                ],
+            },
         });
     </script>
 </head>

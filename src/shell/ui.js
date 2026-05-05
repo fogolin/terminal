@@ -68,6 +68,19 @@ class TerminalUI {
         this.printCommand(this._promptEl.textContent.trimEnd(), '^C');
     }
 
+    printSpans(segments) {
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        for (const seg of segments) {
+            const span = document.createElement('span');
+            span.textContent = seg.text;
+            if (seg.className) span.className = seg.className;
+            line.appendChild(span);
+        }
+        this._lines.insertBefore(line, this._inputRow);
+        this._scrollToBottom();
+    }
+
     error(text) {
         this.print(text, 'line-error');
     }

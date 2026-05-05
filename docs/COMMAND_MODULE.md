@@ -73,6 +73,7 @@ Context is the bridge between a command and the shell runtime. Commands **must n
 {
   // Output
   print(text, className?)       // append line to terminal output; optional CSS class for styling
+  printSpans(segments)          // append line composed of individually-colored spans
   error(text)                   // print error line (styled as stderr)
   clear()                       // clear terminal output
 
@@ -201,6 +202,46 @@ export default {
 	},
 };
 ```
+
+---
+
+## Span Colors — `printSpans(segments)`
+
+`printSpans` renders a single line composed of individually-colored segments. Each segment is `{ text, className? }`.
+
+```js
+ctx.printSpans([
+  { text: 'PASS', className: 'fg-green' },
+  { text: ' 3  ' },
+  { text: 'FAIL', className: 'fg-red' },
+  { text: ' 1  ' },
+  { text: 'SKIP', className: 'fg-bright-black' },
+  { text: ' 0' },
+]);
+```
+
+Available `fg-*` classes (all theme-aware via CSS variables):
+
+| Class              | ANSI color     |
+| ------------------ | -------------- |
+| `fg-black`         | Black          |
+| `fg-red`           | Red            |
+| `fg-green`         | Green          |
+| `fg-yellow`        | Yellow         |
+| `fg-blue`          | Blue           |
+| `fg-magenta`       | Magenta        |
+| `fg-cyan`          | Cyan           |
+| `fg-white`         | White          |
+| `fg-bright-black`  | Bright black   |
+| `fg-bright-red`    | Bright red     |
+| `fg-bright-green`  | Bright green   |
+| `fg-bright-yellow` | Bright yellow  |
+| `fg-bright-blue`   | Bright blue    |
+| `fg-bright-magenta`| Bright magenta |
+| `fg-bright-cyan`   | Bright cyan    |
+| `fg-bright-white`  | Bright white   |
+
+Segments with no `className` inherit the line's default foreground color.
 
 ---
 
