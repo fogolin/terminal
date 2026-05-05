@@ -577,6 +577,7 @@
             js.id = id;
             // assign the src to the script's widget URL
             js.src = 'https://cdn.jsdelivr.net/npm/firelin-terminal/dist/firelin.min.js';
+            // js.src = '../dist/firelin.min.js';
             js.defer = true;
             el.parentNode.insertBefore(js, el);
             // initializes the widget when the script is ready
@@ -818,7 +819,7 @@
                                         class="hl-comment">// package manager config</span></div>
 
                                 <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">registry</span>: <span
-                                        class="hl-str">'https://myregistry.com/index.json'</span>],&nbsp;<span
+                                        class="hl-str">'https://myregistry.com/index.json'</span>,&nbsp;<span
                                         class="hl-comment">// Your custom alternative registry</span></div>
 
                                 <div>&nbsp; &nbsp; &nbsp; <span class="hl-var">preload</span>: [<span
