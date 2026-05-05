@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
     <title>Firelin Terminal - Developer Tools</title>
-    <link rel="icon" type="image/png" href="public/favicon.png">
+    <link rel="icon" type="image/png" href="../src/public/favicon.png">
 
     <style>
         :root {
@@ -586,25 +586,6 @@
                 }
             };
         })(document, 'script', 'firelin-terminal-js', {
-            theme: 'amber',                       // 'phosphor' | 'amber' | 'ayu' | 'noctis'
-            title: 'Terminal — bash',             // titlebar label
-            osName: 'firelin',                    // used across the app
-            user: 'MacGyver',                     // default logged in user
-            welcomeMessage: 'Hello from mysite!', // string or array of strings
-            history: ['ls /projects', 'whoami'],  // pre-seeded history entries
-            curl: [                               // custom simulated curl endpoints
-                {
-                    url: 'https://api.mysite.com/status',
-                    status: 200,
-                    statusText: 'OK',
-                    delay: 400,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: '{"status": "ok", "version": "1.0.0"}'
-                },
-            ],
-            packages: {                           // package manager config
-                preload: ['hello'],               // auto-install from public registry
-            }
         });
     </script>
 </head>
@@ -612,7 +593,7 @@
 <body class="site-body background-grid">
     <header class="site-header">
         <div class="logo-container">
-            <img alt="Logo" class="logo-img" src="public/favicon.png" />
+            <img alt="Logo" class="logo-img" src="../src/public/favicon.png" />
             Firelin Terminal
         </div>
         <div class="header-nav-container">
@@ -859,7 +840,7 @@
 
             <div class="showcase-glow-section">
                 <div class="showcase-glow"></div>
-                <img class="showcase-particles" alt="" aria-hidden="true" loading="lazy" src="public/particles.png">
+                <img class="showcase-particles" alt="" aria-hidden="true" loading="lazy" src="../src/public/particles.png">
             </div>
 
         </div>
