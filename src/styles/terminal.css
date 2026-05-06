@@ -473,6 +473,51 @@
 }
 
 /* ============================================================
+   PANEL OVERLAY
+   ============================================================ */
+.panel-overlay {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.panel-overlay-top {
+	/* inherits .terminal-overlay-bar + .terminal-overlay-bar-top */
+}
+
+.panel-overlay-main {
+	flex: 1;
+	overflow-y: auto;
+	padding: 8px 10px;
+	font: inherit;
+	line-height: 1.6;
+}
+
+.panel-overlay-bottom {
+	/* inherits .terminal-overlay-bar + .terminal-overlay-bar-bottom */
+}
+
+.panel-readline-row {
+	display: flex;
+}
+
+.panel-readline-prompt {
+	white-space: pre;
+	color: inherit;
+}
+
+.panel-readline-input {
+	flex: 1;
+	background: transparent;
+	border: none;
+	outline: none;
+	color: inherit;
+	font: inherit;
+	caret-color: currentColor;
+	caret-shape: block;
+}
+
+/* ============================================================
    SCRAMBLE EFFECT
    ============================================================ */
 .scramble-char {
