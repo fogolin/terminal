@@ -94,10 +94,13 @@ Context is the bridge between a command and the shell runtime. Commands **must n
 
   // Shell control
   abort: AbortSignal,           // fires on Ctrl+C; long-running cmds must respect this
-  prompt(),                     // re-render the prompt (after state changes)
 
-  // Async helper
-  sleep(ms): Promise,           // for simulated network delay etc.
+  // Async helpers
+  sleep(ms): Promise,           // resolves after ms; rejects with AbortError on Ctrl+C
+  readline(prompt, mask?): Promise<String>,
+                                // show prompt, await one line of user input;
+                                // mask=true replaces typed chars with bullets (passwords);
+                                // rejects with AbortError on Ctrl+C
 }
 ```
 
@@ -202,6 +205,51 @@ export default {
 	},
 };
 ```
+
+---
+
+## Interactive Loop Example — `readline`
+
+Commands can call `ctx.readline()` repeatedly to build a read-eval-print loop. Each call pauses execution, shows a custom prompt, and resolves with the line the user typed. Ctrl+C rejects with `AbortError`, which propagates up to the shell's abort handler — no manual cleanup needed.
+
+```js
+// src/shell/commands/calc.js
+export default {
+    name: "calc",
+    aliases: [],
+    synopsis: "calc",
+    description: "Interactive calculator. Type an expression, get the result. Ctrl+C or 'exit' to quit.",
+    options: [],
+    examples: [{ command: "calc", description: "Start the interactive calculator." }],
+
+    async execute(args, ctx) {
+        ctx.print('Interactive calculator. Type "exit" or Ctrl+C to quit.');
+
+        while (true) {
+            const line = await ctx.readline('calc> ');  // AbortError thrown on Ctrl+C
+
+            if (line.trim() === 'exit') break;
+            if (!line.trim()) continue;
+
+            try {
+                // eslint-disable-next-line no-new-func
+                const result = Function('"use strict"; return (' + line + ')')();
+                ctx.print(String(result));
+            } catch {
+                ctx.error(`calc: invalid expression: ${line}`);
+            }
+        }
+    },
+};
+```
+
+**Key points:**
+
+- `await ctx.readline(prompt)` suspends the command and hands control back to the user.
+- Non-masked input is echoed to the terminal automatically (the prompt + typed text appear as a output line on Enter).
+- `mask = true` suppresses echo — use for passwords.
+- On Ctrl+C, `readline` rejects with `AbortError`. If uncaught, it bubbles to the shell's error handler which ignores `AbortError` silently and restores the normal prompt via the `finally` block.
+- Check `ctx.abort.aborted` before the loop (or at the top) if you need to skip setup work on late interrupts.
 
 ---
 
