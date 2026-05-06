@@ -191,6 +191,128 @@ class Shell {
             unmountOverlay(el) { shell._ui.unmountOverlay(el); },
             injectStyle(id, css) { shell._ui.injectStyle(id, css); },
             applyTheme(id, css) { shell._ui.applyTheme(css); },
+            openPanel(options = {}) {
+                const overlay = shell._ui.createOverlay();
+                shell._ui.setInputRowVisible(false);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'panel-overlay';
+
+                const topBar = document.createElement('div');
+                topBar.className = 'terminal-overlay-bar terminal-overlay-bar-top panel-overlay-top';
+
+                const main = document.createElement('div');
+                main.className = 'panel-overlay-main';
+
+                const bottomBar = document.createElement('div');
+                bottomBar.className = 'terminal-overlay-bar terminal-overlay-bar-bottom panel-overlay-bottom';
+
+                function applyContent(el, content) {
+                    if (content == null) { el.style.display = 'none'; return; }
+                    el.style.display = '';
+                    if (content instanceof HTMLElement) {
+                        el.textContent = '';
+                        el.appendChild(content);
+                    } else {
+                        el.innerHTML = content;
+                    }
+                }
+
+                applyContent(topBar, options.top ?? null);
+                applyContent(bottomBar, options.bottom ?? null);
+
+                wrapper.appendChild(topBar);
+                wrapper.appendChild(main);
+                wrapper.appendChild(bottomBar);
+                overlay.appendChild(wrapper);
+
+                let _pendingReadlineReject = null;
+
+                const panel = {
+                    print(text, cls) {
+                        const line = document.createElement('div');
+                        line.className = 'terminal-line' + (cls ? ' ' + cls : '');
+                        line.textContent = text === '' ? ' ' : text;
+                        main.appendChild(line);
+                        main.scrollTop = main.scrollHeight;
+                    },
+                    error(text) { panel.print(text, 'line-error'); },
+                    clear() { main.textContent = ''; },
+                    readline(prompt, mask = false) {
+                        return new Promise((resolve, reject) => {
+                            _pendingReadlineReject = reject;
+
+                            const row = document.createElement('div');
+                            row.className = 'panel-readline-row';
+
+                            const promptEl = document.createElement('span');
+                            promptEl.className = 'panel-readline-prompt';
+                            promptEl.textContent = prompt;
+
+                            const input = document.createElement('input');
+                            input.className = 'panel-readline-input';
+                            if (mask) input.type = 'password';
+
+                            row.appendChild(promptEl);
+                            row.appendChild(input);
+                            main.appendChild(row);
+                            main.scrollTop = main.scrollHeight;
+                            requestAnimationFrame(() => input.focus());
+
+                            function settle() { _pendingReadlineReject = null; }
+
+                            input.addEventListener('keydown', (e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    const val = input.value;
+                                    if (!mask) {
+                                        const echo = document.createElement('span');
+                                        echo.textContent = val;
+                                        row.replaceChild(echo, input);
+                                    } else {
+                                        input.remove();
+                                    }
+                                    settle();
+                                    resolve(val.trim());
+                                } else if (e.key === 'c' && e.ctrlKey) {
+                                    e.preventDefault();
+                                    input.remove();
+                                    shell.sigint(); // fires abort signal → auto-close + reject
+                                }
+                            });
+
+                            abortSignal.addEventListener('abort', () => {
+                                settle();
+                                const err = new Error('Aborted');
+                                err.name = 'AbortError';
+                                reject(err);
+                            }, { once: true });
+                        });
+                    },
+                    setTop(content) { applyContent(topBar, content); },
+                    setBottom(content) { applyContent(bottomBar, content); },
+                    close() {
+                        if (_pendingReadlineReject) {
+                            const err = new Error('Aborted');
+                            err.name = 'AbortError';
+                            _pendingReadlineReject(err);
+                            _pendingReadlineReject = null;
+                        }
+                        shell._ui.unmountOverlay(overlay);
+                        shell._ui.setInputRowVisible(true);
+                    },
+                };
+
+                abortSignal.addEventListener('abort', () => panel.close(), { once: true });
+
+                return panel;
+            },
+            fetch(url, options = {}) {
+                if (typeof window === 'undefined' || typeof window.fetch !== 'function') {
+                    return Promise.reject(new Error('fetch: not supported in this environment'));
+                }
+                return window.fetch(url, { ...options, signal: abortSignal });
+            },
             abort: abortSignal,
             sleep(ms) {
                 return new Promise((resolve, reject) => {

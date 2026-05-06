@@ -21,8 +21,6 @@ Every command is a plain JS object (or default export from a file) conforming to
 }
 ```
 
----
-
 ## Supporting Types
 
 ### OptionDef
@@ -46,8 +44,6 @@ Every command is a plain JS object (or default export from a file) conforming to
 }
 ```
 
----
-
 ## ParsedArgs (what `execute` receives as first argument)
 
 The parser normalises raw input into this shape before dispatching:
@@ -62,8 +58,6 @@ The parser normalises raw input into this shape before dispatching:
   rest:       String | null,    // everything after `--` (double-dash separator)
 }
 ```
-
----
 
 ## ShellContext (what `execute` receives as second argument)
 
@@ -101,10 +95,65 @@ Context is the bridge between a command and the shell runtime. Commands **must n
                                 // show prompt, await one line of user input;
                                 // mask=true replaces typed chars with bullets (passwords);
                                 // rejects with AbortError on Ctrl+C
+
+  // Managed panel overlay
+  openPanel(options?): Panel,   // mount a three-panel overlay (top bar / main / bottom bar)
+                                // options: { top?: String|HTMLElement, bottom?: String|HTMLElement }
+                                // ctx.print() / ctx.readline() continue working normally outside panels;
+                                // use the returned panel object for I/O inside the panel
+
+  // Network
+  fetch(url, options?): Promise<Response>,
+                                // thin wrapper around window.fetch wired to ctx.abort;
+                                // Ctrl+C cancels in-flight requests;
+                                // CORS behaviour is determined by the remote server;
+                                // rejects with Error("fetch: not supported in this environment")
+                                // if window.fetch is unavailable
 }
 ```
 
----
+## Panel Object (returned by `ctx.openPanel()`)
+
+```js
+{
+  print(text, className?)        // append line to panel main area (mirrors ctx.print)
+  error(text)                    // append error line to panel main area
+  clear()                        // clear panel main area
+  readline(prompt, mask?): Promise<String>
+                                 // styled input line in panel main area;
+                                 // echoes prompt + value as static text on Enter;
+                                 // mask=true replaces typed chars with bullets, no echo on resolve;
+                                 // rejects with AbortError on Ctrl+C
+  setTop(content)                // update top bar; String (HTML) or HTMLElement; null hides bar
+  setBottom(content)             // update bottom bar; String (HTML) or HTMLElement; null hides bar
+  close()                        // unmount overlay, restore input row, reject any pending readline
+}
+```
+
+### Panel example
+
+```js
+async execute(args, ctx) {
+    const panel = ctx.openPanel({
+        top: 'My Adventure — Chapter 1',
+        bottom: '^C Quit',
+    });
+
+    panel.print('You stand at a crossroads.');
+    const choice = await panel.readline('> ');
+
+    panel.setBottom('');
+    panel.print(`You chose: ${choice}`);
+    await ctx.sleep(1500);
+    panel.close();
+},
+```
+
+**Key points:**
+
+- `ctx.print()` / `ctx.readline()` on `.terminal-lines` are **unaffected** while a panel is open — the panel routes its own I/O to a separate DOM tree.
+- `panel.close()` must be called to restore the terminal input row. If the command exits without calling it (e.g. an unhandled throw), the overlay stays open — always `close()` in a `finally` block for long flows.
+- The abort signal is shared: Ctrl+C aborts `ctx.abort`, which rejects any pending `panel.readline()` with `AbortError`.
 
 ## File Layout Convention
 
@@ -136,8 +185,6 @@ const registry = new Map();
 export default registry;
 ```
 
----
-
 ## Minimal Example — `whoami`
 
 ```js
@@ -155,8 +202,6 @@ export default {
 	},
 };
 ```
-
----
 
 ## Async Example — `ping`
 
@@ -206,8 +251,6 @@ export default {
 };
 ```
 
----
-
 ## Interactive Loop Example — `readline`
 
 Commands can call `ctx.readline()` repeatedly to build a read-eval-print loop. Each call pauses execution, shows a custom prompt, and resolves with the line the user typed. Ctrl+C rejects with `AbortError`, which propagates up to the shell's abort handler — no manual cleanup needed.
@@ -215,31 +258,34 @@ Commands can call `ctx.readline()` repeatedly to build a read-eval-print loop. E
 ```js
 // src/shell/commands/calc.js
 export default {
-    name: "calc",
-    aliases: [],
-    synopsis: "calc",
-    description: "Interactive calculator. Type an expression, get the result. Ctrl+C or 'exit' to quit.",
-    options: [],
-    examples: [{ command: "calc", description: "Start the interactive calculator." }],
+	name: "calc",
+	aliases: [],
+	synopsis: "calc",
+	description:
+		"Interactive calculator. Type an expression, get the result. Ctrl+C or 'exit' to quit.",
+	options: [],
+	examples: [
+		{ command: "calc", description: "Start the interactive calculator." },
+	],
 
-    async execute(args, ctx) {
-        ctx.print('Interactive calculator. Type "exit" or Ctrl+C to quit.');
+	async execute(args, ctx) {
+		ctx.print('Interactive calculator. Type "exit" or Ctrl+C to quit.');
 
-        while (true) {
-            const line = await ctx.readline('calc> ');  // AbortError thrown on Ctrl+C
+		while (true) {
+			const line = await ctx.readline("calc> "); // AbortError thrown on Ctrl+C
 
-            if (line.trim() === 'exit') break;
-            if (!line.trim()) continue;
+			if (line.trim() === "exit") break;
+			if (!line.trim()) continue;
 
-            try {
-                // eslint-disable-next-line no-new-func
-                const result = Function('"use strict"; return (' + line + ')')();
-                ctx.print(String(result));
-            } catch {
-                ctx.error(`calc: invalid expression: ${line}`);
-            }
-        }
-    },
+			try {
+				// eslint-disable-next-line no-new-func
+				const result = Function('"use strict"; return (' + line + ")")();
+				ctx.print(String(result));
+			} catch {
+				ctx.error(`calc: invalid expression: ${line}`);
+			}
+		}
+	},
 };
 ```
 
@@ -251,47 +297,43 @@ export default {
 - On Ctrl+C, `readline` rejects with `AbortError`. If uncaught, it bubbles to the shell's error handler which ignores `AbortError` silently and restores the normal prompt via the `finally` block.
 - Check `ctx.abort.aborted` before the loop (or at the top) if you need to skip setup work on late interrupts.
 
----
-
 ## Span Colors — `printSpans(segments)`
 
 `printSpans` renders a single line composed of individually-colored segments. Each segment is `{ text, className? }`.
 
 ```js
 ctx.printSpans([
-  { text: 'PASS', className: 'fg-green' },
-  { text: ' 3  ' },
-  { text: 'FAIL', className: 'fg-red' },
-  { text: ' 1  ' },
-  { text: 'SKIP', className: 'fg-bright-black' },
-  { text: ' 0' },
+	{ text: "PASS", className: "fg-green" },
+	{ text: " 3  " },
+	{ text: "FAIL", className: "fg-red" },
+	{ text: " 1  " },
+	{ text: "SKIP", className: "fg-bright-black" },
+	{ text: " 0" },
 ]);
 ```
 
 Available `fg-*` classes (all theme-aware via CSS variables):
 
-| Class              | ANSI color     |
-| ------------------ | -------------- |
-| `fg-black`         | Black          |
-| `fg-red`           | Red            |
-| `fg-green`         | Green          |
-| `fg-yellow`        | Yellow         |
-| `fg-blue`          | Blue           |
-| `fg-magenta`       | Magenta        |
-| `fg-cyan`          | Cyan           |
-| `fg-white`         | White          |
-| `fg-bright-black`  | Bright black   |
-| `fg-bright-red`    | Bright red     |
-| `fg-bright-green`  | Bright green   |
-| `fg-bright-yellow` | Bright yellow  |
-| `fg-bright-blue`   | Bright blue    |
-| `fg-bright-magenta`| Bright magenta |
-| `fg-bright-cyan`   | Bright cyan    |
-| `fg-bright-white`  | Bright white   |
+| Class               | ANSI color     |
+| ------------------- | -------------- |
+| `fg-black`          | Black          |
+| `fg-red`            | Red            |
+| `fg-green`          | Green          |
+| `fg-yellow`         | Yellow         |
+| `fg-blue`           | Blue           |
+| `fg-magenta`        | Magenta        |
+| `fg-cyan`           | Cyan           |
+| `fg-white`          | White          |
+| `fg-bright-black`   | Bright black   |
+| `fg-bright-red`     | Bright red     |
+| `fg-bright-green`   | Bright green   |
+| `fg-bright-yellow`  | Bright yellow  |
+| `fg-bright-blue`    | Bright blue    |
+| `fg-bright-magenta` | Bright magenta |
+| `fg-bright-cyan`    | Bright cyan    |
+| `fg-bright-white`   | Bright white   |
 
 Segments with no `className` inherit the line's default foreground color.
-
----
 
 ## Error Conventions
 
