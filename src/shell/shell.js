@@ -85,10 +85,11 @@ class Shell {
     async submit(input) {
         // Readline mode: a command is waiting for interactive input
         if (this._readline) {
-            const { resolve, mask } = this._readline;
+            const { resolve, mask, prompt: rlPrompt } = this._readline;
             this._readline = null;
             this._ui.setMaskMode(false);
             this._ui.setInput('');
+            if (!mask) this._ui.printCommand(rlPrompt, input);
             this._ui.setPrompt(this.prompt);
             resolve(input);
             return;
@@ -167,12 +168,20 @@ class Shell {
             config: shell.config,
             vfs: shell.vfs,
             readline(prompt, mask = false) {
-                return new Promise(resolve => {
-                    shell._readline = { resolve, mask };
+                return new Promise((resolve, reject) => {
+                    shell._readline = { resolve, mask, prompt };
                     shell._ui.setPrompt(prompt);
                     shell._ui.setMaskMode(mask);
                     shell._ui.setInput('');
                     shell._ui.setInputLocked(false);
+                    abortSignal.addEventListener('abort', () => {
+                        shell._readline = null;
+                        shell._ui.setMaskMode(false);
+                        shell._ui.setInputLocked(true);
+                        const err = new Error('Aborted');
+                        err.name = 'AbortError';
+                        reject(err);
+                    }, { once: true });
                 });
             },
             createBlock() { return shell._ui.createBlock(); },
