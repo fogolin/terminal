@@ -24,12 +24,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
       - name: Prepare site
         run: |
           mkdir -p _site/public
-          cp example/index.html _site/index.html
-          sed -i 's|\.\./src/public/|public/|g' _site/index.html
+          cp src/index.html _site/index.html
           cp -r src/public/. _site/public/
+          cp dist/firelin.min.js _site/firelin.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

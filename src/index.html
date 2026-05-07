@@ -563,7 +563,35 @@
         }
     </style>
 
-    <script defer src="firelin.js"></script>
+    <script>
+        (function (d, s, id, config) {
+            var js,
+                el = d.getElementsByTagName(s)[0];
+            // avoids loading the script twice by mistake
+            if (d.getElementById(id)) {
+                return;
+            }
+            // create a script tag
+            js = d.createElement(s);
+            js.id = id;
+            // assign an id so we can detect if we already added it
+            // js.src = 'https://cdn.jsdelivr.net/npm/firelin-terminal/dist/firelin.min.js';
+            js.src = 'firelin.js' || 'firelin.min.js';
+            js.defer = true;
+            el.parentNode.insertBefore(js, el);
+            // initializes the widget when the script is ready
+            js.onload = function () {
+                if (window.FirelinTerminal) {
+                    window.FirelinTerminal.create(config);
+                }
+            };
+        })(document, 'script', 'firelin-terminal-js', {
+            // Add dev settings here:
+            // theme: 'phosphor',
+            // title: 'dev — bash',
+            // packages: []
+        });
+    </script>
 </head>
 
 <body class="site-body background-grid">

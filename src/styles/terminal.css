@@ -57,7 +57,7 @@
 	--term-font-weight: 600;
 
 	/* --- Layout ------------------------------------------- */
-	--term-width: 550px;
+	--term-width: 564px;
 	--term-border-radius: 10px;
 	--term-titlebar-height: 38px;
 	--term-body-min-h: 2200px;
@@ -196,7 +196,7 @@
 .nano-bar {
 	padding: 3px 10px;
 	flex-shrink: 0;
-	color: var(--bright-black);
+	color: var(--foreground);
 	font-size: var(--term-font-size);
 	font-family: var(--term-font);
 	font-weight: var(--term-font-weight);
@@ -205,6 +205,7 @@
 .terminal-overlay-bar-top,
 .nano-bar-top {
 	border-bottom: 1px solid var(--foreground);
+	white-space: pre;
 }
 
 .terminal-overlay-bar-bottom,
@@ -408,22 +409,54 @@
 }
 
 /* ANSI span colors — use with ctx.printSpans() */
-.fg-black         { color: var(--black); }
-.fg-red           { color: var(--red); }
-.fg-green         { color: var(--green); }
-.fg-yellow        { color: var(--yellow); }
-.fg-blue          { color: var(--blue); }
-.fg-magenta       { color: var(--magenta); }
-.fg-cyan          { color: var(--cyan); }
-.fg-white         { color: var(--white); }
-.fg-bright-black  { color: var(--bright-black); }
-.fg-bright-red    { color: var(--bright-red); }
-.fg-bright-green  { color: var(--bright-green); }
-.fg-bright-yellow { color: var(--bright-yellow); }
-.fg-bright-blue   { color: var(--bright-blue); }
-.fg-bright-magenta{ color: var(--bright-magenta); }
-.fg-bright-cyan   { color: var(--bright-cyan); }
-.fg-bright-white  { color: var(--bright-white); }
+.fg-black {
+	color: var(--black);
+}
+.fg-red {
+	color: var(--red);
+}
+.fg-green {
+	color: var(--green);
+}
+.fg-yellow {
+	color: var(--yellow);
+}
+.fg-blue {
+	color: var(--blue);
+}
+.fg-magenta {
+	color: var(--magenta);
+}
+.fg-cyan {
+	color: var(--cyan);
+}
+.fg-white {
+	color: var(--white);
+}
+.fg-bright-black {
+	color: var(--bright-black);
+}
+.fg-bright-red {
+	color: var(--bright-red);
+}
+.fg-bright-green {
+	color: var(--bright-green);
+}
+.fg-bright-yellow {
+	color: var(--bright-yellow);
+}
+.fg-bright-blue {
+	color: var(--bright-blue);
+}
+.fg-bright-magenta {
+	color: var(--bright-magenta);
+}
+.fg-bright-cyan {
+	color: var(--bright-cyan);
+}
+.fg-bright-white {
+	color: var(--bright-white);
+}
 
 .line-command .terminal-prompt {
 	color: var(--accent);
@@ -483,6 +516,7 @@
 
 .panel-overlay-top {
 	/* inherits .terminal-overlay-bar + .terminal-overlay-bar-top */
+	white-space: pre;
 }
 
 .panel-overlay-main {
